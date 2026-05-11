@@ -112,12 +112,12 @@
   --border-soft: #EFEFEA;
   --border-strong:#D4D4D8;
 
-  /* ONE accent — warm terracotta */
+  /* ONE accent — warm terracotta. ccaf-stripe is an alias for legacy class names. */
   --accent:     #C2410C;
   --accent-ink: #FFFFFF;
   --accent-soft:#FEF3EC;
 
-  --ccaf-stripe: #6366F1;
+  --ccaf-stripe: var(--accent);
 
   --ok:   #15803D;
   --warn: #B45309;
@@ -144,7 +144,7 @@
   --accent:      #F97316;
   --accent-ink:  #0A0A0A;
   --accent-soft: rgba(249,115,22,0.10);
-  --ccaf-stripe: #818CF8;
+  --ccaf-stripe: var(--accent);
 }
 
 /* ============================================================
@@ -388,7 +388,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-7) 0; }
 .toc-list .idx-domain-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--accent);
   opacity: 1;
 }
 .toc-list .idx-time {
@@ -575,8 +575,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-7) 0; }
 .hero-stamp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
 .hero h1 {
-  max-width: 20ch;
+  max-width: 18ch;
   margin-bottom: var(--s-5);
+  text-wrap: balance;
 }
 .hero h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
 
@@ -586,6 +587,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-7) 0; }
   max-width: 58ch;
   margin-bottom: var(--s-6);
   line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .hero-stats {
@@ -701,7 +703,7 @@ section.block { padding: var(--s-8) 0; border-bottom: 1px solid var(--border); }
   display: inline-flex; align-items: center; gap: var(--s-2);
 }
 @media (min-width: 720px) { .idx-domain, .idx-time { padding: 0 var(--s-3); } }
-.idx-domain-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: 0.65; }
+.idx-domain-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); opacity: 0.85; }
 
 .idx-arrow {
   display: none;
@@ -775,7 +777,7 @@ section.block { padding: var(--s-8) 0; border-bottom: 1px solid var(--border); }
   color: var(--text-dim);
   letter-spacing: 0.02em;
 }
-.chip-dot { width: 7px; height: 7px; border-radius: 50%; }
+.chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 
 .tut h2 { margin-bottom: var(--s-4); }
 
@@ -1107,20 +1109,24 @@ footer.site-foot {
 .hero-friction {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-3);
-  font-size: 0.82rem;
+  row-gap: var(--s-2);
+  column-gap: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-dim);
   margin: calc(-1 * var(--s-3)) 0 var(--s-5);
 }
 .hero-friction > span {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-2);
+  padding: 0 var(--s-4);
+  border-left: 1px solid var(--border);
 }
-.hero-friction > span + span::before {
-  content: "·";
-  color: var(--text-faint);
-  margin-right: var(--s-2);
+.hero-friction > span:first-child {
+  padding-left: 0;
+  border-left: 0;
 }
 
 .hero-cta {
@@ -1602,7 +1608,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
   content: "";
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--accent);
 }
 .gloss-def {
   font-size: 0.92rem;
@@ -1739,7 +1745,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">The Agentic Loop</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#4F46E5"><span class="idx-domain-dot"></span>D1 · Agentic</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
             <span class="idx-time">45m</span>
           </span>
         </span>
@@ -1749,7 +1755,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Hub-and-Spoke Orchestration</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#4F46E5"><span class="idx-domain-dot"></span>D1 · Agentic</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
             <span class="idx-time">60m</span>
           </span>
         </span>
@@ -1759,7 +1765,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Build an MCP Server</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#059669"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
             <span class="idx-time">75m</span>
           </span>
         </span>
@@ -1769,7 +1775,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Tool Description Discipline</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#059669"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
             <span class="idx-time">30m</span>
           </span>
         </span>
@@ -1779,7 +1785,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">CLAUDE.md Hierarchy</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#D97706"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
             <span class="idx-time">40m</span>
           </span>
         </span>
@@ -1789,7 +1795,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Hooks vs Skills vs Slash</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#D97706"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
             <span class="idx-time">45m</span>
           </span>
         </span>
@@ -1799,7 +1805,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Structured Output Retry</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#E11D48"><span class="idx-domain-dot"></span>D4 · Prompt Eng.</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D4 · Prompt Eng.</span>
             <span class="idx-time">50m</span>
           </span>
         </span>
@@ -1809,7 +1815,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         <span class="idx-body">
           <span class="idx-title">Prompt Caching & Lost-in-Middle</span>
           <span class="idx-meta">
-            <span class="idx-domain" style="color:#0891B2"><span class="idx-domain-dot"></span>D5 · Context</span>
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D5 · Context</span>
             <span class="idx-time">45m</span>
           </span>
         </span>
@@ -1952,8 +1958,8 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
         </ul>
       </div>
       <div class="prestart-card">
-        <h3 style="color:var(--bad)">
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <h3>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
           Skip this if…
         </h3>
         <ul>
@@ -2096,7 +2102,7 @@ source .venv/bin/activate     # re-enter, no re-install needed</pre>
       <div class="tut-num">01<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#4F46E5"></span>D1 · Agentic</span>
+          <span class="chip"><span class="chip-dot"></span>D1 · Agentic</span>
           <span class="chip">45 min</span>
           <span class="chip">Python · Anthropic SDK</span>
         </div>
@@ -2639,7 +2645,7 @@ def run_tool(name, args):
       <div class="tut-num">02<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#4F46E5"></span>D1 · Agentic</span>
+          <span class="chip"><span class="chip-dot"></span>D1 · Agentic</span>
           <span class="chip">60 min</span>
           <span class="chip">Python · Anthropic SDK</span>
         </div>
@@ -3034,7 +3040,7 @@ if __name__ == "__main__":
       <div class="tut-num">03<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#059669"></span>D2 · Tools / MCP</span>
+          <span class="chip"><span class="chip-dot"></span>D2 · Tools / MCP</span>
           <span class="chip">75 min</span>
           <span class="chip">Python · MCP SDK · Claude Code</span>
         </div>
@@ -3358,7 +3364,7 @@ if __name__ == "__main__":
       <div class="tut-num">04<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#059669"></span>D2 · Tools / MCP</span>
+          <span class="chip"><span class="chip-dot"></span>D2 · Tools / MCP</span>
           <span class="chip">30 min</span>
           <span class="chip">Python · Anthropic SDK</span>
         </div>
@@ -3681,7 +3687,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
       <div class="tut-num">05<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#D97706"></span>D3 · Claude Code</span>
+          <span class="chip"><span class="chip-dot"></span>D3 · Claude Code</span>
           <span class="chip">40 min</span>
           <span class="chip">Claude Code CLI</span>
         </div>
@@ -3975,7 +3981,7 @@ EOF</pre></div>
       <div class="tut-num">06<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#D97706"></span>D3 · Claude Code</span>
+          <span class="chip"><span class="chip-dot"></span>D3 · Claude Code</span>
           <span class="chip">45 min</span>
           <span class="chip">Claude Code CLI · jq</span>
         </div>
@@ -4296,7 +4302,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <div class="tut-num">07<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#E11D48"></span>D4 · Prompt Eng.</span>
+          <span class="chip"><span class="chip-dot"></span>D4 · Prompt Eng.</span>
           <span class="chip">50 min</span>
           <span class="chip">Python · Anthropic SDK · jsonschema</span>
         </div>
@@ -4650,7 +4656,7 @@ data = json.loads(raw)   # this often fails</pre></div>
       <div class="tut-num">08<span class="tut-num-total">/08</span></div>
       <div>
         <div class="tut-head-chips">
-          <span class="chip"><span class="chip-dot" style="background:#0891B2"></span>D5 · Context</span>
+          <span class="chip"><span class="chip-dot"></span>D5 · Context</span>
           <span class="chip">45 min</span>
           <span class="chip">Python · Anthropic SDK</span>
         </div>
@@ -5059,14 +5065,14 @@ def ask_with_placement(placement):
       <div class="gloss-item" data-term="agent">
         <div class="gloss-term-row">
           <dt class="gloss-term">Agent</dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">A Claude instance wrapped in a loop that calls tools, observes results, and decides the next action. See <a href="#tut-1">Tutorial 01</a>.</dd>
       </div>
       <div class="gloss-item" data-term="agentic loop">
         <div class="gloss-term-row">
           <dt class="gloss-term">Agentic Loop</dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">The <strong>think → act → observe</strong> cycle. Terminates on <code class="inline">stop_reason == end_turn</code>, an iteration cap, or an error. Every loop needs a termination condition.</dd>
       </div>
@@ -5079,210 +5085,210 @@ def ask_with_placement(placement):
       <div class="gloss-item" data-term="cache breakpoint">
         <div class="gloss-term-row">
           <dt class="gloss-term">Cache breakpoint</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Marker (<code class="inline">cache_control: {type: "ephemeral"}</code>) placed on a content block to tell the API where a cacheable prefix ends.</dd>
       </div>
       <div class="gloss-item" data-term="cache read">
         <div class="gloss-term-row">
           <dt class="gloss-term">Cache read</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Tokens served from a cached prefix on a subsequent request. Charged at ~10% of standard input cost. The metric that makes caching worth it.</dd>
       </div>
       <div class="gloss-item" data-term="cache write">
         <div class="gloss-term-row">
           <dt class="gloss-term">Cache write</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">First-time creation of a cache entry. Charged at a ~25% premium over standard input, amortised across later cache reads.</dd>
       </div>
       <div class="gloss-item" data-term="claude code">
         <div class="gloss-term-row">
           <dt class="gloss-term">Claude Code</dt>
-          <span class="gloss-domain" style="color:#D97706">D3 · Claude Code</span>
+          <span class="gloss-domain">D3 · Claude Code</span>
         </div>
         <dd class="gloss-def">Anthropic's official CLI agent. Reads <code class="inline">CLAUDE.md</code>, hosts MCP servers, and runs hooks, skills, and slash commands. See <a href="#tut-5">Tutorial 05</a>.</dd>
       </div>
       <div class="gloss-item" data-term="claude.md">
         <div class="gloss-term-row">
           <dt class="gloss-term"><code>CLAUDE.md</code></dt>
-          <span class="gloss-domain" style="color:#D97706">D3 · Claude Code</span>
+          <span class="gloss-domain">D3 · Claude Code</span>
         </div>
         <dd class="gloss-def">Plain-text instruction file read by Claude Code at session start. Three tiers: <strong>global</strong> (<code class="inline">~/.claude</code>), <strong>project</strong> (repo root), and <strong>subdirectory</strong> — the closest tier wins.</dd>
       </div>
       <div class="gloss-item" data-term="compaction">
         <div class="gloss-term-row">
           <dt class="gloss-term">Compaction</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Automatic summarisation of earlier conversation turns to free context budget. Mechanics are not yet deterministic — treat as advisory, not guaranteed.</dd>
       </div>
       <div class="gloss-item" data-term="context window">
         <div class="gloss-term-row">
           <dt class="gloss-term">Context window</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Total token budget the model can attend to in one call. Claude Sonnet 4.6 default is 200K tokens; 1M-token context is opt-in for certain workloads.</dd>
       </div>
       <div class="gloss-item" data-term="end_turn">
         <div class="gloss-term-row">
           <dt class="gloss-term"><code>end_turn</code></dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Value of <code class="inline">stop_reason</code> that means the model has decided the turn is complete and is not requesting a tool. The healthy exit condition of an agentic loop.</dd>
       </div>
       <div class="gloss-item" data-term="ephemeral cache">
         <div class="gloss-term-row">
           <dt class="gloss-term">Ephemeral cache</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Default prompt-cache type. <strong>5-minute TTL</strong>, refreshed on every read. Use when back-to-back calls re-use the same prefix.</dd>
       </div>
       <div class="gloss-item" data-term="hook">
         <div class="gloss-term-row">
           <dt class="gloss-term">Hook</dt>
-          <span class="gloss-domain" style="color:#D97706">D3 · Claude Code</span>
+          <span class="gloss-domain">D3 · Claude Code</span>
         </div>
         <dd class="gloss-def">A <strong>deterministic shell command</strong> Claude Code runs at a lifecycle event (<code class="inline">PreToolUse</code>, <code class="inline">PostToolUse</code>, <code class="inline">Stop</code>, etc.). Use when you need guaranteed execution, not model discretion. See <a href="#tut-6">Tutorial 06</a>.</dd>
       </div>
       <div class="gloss-item" data-term="hub-and-spoke">
         <div class="gloss-term-row">
           <dt class="gloss-term">Hub-and-Spoke</dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Orchestration pattern. A parent agent delegates to sub-agents in isolated contexts; sub-agents return only summaries, not their full transcripts. See <a href="#tut-2">Tutorial 02</a>.</dd>
       </div>
       <div class="gloss-item" data-term="json schema">
         <div class="gloss-term-row">
           <dt class="gloss-term">JSON Schema</dt>
-          <span class="gloss-domain" style="color:#E11D48">D4 · Prompt Eng.</span>
+          <span class="gloss-domain">D4 · Prompt Eng.</span>
         </div>
         <dd class="gloss-def">Contract describing the expected shape of a tool's <code class="inline">input</code> (or a structured output). Paired with tool-use to coerce valid JSON and drive retries on validation failure. See <a href="#tut-7">Tutorial 07</a>.</dd>
       </div>
       <div class="gloss-item" data-term="lost in the middle">
         <div class="gloss-term-row">
           <dt class="gloss-term">Lost in the middle</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Empirical failure mode: facts placed in the <em>middle</em> of a long context are recalled less reliably than facts near the start or end. Structure long prompts accordingly. See <a href="#tut-8">Tutorial 08</a>.</dd>
       </div>
       <div class="gloss-item" data-term="mcp">
         <div class="gloss-term-row">
           <dt class="gloss-term">MCP (Model Context Protocol)</dt>
-          <span class="gloss-domain" style="color:#059669">D2 · Tools/MCP</span>
+          <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
         <dd class="gloss-def">Open standard for exposing <strong>tools, resources, and prompts</strong> to a model via a standardised transport. See <a href="#tut-3">Tutorial 03</a>.</dd>
       </div>
       <div class="gloss-item" data-term="mcp primitives">
         <div class="gloss-term-row">
           <dt class="gloss-term">MCP primitives</dt>
-          <span class="gloss-domain" style="color:#059669">D2 · Tools/MCP</span>
+          <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
         <dd class="gloss-def">Three kinds a server can expose: <strong>tool</strong> (model-initiated action), <strong>resource</strong> (application-attached read-only data), <strong>prompt</strong> (user-invoked template). Picking the wrong primitive is the most common MCP mistake.</dd>
       </div>
       <div class="gloss-item" data-term="memory tool">
         <div class="gloss-term-row">
           <dt class="gloss-term">Memory tool <span class="caps">beta</span></dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Anthropic's managed persistent memory. Currently beta — exact API surface may still shift, so no dedicated tutorial yet.</dd>
       </div>
       <div class="gloss-item" data-term="premium cache">
         <div class="gloss-term-row">
           <dt class="gloss-term">Premium cache</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Opt-in cache type with a <strong>1-hour TTL</strong>. Higher write cost; lower read cost amortised over longer reuse windows. Best for stable system prompts and tool catalogues.</dd>
       </div>
       <div class="gloss-item" data-term="prompt caching">
         <div class="gloss-term-row">
           <dt class="gloss-term">Prompt caching</dt>
-          <span class="gloss-domain" style="color:#0891B2">D5 · Context</span>
+          <span class="gloss-domain">D5 · Context</span>
         </div>
         <dd class="gloss-def">Server-side reuse of previously-sent input tokens across calls. Reduces input cost ~90% and cuts time-to-first-token. See <a href="#tut-8">Tutorial 08</a>.</dd>
       </div>
       <div class="gloss-item" data-term="skill">
         <div class="gloss-term-row">
           <dt class="gloss-term">Skill</dt>
-          <span class="gloss-domain" style="color:#D97706">D3 · Claude Code</span>
+          <span class="gloss-domain">D3 · Claude Code</span>
         </div>
         <dd class="gloss-def">Natural-language capability pack loaded into Claude Code. <strong>Non-deterministic by design</strong> — if you need guaranteed execution, use a hook instead. See <a href="#tut-6">Tutorial 06</a>.</dd>
       </div>
       <div class="gloss-item" data-term="slash command">
         <div class="gloss-term-row">
           <dt class="gloss-term">Slash command</dt>
-          <span class="gloss-domain" style="color:#D97706">D3 · Claude Code</span>
+          <span class="gloss-domain">D3 · Claude Code</span>
         </div>
         <dd class="gloss-def">User-invoked shortcut in Claude Code (e.g. <code class="inline">/fix</code>, <code class="inline">/commit</code>). Expands to a prompt template. Deterministic in <em>when</em> it runs — not in what the model does with it.</dd>
       </div>
       <div class="gloss-item" data-term="stdio transport">
         <div class="gloss-term-row">
           <dt class="gloss-term">Stdio transport</dt>
-          <span class="gloss-domain" style="color:#059669">D2 · Tools/MCP</span>
+          <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
         <dd class="gloss-def">MCP transport over a subprocess's stdin/stdout. Local-process only, no auth needed. The safe default used in <a href="#tut-3">Tutorial 03</a>.</dd>
       </div>
       <div class="gloss-item" data-term="stop_reason">
         <div class="gloss-term-row">
           <dt class="gloss-term"><code>stop_reason</code></dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Field on every Messages response telling you why the model stopped. Values: <code class="inline">end_turn</code>, <code class="inline">tool_use</code>, <code class="inline">max_tokens</code>, <code class="inline">stop_sequence</code>, <code class="inline">pause_turn</code>.</dd>
       </div>
       <div class="gloss-item" data-term="structured output">
         <div class="gloss-term-row">
           <dt class="gloss-term">Structured output</dt>
-          <span class="gloss-domain" style="color:#E11D48">D4 · Prompt Eng.</span>
+          <span class="gloss-domain">D4 · Prompt Eng.</span>
         </div>
         <dd class="gloss-def">Forcing the model to return JSON that conforms to a schema. In 2026 this is implemented via <em>tool-use with a single mandatory tool</em>, not prose "please return JSON" prompts.</dd>
       </div>
       <div class="gloss-item" data-term="sub-agent">
         <div class="gloss-term-row">
           <dt class="gloss-term">Sub-agent</dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Child agent spawned by an orchestrator, running in an <strong>isolated context</strong>. Returns a summary, not its full transcript. Core unit of hub-and-spoke.</dd>
       </div>
       <div class="gloss-item" data-term="system prompt">
         <div class="gloss-term-row">
           <dt class="gloss-term">System prompt</dt>
-          <span class="gloss-domain" style="color:#E11D48">D4 · Prompt Eng.</span>
+          <span class="gloss-domain">D4 · Prompt Eng.</span>
         </div>
         <dd class="gloss-def">Instruction block attached at the top of every call, outside the user/assistant turn structure. Stable across calls → an ideal cache-write target.</dd>
       </div>
       <div class="gloss-item" data-term="termination condition">
         <div class="gloss-term-row">
           <dt class="gloss-term">Termination condition</dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Any bound that causes the agentic loop to exit: <code class="inline">stop_reason == end_turn</code>, an iteration cap, a wall-clock timeout, a spend limit, or an unhandled error. Tutorial 01 makes you remove the cap on purpose.</dd>
       </div>
       <div class="gloss-item" data-term="tool description">
         <div class="gloss-term-row">
           <dt class="gloss-term">Tool description</dt>
-          <span class="gloss-domain" style="color:#059669">D2 · Tools/MCP</span>
+          <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
         <dd class="gloss-def">Free-text field the model reads to decide when to call a tool. Small wording changes materially affect routing — vague ("gets data.") is actively harmful. See <a href="#tut-4">Tutorial 04</a>.</dd>
       </div>
       <div class="gloss-item" data-term="tool_result">
         <div class="gloss-term-row">
           <dt class="gloss-term"><code>tool_result</code></dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Content block type sent back to Claude with the output of a called tool. Matched to the originating <code class="inline">tool_use_id</code>. The "observe" step of the agentic loop.</dd>
       </div>
       <div class="gloss-item" data-term="tool_use">
         <div class="gloss-term-row">
           <dt class="gloss-term"><code>tool_use</code></dt>
-          <span class="gloss-domain" style="color:#4F46E5">D1 · Agentic</span>
+          <span class="gloss-domain">D1 · Agentic</span>
         </div>
         <dd class="gloss-def">Both a <code class="inline">stop_reason</code> value and a content-block type. Signals the model wants a tool executed; your code must run it and return a matching <code class="inline">tool_result</code>.</dd>
       </div>
       <div class="gloss-item" data-term="transport">
         <div class="gloss-term-row">
           <dt class="gloss-term">Transport</dt>
-          <span class="gloss-domain" style="color:#059669">D2 · Tools/MCP</span>
+          <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
         <dd class="gloss-def">How an MCP server is reached. Three today: <code class="inline">stdio</code> (local subprocess), <code class="inline">http</code> (remote), <code class="inline">sse</code> (server-sent events). Remote-with-auth is under-specified — stdio is the safe default.</dd>
       </div>
