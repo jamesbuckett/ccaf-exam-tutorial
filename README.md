@@ -1,4 +1,4 @@
-# Tutorial Generator from HTML Source
+# CCA-F Practical — Hands-On Tutorials for Anthropic's Claude Architect Exam
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/jamesbuckett/ccaf-claude-certified-architect-practical)](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/commits/main)
@@ -8,72 +8,85 @@
 [![Made with HTML5](https://img.shields.io/badge/Made%20with-HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97706?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
 
-## Role
-You are a senior technical instructor who converts conceptual reference material into hands-on, build-and-break tutorials. Your tutorials prioritise doing over reading: every concept must be reinforced with a command the learner runs, an output they inspect, or a failure they intentionally trigger.
+![CCA-F Practical hero screenshot](docs/screenshot.png)
 
-## Task
-1. Read the file `./index.html` in the current working directory.
-2. Strip HTML boilerplate (nav, headers, footers, scripts, styles) and extract the substantive content: headings, prose, code blocks, diagrams (described), tables, and lists.
-3. Identify the distinct **concepts, principles, or components** covered. Group related ideas into logical tutorial units — aim for 4–8 tutorials unless the source material clearly warrants more or fewer.
-4. For each tutorial unit, produce the structured output defined below.
+**TL;DR** — A single-file HTML workbook of eight runnable tutorials covering every domain of Anthropic's **Claude Certified Architect – Foundations (CCA-F)** exam. Roughly **6 h 30 m** of hands-on time, **\$2–4** in Sonnet 4.6 API spend, one `ANTHROPIC_API_KEY`. Every concept is built, then deliberately broken, then verified on a checklist.
 
-## Extraction Rules
-- Preserve technical accuracy: do not invent commands, flags, APIs, or version numbers not implied by the source.
-- If the source references tools without showing usage (e.g. "uses OPA for policy"), generate realistic tutorial steps using current canonical documentation patterns for that tool.
-- If a concept is abstract (e.g. a principle or framework tenet), design a tutorial that makes the principle **observable** — something the learner can see working, then see broken.
-- Flag any content that is ambiguous or under-specified in the source, rather than guessing.
+> **Independent and unofficial.** This workbook is not affiliated with or endorsed by Anthropic. Pair it with your preferred theory resource and practice questions.
 
-## Output Structure
+## What it is
 
-Begin with a **Tutorial Index** — a numbered list of all tutorials with a one-line description each, plus total estimated time.
+`index.html` is a self-contained study guide — no build step, no framework, no server. Open the file in a browser, follow the tutorials in order, and run each one against the Anthropic SDK or Claude Code on your laptop. Progress is tracked locally per tutorial; the FAQ, glossary (33 terms), and troubleshooting sections live in the same page.
 
-Then, for each tutorial, produce the following sections in order:
+The pedagogy is deliberately verification-gated: a tutorial is "done" only after you have **observed the concept work, observed it break, and ticked the checklist**. Passive reading does not advance the page.
 
-### Tutorial [N]: [Title]
+## What's inside
 
-**Concept covered:** One-sentence summary of what the learner will understand by the end, tied directly to the source material.
+Eight tutorials, ordered so each builds on the last. Domains map to the published CCA-F exam blueprint.
 
-**Source reference:** Which heading / section of `index.html` this maps to.
+| #  | Tutorial                              | Domain                  | Time   |
+|----|---------------------------------------|-------------------------|--------|
+| 01 | The Agentic Loop                      | D1 · Agentic            | 45 m   |
+| 02 | Hub-and-Spoke Orchestration           | D1 · Agentic            | 60 m   |
+| 03 | Build an MCP Server                   | D2 · Tools / MCP        | 75 m   |
+| 04 | Tool Description Discipline           | D2 · Tools / MCP        | 30 m   |
+| 05 | CLAUDE.md Hierarchy in Claude Code    | D3 · Claude Code        | 40 m   |
+| 06 | Hooks vs Skills vs Slash Commands     | D3 · Claude Code        | 45 m   |
+| 07 | Structured Output with Tool-Use Retry | D4 · Prompt Engineering | 50 m   |
+| 08 | Prompt Caching & Lost-in-the-Middle   | D5 · Context            | 45 m   |
 
-**Prerequisites:**
-- Tools required (with minimum versions where relevant)
-- Prior tutorials in this set that should be completed first
-- Any accounts, clusters, or environments needed
+Every tutorial follows the same structure: **Setup → Code trace → Walkthrough → Build-and-break exercise → Verification checklist → Cleanup → Further exploration**.
 
-**Estimated time:** [X] minutes
+## Prerequisites
 
-**Learning objectives:** 3–5 bullets, each starting with an action verb (deploy, configure, break, verify, observe).
+**Toolchain** — one-time install, roughly two minutes.
 
-**Setup:** Exact commands to prepare the environment. Assume a fresh local machine or kind/minikube cluster unless the source implies otherwise.
+- Python **3.11+** (each tutorial creates its own `.venv`, so Python packages are installed per-tutorial)
+- Node **20 LTS** (only required for tutorials that use [Claude Code](https://claude.com/claude-code))
+- An Anthropic API key exported as `ANTHROPIC_API_KEY`
+- Comfort with a terminal
 
-**Walkthrough:** Numbered steps. Each step must include:
-- What the learner is doing (one sentence)
-- The exact command(s) or config to run
-- The expected output or observable result
-- A brief "why this matters" tie-back to the concept
+**Budget** — \$2–4 on Claude Sonnet 4.6 across all eight tutorials. Every agentic loop ships with a `MAX_ITERATIONS` guard so runaway spend is structurally impossible.
 
-**Build-and-break exercise:** A deliberate misconfiguration or failure the learner introduces to see the concept fail safely. Include:
-- The change to make
-- The expected failure mode
-- How to confirm the failure (logs, status, denied request, etc.)
-- How to revert
+## Run it locally
 
-**Verification checklist:** 3–5 checkboxes the learner uses to confirm they've internalised the concept.
+The workbook is a single static file — no build, no server, no dependencies beyond a browser.
 
-**Cleanup:** Commands to tear down resources.
+```bash
+git clone https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical.git
+cd ccaf-claude-certified-architect-practical
+xdg-open index.html   # Linux
+# open index.html     # macOS
+# start index.html    # Windows
+```
 
-**Further exploration:** 2–3 suggested extensions or related concepts from the source material.
+Then follow **Tutorial 01 — The Agentic Loop** to set up your first `.venv` and trigger your first round-trip against the Anthropic SDK.
 
----
+## Repo layout
 
-## Final Section
-After all tutorials, produce:
-- **Suggested learning path:** Recommended order and why.
-- **Gaps flagged:** Any concepts from `index.html` that you could not convert into a hands-on tutorial, with a reason (too abstract, requires proprietary tooling, insufficient detail, etc.).
-- **Assumed tooling:** A consolidated list of every CLI, library, or platform the tutorial set assumes, so the learner can pre-install.
+```
+.
+├── index.html          # The workbook — open this in a browser
+├── study-guide.html    # Companion theory notes
+├── docs/
+│   └── screenshot.png  # Hero screenshot used above
+├── CLAUDE.md           # Project rules for Claude Code (light theme, single file, etc.)
+├── LICENSE             # MIT
+└── README.md
+```
 
-## Style
-- Write in plain English. No marketing tone, no "in today's fast-paced world" openings.
-- Use code blocks for every command, config, and output.
-- Prefer `kubectl`, `helm`, `istioctl`, `opa`, `spire-server`, `cert-manager` and similar canonical CLIs when the source implies Kubernetes/ZTA context.
-- If the source is on a different topic entirely, adapt the toolchain to match — do not force a ZTA framing.
+## Verified against
+
+Last verified against `anthropic >= 0.40` and **Claude Sonnet 4.6** on 2026-04-14. If a command no longer behaves as the workbook describes, please [open an issue](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/issues).
+
+## License
+
+Released under the [MIT License](LICENSE). Copyright © 2026 James Buckett.
+
+## Author
+
+**James Buckett**
+
+- GitHub — [@jamesbuckett](https://github.com/jamesbuckett)
+- LinkedIn — [jamesbuckett](https://www.linkedin.com/in/jamesbuckett)
+- Twitter / X — [@jamesbuckett](https://twitter.com/jamesbuckett)
