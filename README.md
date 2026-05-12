@@ -1,5 +1,13 @@
 # Tutorial Generator from HTML Source
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/jamesbuckett/ccaf-claude-certified-architect-practical)](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/commits/main)
+[![GitHub repo size](https://img.shields.io/github/repo-size/jamesbuckett/ccaf-claude-certified-architect-practical)](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical)
+[![GitHub top language](https://img.shields.io/github/languages/top/jamesbuckett/ccaf-claude-certified-architect-practical)](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical)
+[![GitHub stars](https://img.shields.io/github/stars/jamesbuckett/ccaf-claude-certified-architect-practical?style=social)](https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/stargazers)
+[![Made with HTML5](https://img.shields.io/badge/Made%20with-HTML5-E34F26?logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-D97706?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+
 ## Role
 You are a senior technical instructor who converts conceptual reference material into hands-on, build-and-break tutorials. Your tutorials prioritise doing over reading: every concept must be reinforced with a command the learner runs, an output they inspect, or a failure they intentionally trigger.
 
