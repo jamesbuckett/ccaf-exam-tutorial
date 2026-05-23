@@ -1,0 +1,7 @@
+# Style-guide screenshot harness (local-only working files)
+screenshot.mjs
+_launch.mjs
+package.json
+package-lock.json
+node_modules/
+screenshots/
