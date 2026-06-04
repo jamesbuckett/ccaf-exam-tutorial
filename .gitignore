@@ -4,4 +4,7 @@ _launch.mjs
 package.json
 package-lock.json
 node_modules/
-screenshots/
+screenshots/*
+!screenshots/desktop.png
+!screenshots/tablet.png
+!screenshots/mobile.png
