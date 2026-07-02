@@ -8,3 +8,6 @@ screenshots/*
 !screenshots/desktop.png
 !screenshots/tablet.png
 !screenshots/mobile.png
+
+# Playwright MCP browser-check artifacts
+.playwright-mcp/
