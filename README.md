@@ -1,6 +1,6 @@
 # CCA-F Exam Tutorial
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/jamesbuckett/ccaf-exam-tutorial)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/jamesbuckett/ccaf-exam-tutorial?style=social)](https://github.com/jamesbuckett/ccaf-exam-tutorial/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/jamesbuckett/ccaf-exam-tutorial)](https://github.com/jamesbuckett/ccaf-exam-tutorial/commits)
 [![Open issues](https://img.shields.io/github/issues/jamesbuckett/ccaf-exam-tutorial)](https://github.com/jamesbuckett/ccaf-exam-tutorial/issues)
@@ -9,7 +9,7 @@
 
 ## About
 
-Generates a self-contained, single-file HTML workbook of eight runnable tutorials covering every domain of Anthropic's **Claude Certified Architect – Foundations (CCA-F)** exam. The pedagogy is verification-gated: each tutorial is built, then deliberately broken, then ticked off a checklist — passive reading does not advance the page. Pair it with your preferred theory resource and practice questions; this project is independent and unofficial.
+Provides a self-contained, single-file HTML workbook of eight runnable tutorials covering every domain of Anthropic's **Claude Certified Architect – Foundations (CCA-F)** exam, plus a companion visual study guide for the theory half. The pedagogy is verification-gated: each tutorial is built, then deliberately broken, then ticked off a checklist — passive reading does not advance the page. Content was fact-checked against the official exam guide and current Anthropic docs in July 2026. Independent and unofficial — not affiliated with or endorsed by Anthropic.
 
 ## Usage
 
@@ -40,10 +40,9 @@ A hosted copy is available at [ccaf-exam-tutorial.vercel.app](https://ccaf-exam-
 ```
 .
 ├── index.html         # The workbook — open this in a browser
-├── study-guide.html   # Companion theory notes
-├── screenshots/       # Viewport screenshots (desktop / tablet / mobile)
+├── study-guide.html   # Companion theory notes, mock exam, cheat sheet
+├── screenshots/       # Viewport screenshots for both pages
 ├── docs/              # Additional documentation assets
-├── screenshot.mjs     # Playwright helper that regenerates the screenshots
 ├── CLAUDE.md          # Project rules for Claude Code
 ├── LICENSE
 └── README.md
