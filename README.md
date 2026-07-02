@@ -43,6 +43,18 @@ A hosted copy is available at [ccaf-exam-tutorial.vercel.app](https://ccaf-exam-
 └── README.md
 ```
 
+## Maintenance
+
+The content decays as Anthropic ships — re-verify these against primary sources roughly quarterly (last full check: 2026-07-02):
+
+- [ ] Model pricing table in `usage.py` and all cost claims → [models overview](https://platform.claude.com/docs/en/about-claude/models/overview)
+- [ ] Context-window, `stop_reason`, caching, and structured-output claims → [platform.claude.com/docs](https://platform.claude.com/docs/)
+- [ ] MCP transport/auth terminology → [MCP spec](https://modelcontextprotocol.io/specification/latest)
+- [ ] Claude Code install command, CLAUDE.md semantics, MCP resource handling → [code.claude.com/docs](https://code.claude.com/docs/)
+- [ ] Exam fee, domain weights, delivery, validity in `study-guide.html` → official CCA-F exam guide via [Pearson VUE](https://www.pearsonvue.com/us/en/anthropic.html)
+- [ ] Tutorial 08 `prep.py` still extracts >15K chars from the Gutenberg file
+- [ ] Update the freshness stamp in the hero and the `v2026.NN` version strings
+
 ## Contributing
 
 Issues and pull requests welcome. Please open an issue first to discuss substantial changes.

@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CCA-F Exam Prep — 8 Hands-On Claude Architect Tutorials</title>
 <meta name="description" content="Eight runnable tutorials for Anthropic's Claude Certified Architect (CCA-F) exam. Build each concept, trigger a deliberate failure, tick a checklist.">
-<link rel="canonical" href="https://jamesbuckett.github.io/ccaf-claude-certified-architect-practical/">
+<link rel="canonical" href="https://ccaf-exam-tutorial.vercel.app/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="article">
 <meta property="og:title" content="CCA-F Exam Prep — 8 Hands-On Claude Architect Tutorials">
 <meta property="og:description" content="Eight runnable tutorials for Anthropic's Claude Certified Architect exam. Build each concept, trigger a failure, tick a checklist. ~6.5 hrs, under $4 in API spend.">
-<meta property="og:url" content="https://jamesbuckett.github.io/ccaf-claude-certified-architect-practical/">
-<meta property="og:image" content="https://jamesbuckett.github.io/ccaf-claude-certified-architect-practical/og.png">
+<meta property="og:url" content="https://ccaf-exam-tutorial.vercel.app/">
+<meta property="og:image" content="https://ccaf-exam-tutorial.vercel.app/og.png">
 <meta property="og:site_name" content="CCA-F Practical">
 <meta property="og:locale" content="en_US">
 
@@ -22,7 +22,7 @@
 <meta name="twitter:creator" content="@jamesbuckett">
 <meta name="twitter:title" content="CCA-F Exam Prep — 8 Hands-On Claude Architect Tutorials">
 <meta name="twitter:description" content="Build each CCA-F concept yourself, trigger a deliberate failure, tick a checklist. ~6.5 hrs, under $4 in API spend.">
-<meta name="twitter:image" content="https://jamesbuckett.github.io/ccaf-claude-certified-architect-practical/og.png">
+<meta name="twitter:image" content="https://ccaf-exam-tutorial.vercel.app/og.png">
 
 <!-- Structured data: the workbook itself -->
 <script type="application/ld+json">
@@ -36,7 +36,7 @@
   "timeRequired": "PT6H30M",
   "isAccessibleForFree": true,
   "inLanguage": "en",
-  "url": "https://jamesbuckett.github.io/ccaf-claude-certified-architect-practical/",
+  "url": "https://ccaf-exam-tutorial.vercel.app/",
   "datePublished": "2026-04-01",
   "author": {
     "@type": "Person",
@@ -77,12 +77,12 @@
     {
       "@type": "Question",
       "name": "What do I need before I start?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Python 3.11+, Node 20 LTS (for Claude Code), an exported ANTHROPIC_API_KEY, and comfort with a terminal. Full tooling list is in the wrap-up." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Python 3.11+, the Claude Code CLI (one-line native installer; Node 20+ only if you use the npm alternative), an exported ANTHROPIC_API_KEY, and comfort with a terminal. Full tooling list is in the wrap-up." }
     },
     {
       "@type": "Question",
       "name": "Will this alone make me pass the exam?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Probably not on its own — exam prep benefits from broader theoretical context too. This workbook builds the muscle memory for every CCA-F domain, so pair it with your preferred theory resource and practice questions." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Probably not on its own — exam prep benefits from broader theoretical context too. This workbook builds the muscle memory for every CCA-F domain, so pair it with the companion CCA-F Atlas study guide (theory, flashcards, and a mock exam) and practice questions." }
     }
   ]
 }
@@ -990,6 +990,7 @@ code.inline {
 }
 .checklist li:last-child { border-bottom: 0; }
 .checklist li:hover { background: var(--surface-2); }
+.checklist li:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .check-mark {
   flex-shrink: 0;
   width: 18px; height: 18px;
@@ -1728,111 +1729,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
 
 <a class="skip-link" href="#top">Skip to main content</a>
 
-<aside class="toc-sidebar" id="index" aria-label="Index">
-  <div class="toc-inner">
-    <div class="toc-top">
-      <span class="toc-eyebrow"><span class="toc-eyebrow-num">01 /</span> Tutorial Index</span>
-      <button class="toc-close" id="tocClose" aria-label="Close navigation" type="button">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-      </button>
-    </div>
-    <h2 class="toc-title">Pick a tutorial.</h2>
-    <p class="toc-intro">Ordered so each builds on the last. Tutorial 1 is the foundation for every subsequent session. Progress saves locally.</p>
 
-    <nav class="toc-list" aria-label="Tutorials">
-      <a class="index-row" data-tut="1" href="#tut-1">
-        <span class="idx-num"><span>01</span></span>
-        <span class="idx-body">
-          <span class="idx-title">The Agentic Loop</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
-            <span class="idx-time">45m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="2" href="#tut-2">
-        <span class="idx-num"><span>02</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Hub-and-Spoke Orchestration</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
-            <span class="idx-time">60m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="3" href="#tut-3">
-        <span class="idx-num"><span>03</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Build an MCP Server</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
-            <span class="idx-time">75m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="4" href="#tut-4">
-        <span class="idx-num"><span>04</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Tool Description Discipline</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
-            <span class="idx-time">30m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="5" href="#tut-5">
-        <span class="idx-num"><span>05</span></span>
-        <span class="idx-body">
-          <span class="idx-title">CLAUDE.md Hierarchy</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
-            <span class="idx-time">40m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="6" href="#tut-6">
-        <span class="idx-num"><span>06</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Hooks vs Skills vs Slash</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
-            <span class="idx-time">45m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="7" href="#tut-7">
-        <span class="idx-num"><span>07</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Structured Output Retry</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D4 · Prompt Eng.</span>
-            <span class="idx-time">50m</span>
-          </span>
-        </span>
-      </a>
-      <a class="index-row" data-tut="8" href="#tut-8">
-        <span class="idx-num"><span>08</span></span>
-        <span class="idx-body">
-          <span class="idx-title">Prompt Caching & Lost-in-Middle</span>
-          <span class="idx-meta">
-            <span class="idx-domain"><span class="idx-domain-dot"></span>D5 · Context</span>
-            <span class="idx-time">45m</span>
-          </span>
-        </span>
-      </a>
-    </nav>
-
-    <div class="toc-footer">
-      <div class="toc-progress-row">
-        <span><strong id="doneCount">0</strong> / 8 complete</span>
-        <span>progress</span>
-      </div>
-      <div class="mini-bar"><span id="miniBar"></span></div>
-      <button class="reset-btn" id="resetProgress" type="button">Reset progress</button>
-    </div>
-  </div>
-</aside>
-<div class="toc-backdrop" id="tocBackdrop"></div>
 
 <header class="site-head">
   <div class="page">
@@ -1872,14 +1769,14 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
   <div class="page">
     <div class="hero-stamp"><span class="hero-stamp-dot"></span> LAB MANUAL · CCA-F EXAM PREP · v2026.04</div>
     <h1>Pass Anthropic's Claude Architect exam by <em>building</em> every concept yourself.</h1>
-    <p class="hero-lede">Every CCA-F domain as runnable code — with a deliberate failure to trigger and a checklist you can only tick after you've seen it on your own terminal.</p>
+    <p class="hero-lede">Every CCA-F domain as runnable code — with a deliberate failure to trigger and a checklist designed so you can only honestly tick it after you've seen it on your own terminal.</p>
 
     <div class="hero-friction">
       <span>Free &amp; open source</span>
       <span>~6h 30m hands-on</span>
       <span>One API key</span>
       <span>Under $4 in Sonnet 4.6 spend</span>
-      <span>Python 3.11 + Node 20</span>
+      <span>Python 3.11+ · one-line installs</span>
     </div>
 
     <div class="hero-cta">
@@ -1928,7 +1825,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
 
     <div class="freshness" role="note">
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Last verified against <code class="inline" style="font-size:0.72rem">anthropic &gt;= 0.40</code> and Claude Sonnet 4.6 · 2026-04-14 · <a href="https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/issues" target="_blank" rel="noopener noreferrer">report an issue</a>
+      Last verified against <code class="inline" style="font-size:0.72rem">anthropic &gt;= 0.40</code> and Claude Sonnet 4.6 · 2026-04-14 · facts re-checked against official docs &amp; exam guide 2026-07-02 · <a href="https://github.com/jamesbuckett/ccaf-exam-tutorial/issues" target="_blank" rel="noopener noreferrer">report an issue</a>
     </div>
   </div>
 </section>
@@ -1939,7 +1836,7 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
 <section class="block" id="before-you-start" aria-labelledby="prestart-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">00 /</span>
+      <span class="eyebrow-num">§</span>
       <span class="eyebrow-label">Before you start</span>
     </div>
     <h2 id="prestart-heading">Two minutes of setup, then you're doing exam-relevant work.</h2>
@@ -1969,15 +1866,29 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
       </div>
     </div>
 
+    <div class="prestart-card" style="margin-top: var(--s-5)">
+      <h3><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>The five CCA-F domains</h3>
+      <p class="muted" style="font-size:0.9rem; margin-bottom: var(--s-3)">Official exam weights (per the exam guide, July 2026). The "D1 · Agentic"-style chips throughout this workbook map to these. Full theory deep-dives live in the <a href="study-guide.html">companion study guide</a>.</p>
+      <ul>
+        <li><strong>D1 · Agentic Architecture &amp; Orchestration</strong> — 27% · Tutorials 01–02</li>
+        <li><strong>D2 · Tool Design &amp; MCP Integration</strong> — 18% · Tutorials 03–04</li>
+        <li><strong>D3 · Claude Code Configuration &amp; Workflows</strong> — 20% · Tutorials 05–06</li>
+        <li><strong>D4 · Prompt Engineering &amp; Structured Output</strong> — 20% · Tutorial 07</li>
+        <li><strong>D5 · Context Management &amp; Reliability</strong> — 15% · Tutorial 08</li>
+      </ul>
+    </div>
+
     <div class="prestart-install">
       <p style="margin:0 0 var(--s-2)"><strong>One-time install</strong> (~2 minutes) — each tutorial creates its own <code style="font-family:var(--mono);font-size:0.8rem">.venv</code>, so Python packages get installed per tutorial. Only these are truly global:</p>
       <div><span style="color:var(--text-faint)"># Ubuntu / Debian (skip on macOS):</span></div>
       <div>sudo apt update &amp;&amp; sudo apt install -y python3 python3-venv python3-pip</div>
-      <div><span style="color:var(--text-faint)"># All platforms:</span></div>
-      <div>sudo npm i -g @anthropic-ai/claude-code</div>
+      <div><span style="color:var(--text-faint)"># All platforms — native installer (recommended; the docs warn against sudo npm):</span></div>
+      <div>curl -fsSL https://claude.ai/install.sh | bash</div>
+      <div><span style="color:var(--text-faint)"># Alternative if you prefer npm (Node 20+, no sudo): npm i -g @anthropic-ai/claude-code</span></div>
       <div>export ANTHROPIC_API_KEY="sk-ant-…"</div>
     </div>
-    <p class="muted" style="margin-top: var(--s-4); font-size: 0.9rem">Never set up a Python virtualenv before? Walk through the <a href="#venv-setup">venv setup section</a> below — it covers the activate / install / deactivate cycle every tutorial assumes.</p>
+    <p class="muted" style="margin-top: var(--s-4); font-size: 0.9rem">Never set up a Python virtual environment before? Walk through the <a href="#venv-setup">venv setup section</a> below — it covers the activate / install / deactivate cycle every tutorial assumes.</p>
+    <p class="muted" style="margin-top: var(--s-2); font-size: 0.9rem">Key exported? Verify it works before Tutorial 01: grab <code class="inline">usage.py</code> from <a href="#utilities">Utilities</a> and run <code class="inline">python3 usage.py</code> — a fraction-of-a-cent smoke call that prints live <code class="inline">.usage</code> fields.</p>
   </div>
 </section>
 
@@ -1987,11 +1898,11 @@ details.trace-inline > :last-child { padding-bottom: var(--s-4); }
 <section class="block" id="venv-setup" aria-labelledby="venv-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">00 /</span>
+      <span class="eyebrow-num">§</span>
       <span class="eyebrow-label">Virtual environments</span>
     </div>
     <h2 id="venv-heading">Enabling <code class="inline">venv</code> to run the tutorials.</h2>
-    <p class="muted" style="max-width:62ch; margin-top: var(--s-3)">Every tutorial installs its Python packages into a throwaway virtualenv under <code class="inline">.venv</code>. That keeps each tutorial's SDK version isolated, avoids polluting your system Python, and sidesteps <a href="https://peps.python.org/pep-0668/" target="_blank" rel="noopener noreferrer">PEP 668</a> errors on Ubuntu 23.04+ and current Homebrew. If you've never set one up before, this is the whole dance — do it once on Tutorial 01, then repeat the short version for every later tutorial.</p>
+    <p class="muted" style="max-width:62ch; margin-top: var(--s-3)">Every tutorial installs its Python packages into a throwaway virtual environment under <code class="inline">.venv</code>. That keeps each tutorial's SDK version isolated, avoids polluting your system Python, and sidesteps <a href="https://peps.python.org/pep-0668/" target="_blank" rel="noopener noreferrer">PEP 668</a> errors (the rule that makes system Python refuse global <code class="inline">pip install</code> to protect OS packages) on Ubuntu 23.04+ and current Homebrew. If you've never set one up before, this is the whole dance — do it once on Tutorial 01, then repeat the short version for every later tutorial.</p>
 
     <h3 style="margin-top: var(--s-6); margin-bottom: var(--s-3)">1. Install the <code class="inline">venv</code> package (Ubuntu / Debian only)</h3>
     <p>macOS and most other Linux distros ship the <code class="inline">venv</code> module with Python. Ubuntu and Debian split it into a separate apt package that has to be installed once:</p>
@@ -2046,7 +1957,7 @@ source .venv/bin/activate     # re-enter, no re-install needed</pre>
 <section class="block" id="faq" aria-labelledby="faq-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">00 /</span>
+      <span class="eyebrow-num">§</span>
       <span class="eyebrow-label">Frequently asked</span>
     </div>
     <h2 id="faq-heading">Before you commit six hours.</h2>
@@ -2074,19 +1985,19 @@ source .venv/bin/activate     # re-enter, no re-install needed</pre>
       <details class="faq-item">
         <summary>What do I need before I start?</summary>
         <div class="faq-body">
-          <p>Python 3.11+, Node 20 LTS (for Claude Code), an exported <code class="inline">ANTHROPIC_API_KEY</code>, and comfort with a terminal. Everything you need is in the <a href="#before-you-start">pre-start install block</a> above — no Docker, no cloud accounts, no cluster, everything runs locally.</p>
+          <p>Python 3.11+, the Claude Code CLI (one-line native installer — Node 20+ only if you take the npm alternative), an exported <code class="inline">ANTHROPIC_API_KEY</code>, and comfort with a terminal. Everything you need is in the <a href="#before-you-start">pre-start install block</a> above — no Docker, no cloud accounts, no cluster, everything runs locally.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>Will this workbook alone make me pass the exam?</summary>
         <div class="faq-body">
-          <p>Honestly? Probably not on its own. Exam prep benefits from broader theoretical context alongside hands-on work. This workbook's job is the muscle memory half — every CCA-F domain translated into runnable code with a deliberate failure to trigger, so when you see a scenario on the exam you've already watched the behaviour on your own terminal. Pair it with your preferred theory resource and practice questions, and reserve the final week for revision rather than more tutorials.</p>
+          <p>Honestly? Probably not on its own. Exam prep benefits from broader theoretical context alongside hands-on work. This workbook's job is the muscle memory half — every CCA-F domain translated into runnable code with a deliberate failure to trigger, so when you see a scenario on the exam you've already watched the behaviour on your own terminal. Pair it with the <a href="study-guide.html">companion CCA-F Atlas study guide</a> (domain deep-dives, flashcards, and a 15-question mock — it's what every tutorial's "Source" line cites) plus practice questions, and reserve the final week for revision rather than more tutorials.</p>
         </div>
       </details>
       <details class="faq-item">
         <summary>What if the code breaks or an SDK version ships?</summary>
         <div class="faq-body">
-          <p>Open an issue on <a href="https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/issues" target="_blank" rel="noopener noreferrer">the GitHub repo</a>. The freshness stamp at the top of the page shows when the code was last verified against a live SDK and model version.</p>
+          <p>Open an issue on <a href="https://github.com/jamesbuckett/ccaf-exam-tutorial/issues" target="_blank" rel="noopener noreferrer">the GitHub repo</a>. The freshness stamp at the top of the page shows when the code was last verified against a live SDK and model version.</p>
         </div>
       </details>
     </div>
@@ -2108,7 +2019,7 @@ source .venv/bin/activate     # re-enter, no re-install needed</pre>
         </div>
         <h2>The Agentic Loop — think / act / observe with the Anthropic SDK</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> An agent is a Claude instance wrapped in a loop that calls tools, observes results, and decides the next action until a stop condition fires. Every loop needs a termination condition.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 1 · The Agentic Loop mental model</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-1">Domain 1 · The Agentic Loop mental model</a> — companion study guide</p>
       </div>
     </div>
 
@@ -2223,7 +2134,7 @@ source .venv/bin/activate     # re-enter, no re-install needed</pre>
         </div>
 <pre>sudo apt update &amp;&amp; sudo apt install -y python3 python3-venv python3-pip</pre>
       </div>
-      <p>Now create the project directory and a fresh virtualenv. On macOS and most Linux distros, <code class="inline">python3</code> is the canonical binary — <code class="inline">python</code> on its own is not reliable across systems.</p>
+      <p>Now create the project directory and a fresh virtual environment. On macOS and most Linux distros, <code class="inline">python3</code> is the canonical binary — <code class="inline">python</code> on its own is not reliable across systems.</p>
       <div class="codeblock">
         <div class="codeblock-head">
           <span class="codeblock-lang">bash</span>
@@ -2307,7 +2218,7 @@ def run_tool(name, args):
       <ul>
         <li><code class="inline">anthropic.Anthropic()</code> reads <code class="inline">ANTHROPIC_API_KEY</code> from env and constructs an HTTP client. <strong>No network call yet.</strong></li>
         <li><code class="inline">MAX_ITERATIONS = 5</code> is the <strong>termination cap</strong> — the single most important line in the file. Without it, <code class="inline">for turn in range(MAX_ITERATIONS)</code> becomes <code class="inline">while True:</code> and your bill grows without bound. Tutorial 01's build-and-break exercise deletes exactly this line on purpose.</li>
-        <li><code class="inline">tools = [...]</code> is the <strong>catalogue the model sees</strong>. Three fields matter: <code class="inline">name</code> (identifier the model emits), <code class="inline">description</code> (free text it reads to decide <em>when</em> to call), and <code class="inline">input_schema</code> (JSON Schema enforced server-side on the argument payload).</li>
+        <li><code class="inline">tools = [...]</code> is the <strong>catalogue the model sees</strong>. Three fields matter: <code class="inline">name</code> (identifier the model emits), <code class="inline">description</code> (free text it reads to decide <em>when</em> to call), and <code class="inline">input_schema</code> (JSON Schema the model follows when emitting arguments — guaranteed by the API only if the tool sets <code class="inline">strict: true</code>).</li>
         <li><code class="inline">run_tool(...)</code> is a pure-Python dispatcher. <strong>The model never executes this</strong> — you do. The model only asks you to.</li>
         <li><code class="inline">messages</code> starts with a single user turn. Everything below gets <strong>appended</strong> to it; state lives in your Python process, not on Anthropic's side.</li>
       </ul>
@@ -2600,7 +2511,9 @@ def run_tool(name, args):
       </div>
       <div class="codeblock">
         <div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
-<pre>deactivate &amp;&amp; rm -rf agentic-loop</pre>
+<pre>deactivate   # keep the agentic-loop directory — Tutorials 02 and 04 reuse its .venv
+# once you've finished Tutorials 02 and 04:
+# cd .. &amp;&amp; rm -rf agentic-loop</pre>
       </div>
     </div>
 
@@ -2651,7 +2564,7 @@ def run_tool(name, args):
         </div>
         <h2>Hub-and-Spoke Orchestration with Isolated Sub-agent Context</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> One orchestrator delegates independent slices of work to sub-agents running in their own context windows. Sub-agents return summaries, not full transcripts. No worker-to-worker edges.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 1 · Hub-and-Spoke model · Scenario 03 (Multi-Agent Research)</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-1">Domain 1 · Hub-and-Spoke model</a> · <a href="study-guide.html#scenarios">Scenario 03 (Multi-Agent Research)</a></p>
       </div>
     </div>
 
@@ -2756,8 +2669,9 @@ def run_tool(name, args):
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 5 min</span>
       </div>
-      <p>Reuse the <code class="inline">.venv</code> from Tutorial 01. Create <code class="inline">orchestrator.py</code>:</p>
+      <p>Reuse the <code class="inline">.venv</code> from Tutorial 01 (<code class="inline">cd agentic-loop &amp;&amp; source .venv/bin/activate</code> if you're in a fresh shell). Create <code class="inline">orchestrator.py</code>:</p>
       <div class="codeblock">
         <div class="codeblock-head"><span class="codeblock-lang">python · orchestrator.py</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre><span class="ccaf-line">import anthropic</span>
@@ -2847,6 +2761,7 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 25 min</span>
       </div>
       <ol class="steps">
         <li>
@@ -2906,7 +2821,7 @@ if __name__ == "__main__":
         <li>
           <span class="step-title">Observe the summary contract.</span>
           <p>The sub-agent's system prompt says "return ONE paragraph… do not narrate." Sub-agents return artifacts, not history.</p>
-          <div class="step-why"><em>Why it matters:</em> This is the summary-not-state rule from the source, enforced at the prompt layer.</div>
+          <div class="step-why"><em>Why it matters:</em> This is the summary-not-state rule from the <a href="study-guide.html#domain-1">companion study guide's Domain 1 material</a>, enforced at the prompt layer.</div>
         </li>
       </ol>
     </div>
@@ -2915,6 +2830,7 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 15 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -2986,7 +2902,7 @@ if __name__ == "__main__":
         <li data-key="2.1"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can explain why sub-agents return summaries, not transcripts.</span></li>
         <li data-key="2.2"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've seen the parent's token count stay small in the isolated version.</span></li>
         <li data-key="2.3"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can identify a mesh anti-pattern vs a hub-and-spoke.</span></li>
-        <li data-key="2.4"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've run the same orchestration sequentially vs in parallel (see Further exploration).</span></li>
+        <li data-key="2.4"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've compared the sub-agents' summed token counts against the orchestrator's, and can say where the savings come from.</span></li>
         <li data-key="2.5"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I know the first question before splitting: <em>is the work actually independent?</em></span></li>
       </ul>
     </div>
@@ -3005,7 +2921,7 @@ if __name__ == "__main__":
         <h3>Further exploration</h3>
       </div>
       <ul>
-        <li>Wrap the three spawn calls in <code class="inline">asyncio.gather</code> using the async client — parallelize for wall-clock savings.</li>
+        <li>Wrap the three spawn calls in <code class="inline">asyncio.gather</code> using the async client — parallelise for wall-clock savings.</li>
         <li>Add a <code class="inline">max_subagents</code> guard and a circuit-breaker for failing sub-agents.</li>
       </ul>
     </div>
@@ -3046,7 +2962,7 @@ if __name__ == "__main__":
         </div>
         <h2>Build an MCP Server Exposing Tools, Resources, and Prompts</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> MCP exposes three primitive types from one server. <strong>Tools</strong> are model-invoked actions. <strong>Resources</strong> are app-controlled data. <strong>Prompts</strong> are user-triggered templates. Picking the wrong primitive is the single most common Domain 2 exam trap.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 2 · MCP Triangle · Flashcards (Tool / Resource / Prompt Template)</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-2">Domain 2 · MCP Triangle · Flashcards (Tool / Resource / Prompt Template)</a></p>
       </div>
     </div>
 
@@ -3122,7 +3038,7 @@ if __name__ == "__main__":
         <ul>
           <li>Python 3.11+</li>
           <li><code class="inline">mcp</code> package (official Model Context Protocol SDK): <code class="inline">pip install mcp</code></li>
-          <li>Claude Code CLI installed (<code class="inline">sudo npm i -g @anthropic-ai/claude-code</code>)</li>
+          <li>Claude Code CLI installed (<code class="inline">curl -fsSL https://claude.ai/install.sh | bash</code> — see the pre-start block)</li>
           <li>Basic familiarity with JSON Schema</li>
         </ul>
       </div>
@@ -3150,6 +3066,7 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 10 min</span>
       </div>
       <div class="codeblock">
         <div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
@@ -3214,7 +3131,7 @@ if __name__ == "__main__":
       <h4 style="margin-top: var(--s-5); margin-bottom: var(--s-2)">Before any user interaction</h4>
       <ul>
         <li><code class="inline">FastMCP("triangle-demo")</code> constructs the server object. The three decorators (<code class="inline">@mcp.tool()</code>, <code class="inline">@mcp.resource(...)</code>, <code class="inline">@mcp.prompt(...)</code>) fire at <strong>import time</strong> — they introspect the Python functions, pull the docstrings out as descriptions, and register each primitive with the server's capability table.</li>
-        <li><code class="inline">mcp.run()</code> starts the stdio event loop. The server now blocks on <code class="inline">stdin</code> waiting for a JSON-RPC frame from Claude Code.</li>
+        <li><code class="inline">mcp.run()</code> starts the stdio event loop. The server now blocks on <code class="inline">stdin</code> waiting for a JSON-RPC frame from Claude Code (JSON-RPC is the small request/response message format MCP speaks over the pipe — a JSON object with a method name, params, and an id).</li>
         <li>When Claude Code launches in this directory, it reads <code class="inline">.mcp.json</code>, spawns <code class="inline">python server.py</code> as a subprocess, and handshakes with it over that subprocess's <code class="inline">stdin</code>/<code class="inline">stdout</code>. After the handshake, Claude Code knows the server offers exactly: 1 tool, 1 resource, 1 prompt — visible when you type <code class="inline">/mcp</code>.</li>
       </ul>
 
@@ -3226,8 +3143,8 @@ if __name__ == "__main__":
         </li>
         <li>
           <span class="step-title">RESOURCE — <em>the application</em> initiates.</span>
-          <p>You ask <em>"Explain our shipping timeline."</em>. Claude Code's harness decides that the <code class="inline">docs://shipping-policy</code> resource is relevant to the task and issues a <code class="inline">resources/read</code> JSON-RPC call to the server. The <code class="inline">shipping_policy()</code> function returns its string, Claude Code <strong>inlines it into the prompt context</strong> (as a content block attached to the user message), and the model just reads. The model never emits a tool-use block; it never decided to call anything.</p>
-          <div class="step-why"><em>Key point:</em> resources are <em>attached</em>, not <em>called</em>. That's why "mis-categorising a Resource as a Tool" — the build-and-break exercise — produces wrong-time calls and wasted tokens: you've shifted the initiator from the app to the model.</div>
+          <p>You attach the resource with an @-mention: type <code class="inline">@triangle:docs://shipping-policy</code> in your prompt (typing <code class="inline">@</code> lists every available resource), then ask <em>"Explain our shipping timeline."</em>. Claude Code's harness — the application machinery wrapped around the model — issues a <code class="inline">resources/read</code> JSON-RPC call to the server. The <code class="inline">shipping_policy()</code> function returns its string, Claude Code <strong>inlines it into the prompt context</strong> (as a content block attached to the user message), and the model just reads. The model never emits a tool-use block; it never decided to call anything.</p>
+          <div class="step-why"><em>Key point:</em> resources are <em>attached</em>, not <em>called</em> — the app layer controls when. Claude Code implements app-control by letting <em>you</em> attach resources with @-mentions; other MCP hosts may attach relevant resources automatically. Either way the initiator is the application, not the model — which is why "mis-categorising a Resource as a Tool" (the build-and-break exercise) produces wrong-time calls and wasted tokens: you've shifted the initiator to the model.</div>
         </li>
         <li>
           <span class="step-title">PROMPT — <em>the user</em> initiates.</span>
@@ -3249,6 +3166,7 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 30 min</span>
       </div>
       <ol class="steps">
         <li>
@@ -3270,8 +3188,8 @@ if __name__ == "__main__":
         </li>
         <li>
           <span class="step-title">Trigger the RESOURCE (app-controlled).</span>
-          <p>Ask: <em>Explain our shipping timeline.</em> In a well-behaved harness, the resource is attached; Claude reads it to answer.</p>
-          <div class="step-why"><em>Why it matters:</em> Resources aren't "chosen" by the model — the app decides to include them.</div>
+          <p>Type <code class="inline">@</code> to see the triangle server's resources, then submit: <em>@triangle:docs://shipping-policy Explain our shipping timeline.</em> Expected: the resource content is attached to your message and Claude reads it to answer — no tool call in the transcript.</p>
+          <div class="step-why"><em>Why it matters:</em> Resources aren't "chosen" by the model — the app layer attaches them. In Claude Code that attachment is your @-mention; the model never issues the read.</div>
         </li>
         <li>
           <span class="step-title">Trigger the PROMPT (user-initiated).</span>
@@ -3285,6 +3203,7 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 20 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -3300,7 +3219,7 @@ if __name__ == "__main__":
           <li>It doesn't call the resource-that-should-be-there at all.</li>
           <li>Token use balloons because the full document is injected into each tool result.</li>
         </ul>
-        <p><strong>Confirm:</strong> watch the Claude Code transcript — you'll see the spurious <code class="inline">get_shipping_policy</code> call. A resource would have been quietly attached; a tool demands a reason to call.</p>
+        <p><strong>Confirm:</strong> watch the Claude Code transcript — you'll see the spurious <code class="inline">get_shipping_policy</code> call. A resource is attached up front (your @-mention decides); a tool demands that the model find a reason to call it.</p>
         <p><strong>Revert:</strong> restore the <code class="inline">@mcp.resource</code> decorator.</p>
       </div>
     </div>
@@ -3313,7 +3232,7 @@ if __name__ == "__main__":
       <ul class="checklist">
         <li data-key="3.1"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can state "who initiates?" for each of the three primitives without looking.</span></li>
         <li data-key="3.2"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've seen a tool mis-used because its description was too loose.</span></li>
-        <li data-key="3.3"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can point to my <code class="inline">.mcp.json</code> and explain stdio vs HTTP/SSE transport.</span></li>
+        <li data-key="3.3"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can point to my <code class="inline">.mcp.json</code> and explain stdio vs Streamable HTTP transport.</span></li>
         <li data-key="3.4"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">My MCP server exposes one of each primitive and all register in <code class="inline">/mcp</code>.</span></li>
         <li data-key="3.5"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've watched Claude choose (or not) to call a tool based on its description.</span></li>
       </ul>
@@ -3333,7 +3252,7 @@ if __name__ == "__main__":
         <h3>Further exploration</h3>
       </div>
       <ul>
-        <li>Convert the server to HTTP transport (<code class="inline">mcp.run(transport="http", port=3333)</code>) and connect from a remote host.</li>
+        <li>Convert the server to the Streamable HTTP transport — <code class="inline">FastMCP("triangle-demo", port=3333)</code> plus <code class="inline">mcp.run(transport="streamable-http")</code> — and connect from a remote host.</li>
         <li>Add a second tool with an anti-example in the description (<code class="inline">"Do NOT call when…"</code>).</li>
         <li>Explore the <code class="inline">resources/list</code> MCP method directly with <code class="inline">mcp-cli</code> or <code class="inline">curl</code>.</li>
       </ul>
@@ -3370,7 +3289,7 @@ if __name__ == "__main__":
         </div>
         <h2>Tool Description Discipline — Break It, Then Fix It</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> The tool description is the only signal the model has for <em>when</em> to call a tool. Vague descriptions cause wrong-time calls; great descriptions state parameters, units, side effects, and anti-examples ("when NOT to call").</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 2 · Common Traps · Quiz Q7</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-2">Domain 2 · Common Traps</a> · <a href="study-guide.html#quiz">Quiz Q7</a></p>
       </div>
     </div>
 
@@ -3444,7 +3363,7 @@ if __name__ == "__main__":
           <text x="394" y="326" class="d-t-sm">one call, right semantics, exits fast</text>
         </svg>
       </div>
-      <p class="concept-diagram-caption">A tool description is a <strong>contract with the router</strong>. The model picks by semantic match, not by function name. Include trigger-words, scope boundaries, and explicit non-examples — e.g. <code>"NOT for weather"</code> — or an adjacent tool will swallow the call.</p>
+      <p class="concept-diagram-caption">A tool description is a <strong>contract with the model's tool-selection ("routing") logic</strong>. The model picks by semantic match, not by function name. Include trigger-words, scope boundaries, and explicit non-examples — e.g. <code>"NOT for weather"</code> — or an adjacent tool will swallow the call.</p>
     </div>
 
     <div class="tut-meta">
@@ -3479,8 +3398,9 @@ if __name__ == "__main__":
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 5 min</span>
       </div>
-      <p>Reuse Tutorial 01's environment. Create <code class="inline">describe.py</code>:</p>
+      <p>Reuse Tutorial 01's environment (<code class="inline">cd agentic-loop &amp;&amp; source .venv/bin/activate</code>). Create <code class="inline">describe.py</code>:</p>
       <div class="codeblock">
         <div class="codeblock-head"><span class="codeblock-lang">python · describe.py</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre><span class="ccaf-line">import anthropic, json</span>
@@ -3543,7 +3463,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
       <ul>
         <li>The <code class="inline">test_prompts</code> list is labelled in the source comments: two should call (order-ID lookups), two should not (policy + product questions). That label is the <em>ground truth</em> you'll measure accuracy against.</li>
         <li><code class="inline">VAGUE</code> has a single sentence description (<em>"Gets data."</em>) and an empty <code class="inline">input_schema</code>. <code class="inline">PRECISE</code> names the domain, the trigger phrases, the anti-cases, the parameter with its own description, and the return shape — <strong>five elements</strong>, each of which is a signal the model can route on.</li>
-        <li><code class="inline">run(tools, prompts, label)</code> is the harness: one <code class="inline">create()</code> per prompt, with a fresh single-turn <code class="inline">messages</code> list each time — no conversation carry-over. The log line extracts <code class="inline">[b.name for b in resp.content if b.type == "tool_use"]</code>, so an empty list means "model decided not to call".</li>
+        <li><code class="inline">run(tools, prompts, label)</code> is the test driver: one <code class="inline">create()</code> per prompt, with a fresh single-turn <code class="inline">messages</code> list each time — no conversation carry-over. The log line extracts <code class="inline">[b.name for b in resp.content if b.type == "tool_use"]</code>, so an empty list means "model decided not to call".</li>
       </ul>
 
       <ol class="steps" style="margin-top: var(--s-5)">
@@ -3584,6 +3504,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 12 min</span>
       </div>
       <ol class="steps">
         <li>
@@ -3609,6 +3530,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 8 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -3692,20 +3614,20 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
           <span class="chip">Claude Code CLI</span>
         </div>
         <h2>CLAUDE.md Hierarchy in Claude Code</h2>
-        <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> Claude Code loads CLAUDE.md instructions at three tiers — global (<code class="inline">~/.claude/CLAUDE.md</code>), project (<code class="inline">./CLAUDE.md</code>), and subdirectory (<code class="inline">./src/foo/CLAUDE.md</code>). More specific wins. Personal preferences go global; team rules go in project; local overrides go in subdirs.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 3 · CLAUDE.md Pyramid · Quiz Q13</p>
+        <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> Claude Code loads CLAUDE.md instructions at three tiers — global (<code class="inline">~/.claude/CLAUDE.md</code>), project (<code class="inline">./CLAUDE.md</code>), and subdirectory (<code class="inline">./src/foo/CLAUDE.md</code>). All applicable files are concatenated into context — subdirectory files join only when Claude works in that subtree, and the docs promise no winner when rules contradict. Personal preferences go global; team rules go in project; per-directory specifics go in subdirs — written so tiers never conflict.</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-3">Domain 3 · CLAUDE.md Pyramid</a> · <a href="study-guide.html#quiz">Quiz Q13</a></p>
       </div>
     </div>
 
     <div class="concept-diagram" aria-label="CLAUDE.md hierarchy diagram">
       <div class="concept-diagram-head">
         <span class="concept-diagram-label">Concept diagram</span>
-        <span class="concept-diagram-title">three-layer merge · deepest wins</span>
+        <span class="concept-diagram-title">three tiers · scoped loading</span>
       </div>
       <div class="concept-diagram-svg-wrap">
         <svg class="concept-svg" viewBox="0 0 720 340" role="img" aria-labelledby="t5-dia-title t5-dia-desc">
           <title id="t5-dia-title">CLAUDE.md hierarchy: user global, project, and nested files merge with precedence from top to bottom.</title>
-          <desc id="t5-dia-desc">Three layers of CLAUDE.md stack: the user global file applies everywhere, the project file applies in the repo, and nested files apply within subdirectories. The deepest file wins on conflicts. All three merge into the effective session context.</desc>
+          <desc id="t5-dia-desc">Three layers of CLAUDE.md stack: the user global file applies everywhere, the project file applies in the repo, and nested files load on demand within subdirectories. All applicable files are concatenated into the effective session context; contradictory rules may resolve arbitrarily, so tiers should never disagree.</desc>
           <defs>
             <marker id="t5-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
               <path d="M0,0 L10,5 L0,10 z" class="d-arrow"/>
@@ -3741,7 +3663,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
             <path d="M0,0 L0,272" class="d-edge-ac"/>
             <path d="M-4,268 L0,276 L4,268 z" class="d-arrow-ac"/>
           </g>
-          <text x="-14" y="160" class="d-t-xs" transform="rotate(-90 -14 160)" text-anchor="middle" style="fill: var(--accent);">deepest wins</text>
+          <text x="-14" y="160" class="d-t-xs" transform="rotate(-90 -14 160)" text-anchor="middle" style="fill: var(--accent);">narrower scope</text>
 
           <path d="M364,64 C398,64 412,168 440,168" class="d-edge" marker-end="url(#t5-arr)"/>
           <path d="M364,160 L440,168" class="d-edge" marker-end="url(#t5-arr)"/>
@@ -3753,23 +3675,23 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
 
           <rect x="452" y="78" width="240" height="38" rx="3" class="d-box-2"/>
           <text x="462" y="96" class="d-mono">pytest, tabs 2</text>
-          <text x="462" y="110" class="d-t-xs">from user global</text>
+          <text x="462" y="110" class="d-t-xs">from user global · always loaded</text>
 
           <rect x="452" y="124" width="240" height="38" rx="3" class="d-box-2"/>
           <text x="462" y="142" class="d-mono">output ONE html file</text>
-          <text x="462" y="156" class="d-t-xs">from project (overrides none above)</text>
+          <text x="462" y="156" class="d-t-xs">from project · concatenated after global</text>
 
           <rect x="452" y="170" width="240" height="38" rx="3" class="d-box-ac"/>
           <text x="462" y="188" class="d-mono-ac">FastAPI · return Pydantic</text>
-          <text x="462" y="202" class="d-t-xs" style="fill: var(--accent);">from nested (overrides parent)</text>
+          <text x="462" y="202" class="d-t-xs" style="fill: var(--accent);">from nested · joins only in that subtree</text>
 
           <rect x="452" y="224" width="240" height="60" rx="3" class="d-box-ok"/>
-          <text x="462" y="244" class="d-t-xs" style="fill: var(--ok); letter-spacing: 0.14em;">CONFLICT RESOLUTION</text>
-          <text x="462" y="262" class="d-t-sm">if global says "Flask" and</text>
-          <text x="462" y="276" class="d-t-sm">nested says "FastAPI" → <tspan style="fill: var(--accent); font-weight: 600;">FastAPI wins</tspan></text>
+          <text x="462" y="244" class="d-t-xs" style="fill: var(--ok); letter-spacing: 0.14em;">CONFLICT RULE (PER DOCS)</text>
+          <text x="462" y="262" class="d-t-sm">contradictions "may resolve arbitrarily" —</text>
+          <text x="462" y="276" class="d-t-sm">so <tspan style="fill: var(--accent); font-weight: 600;">never let tiers disagree</tspan></text>
         </svg>
       </div>
-      <p class="concept-diagram-caption">Claude Code loads all applicable <code>CLAUDE.md</code> files on start-up and merges them. Scope narrows as you descend — global affects every project, project affects the repo, nested affects a subfolder. On conflicts, <strong>the deepest file wins</strong>. Use user global for personal style, project for repo invariants, nested for per-directory overrides.</p>
+      <p class="concept-diagram-caption">Claude Code loads the global and project <code>CLAUDE.md</code> files at session start and pulls subdirectory files in on demand as it works in those paths. Scope narrows as you descend — global affects every project, project affects the repo, nested affects a subfolder. All applicable files are <strong>concatenated, not overridden</strong>: the docs say contradictory rules "may resolve arbitrarily", so write tiers that never conflict. Use user global for personal style, project for repo invariants, nested for per-directory specifics.</p>
     </div>
 
     <div class="tut-meta">
@@ -3785,7 +3707,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
         <div class="tut-meta-label">Learning objectives</div>
         <ul>
           <li>Observe three CLAUDE.md files loading simultaneously</li>
-          <li>Force a conflict and see which tier wins</li>
+          <li>Force a conflict and learn why the docs tell you not to rely on a winner</li>
           <li>Identify what belongs at each tier (team / personal / local)</li>
           <li>Break the hierarchy by putting a user preference in a project file</li>
         </ul>
@@ -3805,6 +3727,7 @@ run(PRECISE, test_prompts, "PRECISE tool description")</pre>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 5 min</span>
       </div>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre># Back up existing global CLAUDE.md if any
@@ -3857,7 +3780,7 @@ EOF</pre></div>
         <li>
           <span class="step-title">Phase 2 — you ask for an edit in <code class="inline">src/payments/</code>.</span>
           <p>The moment Claude Code's file-op scope shifts into <code class="inline">src/payments/</code> — typically because of an <code class="inline">Edit</code> or <code class="inline">Write</code> tool call targeting a file there — the harness re-walks and finds <code class="inline">src/payments/CLAUDE.md</code>. It gets added to the context as the <strong>most specific</strong> tier.</p>
-          <p>Now there's a conflict: global says 4-space, subdir says 2-space. The resolution rule is <strong>most specific wins for this scope</strong> — subdir &gt; project &gt; global. Claude uses 2-space inside <code class="inline">src/payments/</code>, 4-space everywhere else.</p>
+          <p>Now there's a conflict: global says 4-space, subdir says 2-space. In practice Claude usually follows the most specific rule — the subdir file sits closest to the work — but the docs are explicit that this is <strong>not a guarantee</strong>: all applicable files are concatenated into context, and "if two rules contradict each other, Claude may pick one arbitrarily". The design rule that follows: scope rules so tiers never contradict in the first place.</p>
           <div class="step-why"><em>Why it's scope-based, not merge-at-startup:</em> a monorepo can have dozens of subdirectory CLAUDE.md files. Loading all of them at session start would bloat context. They're loaded on demand as Claude actually works in those paths.</div>
         </li>
         <li>
@@ -3872,7 +3795,7 @@ EOF</pre></div>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           One-line mental model
         </div>
-        <p>Closest-CLAUDE.md-to-the-work wins. <strong>Global</strong> follows you. <strong>Project</strong> follows the repo. <strong>Subdir</strong> follows a specific path. Content belongs at the tier whose audience matches the rule's scope — that's the only design rule, and every anti-pattern violates it.</p>
+        <p>The tiers are scopes, not a precedence ladder. <strong>Global</strong> follows you. <strong>Project</strong> follows the repo. <strong>Subdir</strong> follows a specific path. Everything in scope is concatenated, and the docs promise no winner for contradictions — so content belongs at the tier whose audience matches the rule's scope, written so tiers never disagree. That's the only design rule, and every anti-pattern violates it.</p>
       </div>
     </details>
 
@@ -3880,6 +3803,7 @@ EOF</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 20 min</span>
       </div>
       <ol class="steps">
         <li>
@@ -3891,14 +3815,14 @@ EOF</pre></div>
         <li>
           <span class="step-title">Work in the payments subdir.</span>
           <p>Ask: <em>Let's edit src/payments/charge.py — create it with a small function.</em> Then ask: <em>Which indentation rule applies here?</em></p>
-          <p>Expected: "2-space, because we're in <code class="inline">src/payments</code> and the local CLAUDE.md overrides the global 4-space preference."</p>
-          <div class="step-why"><em>Why it matters:</em> This is the precedence-by-specificity rule from the pyramid diagram.</div>
+          <p>Expected: Claude typically answers "2-space", citing the payments CLAUDE.md — the most specific rule now in context. Note that the docs don't guarantee this: contradictory rules "may resolve arbitrarily".</p>
+          <div class="step-why"><em>Why it matters:</em> Specificity usually carries the day in practice, but it's a heuristic, not a contract — the documented model is concatenation, and the real fix is removing the contradiction.</div>
         </li>
         <li>
           <span class="step-title">Force a conflict.</span>
           <p>Edit the project <code class="inline">CLAUDE.md</code> to say <code class="inline">- Prefer tabs everywhere</code> and ask Claude to write a function in the repo root.</p>
-          <p>Your global says 4-space; project says tabs. Expected: Claude follows the project (more specific wins for this scope).</p>
-          <div class="step-why"><em>Why it matters:</em> Teams encode rules closer to the code; personal defaults are overridden where teams have spoken.</div>
+          <p>Your global says 4-space; project says tabs. Expected: Claude usually follows the project rule — but run it a few times and you may see it drift. That <em>is</em> the documented behaviour: conflicting rules may resolve arbitrarily.</p>
+          <div class="step-why"><em>Why it matters:</em> Don't leave the contradiction in place and hope the "right" tier wins. Put the rule at the tier whose audience it belongs to, and delete the conflicting one.</div>
         </li>
       </ol>
     </div>
@@ -3907,6 +3831,7 @@ EOF</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 10 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -3917,7 +3842,7 @@ EOF</pre></div>
         <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div><pre>cat &gt;&gt; ~/hierarchy-demo/CLAUDE.md &lt;&lt;'EOF'
 - I like verbose commit messages with rationale in every line.
 EOF</pre></div>
-        <p>Commit it. Imagine a teammate cloning the repo — they'd inherit your commit-message preference, never having asked for it. The source's "Don't" explicitly warns against this.</p>
+        <p>Commit it. Imagine a teammate cloning the repo — they'd inherit your commit-message preference, never having asked for it. The <a href="study-guide.html#domain-3">study guide's Domain 3 "Don't" list</a> explicitly warns against this.</p>
         <p><strong>Confirm:</strong> ask Claude <em>Who is "I" in this CLAUDE.md? Does this rule belong here?</em> Claude should flag it as a user-scoped rule in the wrong tier.</p>
         <p><strong>Revert:</strong> remove the offending line and restore your real global CLAUDE.md: <code class="inline">mv ~/.claude/CLAUDE.md.bak ~/.claude/CLAUDE.md</code></p>
       </div>
@@ -3931,7 +3856,7 @@ EOF</pre></div>
       <ul class="checklist">
         <li data-key="5.1"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can name what belongs at global / project / subdir tiers.</span></li>
         <li data-key="5.2"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've seen Claude cite rules from multiple CLAUDE.md files.</span></li>
-        <li data-key="5.3"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've seen a subdir override a project rule.</span></li>
+        <li data-key="5.3"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I've seen a subdir rule shape output inside its path — and I know the docs don't guarantee it wins a contradiction.</span></li>
         <li data-key="5.4"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I understand why "I prefer X" should not go in a checked-in CLAUDE.md.</span></li>
         <li data-key="5.5"><span class="check-mark"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><span class="check-text">I can explain why this is a hierarchy, not a flat config.</span></li>
       </ul>
@@ -3987,7 +3912,7 @@ EOF</pre></div>
         </div>
         <h2>Hooks vs Skills vs Slash Commands</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> Claude Code gives you three automation mechanisms, differing by <em>who initiates</em>. <strong>Hooks</strong> fire deterministically on harness events. <strong>Skills</strong> are capabilities the model chooses to use. <strong>Slash commands</strong> are shortcuts the user types. Pick by initiator, not by what you want to do.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 3 · Flashcards · Quiz Q3 and Q8</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-3">Domain 3 · Flashcards</a> · <a href="study-guide.html#quiz">Quiz Q3 and Q8</a></p>
       </div>
     </div>
 
@@ -4104,6 +4029,7 @@ EOF</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 8 min</span>
       </div>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre>mkdir ~/primitives &amp;&amp; cd ~/primitives
@@ -4153,7 +4079,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <h4 style="margin-top: var(--s-5); margin-bottom: var(--s-2)">What happens at session start</h4>
       <ul>
         <li>Claude Code reads <code class="inline">.claude/settings.json</code> and registers the <code class="inline">PostToolUse</code> hook — a declaration of "run this shell command whenever a tool matching <code class="inline">Edit|Write</code> finishes". Nothing runs yet.</li>
-        <li>It scans <code class="inline">.claude/skills/*/SKILL.md</code> and loads the frontmatter (<code class="inline">name</code> + <code class="inline">description</code>) into the skill catalogue the model will see as routing signals each turn. The body of <code class="inline">SKILL.md</code> stays on disk — only loaded when the skill is invoked.</li>
+        <li>It scans <code class="inline">.claude/skills/*/SKILL.md</code> and loads the frontmatter — the <code class="inline">---</code>-delimited metadata block at the top (<code class="inline">name</code> + <code class="inline">description</code>) — into the skill catalogue the model will see as routing signals each turn. The body of <code class="inline">SKILL.md</code> stays on disk — only loaded when the skill is invoked.</li>
         <li>It indexes <code class="inline">.claude/commands/*.md</code> as slash-command templates. The command body is a prompt stub, not executable code.</li>
       </ul>
 
@@ -4188,6 +4114,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 18 min</span>
       </div>
       <ol class="steps">
         <li>
@@ -4214,6 +4141,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 12 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -4306,20 +4234,20 @@ Report findings as a numbered list with file:line references.</pre></div>
           <span class="chip">50 min</span>
           <span class="chip">Python · Anthropic SDK · jsonschema</span>
         </div>
-        <h2>Structured Output with Tool-Use + JSON Schema Retry Loop</h2>
-        <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> The reliable way to get JSON from Claude is to define a tool whose <code class="inline">input_schema</code> is your target JSON shape. When validation fails, return the validator's error to the model and retry — the self-healing loop from the source. Cap retries and fail loudly.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 4 · JSON Schema Retry mental model · Quiz Q4 and Q14</p>
+        <h2>Structured Output with Tool Use + JSON Schema Retry Loop</h2>
+        <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> Two layers of structured output. The API's native features — <code class="inline">output_config.format</code> with a JSON schema, and <code class="inline">strict: true</code> on a tool — <em>guarantee</em> schema-valid shape. The validate-and-retry loop you build here closes the remaining <em>semantic</em> gap (email formats, ranges, business rules): when validation fails, return the validator's error to the model and retry. Cap retries and fail loudly.</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-4">Domain 4 · JSON Schema Retry mental model</a> · <a href="study-guide.html#quiz">Quiz Q4 and Q14</a></p>
       </div>
     </div>
 
     <div class="concept-diagram" aria-label="Structured output retry loop diagram">
       <div class="concept-diagram-head">
         <span class="concept-diagram-label">Concept diagram</span>
-        <span class="concept-diagram-title">schema · tool-use · validate · retry</span>
+        <span class="concept-diagram-title">schema · tool use · validate · retry</span>
       </div>
       <div class="concept-diagram-svg-wrap">
         <svg class="concept-svg" viewBox="0 0 720 340" role="img" aria-labelledby="t7-dia-title t7-dia-desc">
-          <title id="t7-dia-title">Structured output: tool-use forces JSON, validator gates the output, invalid responses feed the error back and retry.</title>
+          <title id="t7-dia-title">Structured output: tool use forces JSON, validator gates the output, invalid responses feed the error back and retry.</title>
           <desc id="t7-dia-desc">Input prompt plus a JSON Schema are passed to the LLM as a tool definition. The LLM returns a tool_use block with JSON input. A validator checks it against the schema. Valid output is returned. Invalid output's error is appended and the loop retries up to MAX_RETRIES.</desc>
           <defs>
             <marker id="t7-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
@@ -4381,7 +4309,7 @@ Report findings as a numbered list with file:line references.</pre></div>
           <text x="34" y="318" class="d-t-sm">If the model can't satisfy the schema within <tspan class="d-mono">MAX_RETRIES</tspan>, raise — don't loop forever.</text>
         </svg>
       </div>
-      <p class="concept-diagram-caption">Tool-use + JSON Schema is the durable way to force structured output. The validator is not optional — it's the contract. When it fails, feed the <strong>exact error string back to the model</strong> so the next turn can correct, not guess. Cap retries; structured output without a loop bound is a spend bomb.</p>
+      <p class="concept-diagram-caption">Tool use + JSON Schema is a durable way to force structured output (native <code>output_config.format</code> and <code>strict: true</code> are the API-level guarantees). The validator is not optional — it's the contract. When it fails, feed the <strong>exact error string back to the model</strong> so the next turn can correct, not guess. Cap retries; structured output without a loop bound is a spend bomb.</p>
     </div>
 
     <div class="tut-meta">
@@ -4396,7 +4324,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <div class="tut-meta-block">
         <div class="tut-meta-label">Learning objectives</div>
         <ul>
-          <li>Get guaranteed-shape JSON via tool-use (not prose)</li>
+          <li>Get schema-shaped JSON via tool use (not prose), then close the semantic gap with validation + retry</li>
           <li>Validate against a <code class="inline">jsonschema</code> spec</li>
           <li>On failure, feed the validator's error back and retry</li>
           <li>Compare with the "please return JSON" prose approach</li>
@@ -4417,6 +4345,7 @@ Report findings as a numbered list with file:line references.</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 5 min</span>
       </div>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre>mkdir retry-loop &amp;&amp; cd retry-loop
@@ -4494,10 +4423,23 @@ print(json.dumps(extract_with_retry(document), indent=2))</pre></div>
 
       <h4 style="margin-top: var(--s-5); margin-bottom: var(--s-2)">Three design choices before the loop</h4>
       <ul>
-        <li><strong>Tool-use, not prose.</strong> The tool catalogue has exactly one tool (<code class="inline">record_contact</code>) whose <code class="inline">input_schema</code> is the target JSON shape. The API itself ensures <code class="inline">tool_use.input</code> is shape-compatible at the type level — you don't need to parse JSON out of prose.</li>
+        <li><strong>Tool use, not prose.</strong> The tool catalogue has exactly one tool (<code class="inline">record_contact</code>) whose <code class="inline">input_schema</code> is the target JSON shape. The model almost always emits <code class="inline">tool_use.input</code> matching that shape — and you never parse JSON out of prose. (Only <code class="inline">strict: true</code> on the tool makes the API <em>guarantee</em> it; without it, conformance is reliable but not contractual — which is one more reason the validator below isn't optional.)</li>
         <li><strong>Forced tool use.</strong> <code class="inline">tool_choice={"type": "tool", "name": "record_contact"}</code> removes the model's option to reply with prose. Every response <em>must</em> contain a <code class="inline">tool_use</code> block.</li>
-        <li><strong>Schema-level validation on top.</strong> The API enforces types and required fields; <code class="inline">jsonschema</code> enforces everything else — <code class="inline">format: email</code>, <code class="inline">minLength</code>, <code class="inline">minimum</code>/<code class="inline">maximum</code>, <code class="inline">additionalProperties: false</code>. That gap is what retries close.</li>
+        <li><strong>Schema-level validation on top.</strong> The API layer covers types and required fields; <code class="inline">jsonschema</code> enforces everything else — <code class="inline">format: email</code>, <code class="inline">minLength</code>, <code class="inline">minimum</code>/<code class="inline">maximum</code>, <code class="inline">additionalProperties: false</code>. That gap is what retries close.</li>
       </ul>
+
+      <div class="callout">
+        <div class="callout-head">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          The native alternative
+        </div>
+        <p>The Messages API now ships <strong>structured outputs natively</strong> — both are GA on Sonnet 4.6, no beta header:</p>
+        <ul>
+          <li><code class="inline">output_config={"format": {"type": "json_schema", "schema": ...}}</code> constrains the <em>response itself</em> to your schema — no tool needed. The Python SDK's <code class="inline">client.messages.parse()</code> validates against a Pydantic model for you.</li>
+          <li><code class="inline">strict: true</code> on a tool definition makes the API <em>guarantee</em> that <code class="inline">tool_use.input</code> validates against <code class="inline">input_schema</code> (the schema needs <code class="inline">additionalProperties: false</code> and a <code class="inline">required</code> list).</li>
+        </ul>
+        <p style="margin-bottom:0">Reach for those first in production. This tutorial still builds the validate-and-retry loop because native structured outputs don't cover <em>semantic</em> constraints — <code class="inline">format: email</code>, numeric ranges, business rules — and because the error-becomes-a-message pattern generalises to every self-healing agent loop, which is what the exam probes.</p>
+      </div>
 
       <ol class="steps" style="margin-top: var(--s-5)">
         <li>
@@ -4507,7 +4449,7 @@ print(json.dumps(extract_with_retry(document), indent=2))</pre></div>
         </li>
         <li>
           <span class="step-title">Attempt 1 — the sad path. Error becomes a message.</span>
-          <p>Suppose the source text said <em>"I'm about thirty-something"</em>. The model guesses <code class="inline">age=35</code> — type-valid but semantically unsupported — or it may emit a string like <code class="inline">"thirty-something"</code>. <code class="inline">validator.iter_errors</code> returns an <code class="inline">ValidationError</code> with a human-readable <code class="inline">.message</code> and a JSON-pointer <code class="inline">.path</code>. The loop does three things in sequence:</p>
+          <p>This path won't fire with the document as shipped — you'll trigger it in walkthrough step 2 by ambiguating the age. When it does: suppose the source text said <em>"I'm about thirty-something"</em>. The model guesses <code class="inline">age=35</code> — type-valid but semantically unsupported — or it may emit a string like <code class="inline">"thirty-something"</code>. <code class="inline">validator.iter_errors</code> returns an <code class="inline">ValidationError</code> with a human-readable <code class="inline">.message</code> and a JSON-pointer <code class="inline">.path</code>. The loop does three things in sequence:</p>
           <ul style="margin: var(--s-2) 0">
             <li>Appends the <strong>assistant</strong> turn (<code class="inline">resp.content</code> as-is) — so the next <code class="inline">create()</code> call sees what the model just said.</li>
             <li>Appends a <strong>user</strong> turn containing a <code class="inline">tool_result</code> with <code class="inline">is_error: True</code> and the validator's error text.</li>
@@ -4531,7 +4473,7 @@ print(json.dumps(extract_with_retry(document), indent=2))</pre></div>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           One-line mental model
         </div>
-        <p>Structured output is <strong>tool_use + schema + retry</strong>. The tool forces shape at the type level, the schema closes the semantic gap, the retry loop turns validation failures into corrections. Anything prose-based — "please return JSON" — skips all three.</p>
+        <p>Structured output is <strong>shape + semantics + retry</strong>. Shape comes from the API — a tool's <code class="inline">input_schema</code> (guaranteed with <code class="inline">strict: true</code>) or native <code class="inline">output_config.format</code>. The <code class="inline">jsonschema</code> validator closes the semantic gap, and the retry loop turns validation failures into corrections. Anything prose-based — "please return JSON" — skips all three.</p>
       </div>
     </details>
 
@@ -4539,13 +4481,14 @@ print(json.dumps(extract_with_retry(document), indent=2))</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough</h3>
+        <span class="sub-pill">≈ 20 min</span>
       </div>
       <ol class="steps">
         <li>
           <span class="step-title">Run a clean extraction.</span>
           <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div><pre>python extract.py</pre></div>
           <p>Expected: <code class="inline">✓ valid on attempt 1</code> and a well-formed JSON dump.</p>
-          <div class="step-why"><em>Why it matters:</em> The API itself enforces that <code class="inline">tool_use.input</code> is shape-compatible with <code class="inline">input_schema</code> — retries for a clean schema are rare.</div>
+          <div class="step-why"><em>Why it matters:</em> The model reliably matches the declared <code class="inline">input_schema</code> for a clean schema, so retries are rare — add <code class="inline">strict: true</code> to the tool when you need that shape contractually guaranteed by the API.</div>
         </li>
         <li>
           <span class="step-title">Force a retry.</span>
@@ -4565,13 +4508,14 @@ print(json.dumps(extract_with_retry(document), indent=2))</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 15 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
           PROSE "RETURN JSON" TRAP
         </div>
-        <h4>Replace tool-use with a prose request</h4>
+        <h4>Replace tool use with a prose request</h4>
         <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">python</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre><span class="ccaf-line">resp = client.messages.create(</span>
 <span class="ccaf-line">    model=MODEL, max_tokens=512,</span>
@@ -4588,7 +4532,7 @@ data = json.loads(raw)   # this often fails</pre></div>
           <li>Claude invents a field or drops one.</li>
           <li>You <em>cannot</em> set <code class="inline">tool_choice</code> to force the shape.</li>
         </ul>
-        <p>This is why Domain 4 insists tool-use is the reliable path, and why Quiz Q14 calls out prose "return as JSON" as most unreliable.</p>
+        <p>This is why Domain 4 insists on schema-backed paths — tool use or native <code class="inline">output_config.format</code> — and why Quiz Q14 calls out prose "return as JSON" as most unreliable.</p>
         <p><strong>Revert:</strong> restore the tool-use version.</p>
       </div>
     </div>
@@ -4621,8 +4565,9 @@ data = json.loads(raw)   # this often fails</pre></div>
         <h3>Further exploration</h3>
       </div>
       <ul>
-        <li>Add <code class="inline">strict: true</code> to a more complex schema with <code class="inline">oneOf</code> and see how retry-count changes.</li>
-        <li>Compare total tokens: tool-use vs prose+parse-then-repair.</li>
+        <li>Add <code class="inline">strict: true</code> to the tool and confirm attempt-1 validation failures disappear for structural errors (semantic ones remain).</li>
+        <li>Rewrite the exercise with native <code class="inline">output_config={"format": {"type": "json_schema", "schema": schema}}</code> and no tool at all — compare code size and token use.</li>
+        <li>Compare total tokens: tool use vs prose+parse-then-repair.</li>
       </ul>
     </div>
 
@@ -4662,7 +4607,7 @@ data = json.loads(raw)   # this often fails</pre></div>
         </div>
         <h2>Prompt Caching &amp; Fighting "Lost in the Middle"</h2>
         <p class="muted" style="margin-top:var(--s-3); max-width:60ch"><strong style="color:var(--text)">Concept covered.</strong> Two independent techniques for long-context reliability. <strong>Prompt caching</strong> marks stable prefix tokens with <code class="inline">cache_control</code> so repeated calls cost ~10% of uncached. <strong>Lost in the middle</strong> — attention is strongest at start and end; critical rules belong at both anchors, never buried mid-context.</p>
-        <p class="mono muted" style="font-size:0.82rem">Source: Domain 5 · Attention Curve · Quiz Q5 and Q10</p>
+        <p class="mono muted" style="font-size:0.82rem">Source: <a href="study-guide.html#domain-5">Domain 5 · Attention Curve</a> · <a href="study-guide.html#quiz">Quiz Q5 and Q10</a></p>
       </div>
     </div>
 
@@ -4748,7 +4693,7 @@ data = json.loads(raw)   # this often fails</pre></div>
         <ul>
           <li>Tutorial 01 complete</li>
           <li>Python, <code class="inline">anthropic</code> SDK, API key</li>
-          <li>A long document (Moby Dick chapter 1 from Project Gutenberg works; any 3–5K-token text)</li>
+          <li>A long document (the prep script pulls Moby Dick chapters 1–2 from Project Gutenberg; any 3–5K-token text works)</li>
         </ul>
       </div>
       <div class="tut-meta-block">
@@ -4775,6 +4720,7 @@ data = json.loads(raw)   # this often fails</pre></div>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <h3>Setup</h3>
+        <span class="sub-pill">≈ 5 min</span>
       </div>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
 <pre>mkdir cache-demo &amp;&amp; cd cache-demo
@@ -4787,17 +4733,24 @@ text = requests.get(
     "https://www.gutenberg.org/files/2701/2701-0.txt",
     timeout=30,
 ).text
-# Keep chapters 1–5 only — enough to cross the cache threshold
-body = text.split("CHAPTER 1.")[1].split("CHAPTER 6.")[0]
+# Keep chapters 1–2 (~5K tokens) — comfortably past the ~2K-token
+# minimum prefix Sonnet 4.6 will cache. The Gutenberg file lists every
+# chapter in a table of contents first, so split on the full body
+# heading and skip the TOC match ([1] is the TOC, [2] is the body).
+body = text.split("CHAPTER 1. Loomings.")[2] \
+           .split("CHAPTER 3. The Spouter-Inn.")[0]
+assert len(body) &gt; 15_000, "extraction failed — grabbed the TOC instead?"
 pathlib.Path("moby.txt").write_text(body)
-print(f"saved {len(body)} chars")</pre></div>
+print(f"saved {len(body)} chars")   # expect ≈ 20,000</pre></div>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div><pre>python prep.py</pre></div>
+      <p class="muted" style="margin-top: var(--s-4); font-size: 0.9rem"><strong>Heads-up on structure:</strong> this tutorial runs the scaffold twice — Part A (prompt caching) and Part B (lost in the middle) each pair their own walkthrough with an inline code trace, instead of the single up-front trace Tutorials 01–07 use.</p>
     </div>
 
     <div class="sub">
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough — Part A · Prompt Caching</h3>
+        <span class="sub-pill">≈ 15 min</span>
       </div>
       <p>Create <code class="inline">cache.py</code>:</p>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">python · cache.py</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
@@ -4844,7 +4797,7 @@ ask("What does Ishmael do when he feels spleen?", use_cache=False)</pre></div>
 
         <p><strong>Call 3 — <code class="inline">use_cache=False</code>, control.</strong> Same prefix, but the <code class="inline">cache_control</code> marker is absent. The API treats every token as fresh input. Both cache counters are zero; <code class="inline">input_tokens ≈ 5000</code> at the full rate. This is your baseline for measuring the savings.</p>
 
-        <p style="margin-top: var(--s-4)"><strong>What actually drives the hit.</strong> The cache key is a hash of the <em>exact</em> prefix tokens. Any change — a punctuation edit, a blank line, a different role description — produces a different key and a cache miss. That's why the 5-minute TTL step (<code class="inline">time.sleep(310)</code>) also forces a rewrite: the prefix is the same, but the entry has expired, so it's effectively a new key.</p>
+        <p style="margin-top: var(--s-4)"><strong>What actually drives the hit.</strong> The cache key is a hash of the <em>exact</em> prefix tokens. Any change — a punctuation edit, a blank line, a different role description — produces a different key and a cache miss. That's why the TTL test you'll add in the next step (a <code class="inline">time.sleep(310)</code> between calls) also forces a rewrite: the prefix is the same, but the entry has expired, so it's effectively a new key.</p>
       </details>
 
       <ol class="steps">
@@ -4905,6 +4858,7 @@ ask("What does Ishmael do when he feels spleen?", use_cache=False)</pre>
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"/></svg>
         <h3>Walkthrough — Part B · Lost in the Middle</h3>
+        <span class="sub-pill">≈ 12 min</span>
       </div>
       <p>Create <code class="inline">middle.py</code>:</p>
       <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">python · middle.py</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div>
@@ -4964,7 +4918,7 @@ def ask_with_placement(placement):
           <span class="step-title">Run the placement test.</span>
           <div class="codeblock"><div class="codeblock-head"><span class="codeblock-lang">bash</span><button class="copy-btn" type="button"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-label">copy</span></button></div><pre>python middle.py</pre></div>
           <p>Expected: <code class="inline">start</code> and <code class="inline">end</code> recall the passphrase reliably. <code class="inline">middle</code> fails some fraction of the time — especially with larger documents.</p>
-          <div class="step-why"><em>Why it matters:</em> This is the "lost in the middle" curve from the source, made observable in your own terminal.</div>
+          <div class="step-why"><em>Why it matters:</em> This is the "lost in the middle" curve from the <a href="study-guide.html#domain-5">study guide's Domain 5 material</a>, made observable in your own terminal.</div>
         </li>
       </ol>
     </div>
@@ -4973,6 +4927,7 @@ def ask_with_placement(placement):
       <div class="sub-head">
         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <h3>Build-and-break exercise</h3>
+        <span class="sub-pill">≈ 8 min</span>
       </div>
       <div class="callout">
         <div class="callout-head">
@@ -4981,7 +4936,7 @@ def ask_with_placement(placement):
         </div>
         <h4>Bury a critical instruction in the middle</h4>
         <p>Combine both failure modes. Put a critical instruction — <em>"Before answering, always capitalise the first word"</em> — in the <strong>middle</strong> of the doc, and do NOT repeat it elsewhere. Ask a question that requires following it.</p>
-        <p><strong>Expected:</strong> intermittent compliance. The "Do" from the source says: repeat critical rules at start AND end. Confirm by adding the rule to both anchors — compliance jumps to ~100%.</p>
+        <p><strong>Expected:</strong> intermittent compliance. The <a href="study-guide.html#domain-5">Domain 5 "Do" list in the companion study guide</a> says: repeat critical rules at start AND end. Confirm by adding the rule to both anchors — compliance jumps to ~100%.</p>
       </div>
     </div>
 
@@ -5015,7 +4970,7 @@ def ask_with_placement(placement):
       <ul>
         <li>Add a third cache breakpoint and measure hit rate across different query patterns.</li>
         <li>Try the same middle-vs-end test with Haiku 4.5 and compare attention curves.</li>
-        <li>Re-read Quiz Q10 and Q15 and reason through which primitive each maps to.</li>
+        <li>Re-read <a href="study-guide.html#quiz">Quiz Q10 and Q15 in the companion study guide</a> and reason through which primitive each maps to.</li>
       </ul>
     </div>
 
@@ -5042,13 +4997,32 @@ def ask_with_placement(placement):
 </article>
 
 <!-- ============================================================
+     FINISHED ALL EIGHT?
+     ============================================================ -->
+<section class="block" id="finished">
+  <div class="page">
+    <div class="eyebrow">
+      <span class="eyebrow-num">§</span>
+      <span class="eyebrow-label">Finished all eight?</span>
+    </div>
+    <h2>Turn 8/8 into a booked exam.</h2>
+    <p class="muted" style="max-width:62ch; margin-top: var(--s-3)">You've now watched every CCA-F domain run, fail, and recover on your own terminal. Three steps close the loop:</p>
+    <ol style="max-width:62ch">
+      <li>Take the <a href="study-guide.html#quiz">15-question mock exam</a> in the companion study guide, and print its <a href="study-guide.html#cheat-sheet">one-page cheat sheet</a> for revision week.</li>
+      <li>Re-run any tutorial whose checklist items you couldn't honestly tick — the build-and-break variants are the fastest refreshers.</li>
+      <li><a href="https://www.pearsonvue.com/us/en/anthropic.html" target="_blank" rel="noopener noreferrer">Register with Pearson VUE</a> — $125 USD, online proctored or at a test center. The credential is valid for 12 months, so time your attempt.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================
      GLOSSARY
      ============================================================ -->
 <section class="block" id="glossary" aria-labelledby="glossary-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">02 /</span>
-      <span class="eyebrow-label">Glossary</span>
+      <span class="eyebrow-num">§</span>
+      <span class="eyebrow-label">Reference · Glossary</span>
     </div>
     <h2 id="glossary-heading">Thirty-three terms you'll meet in the tutorials.</h2>
     <p class="muted" style="max-width:62ch; margin-top: var(--s-3)">Short, exam-relevant definitions. Filter by term, domain (<code class="inline">D1</code>–<code class="inline">D5</code>), or any phrase in the definition. Use this as a reference while you work through the workbook.</p>
@@ -5115,7 +5089,7 @@ def ask_with_placement(placement):
           <dt class="gloss-term"><code>CLAUDE.md</code></dt>
           <span class="gloss-domain">D3 · Claude Code</span>
         </div>
-        <dd class="gloss-def">Plain-text instruction file read by Claude Code at session start. Three tiers: <strong>global</strong> (<code class="inline">~/.claude</code>), <strong>project</strong> (repo root), and <strong>subdirectory</strong> — the closest tier wins.</dd>
+        <dd class="gloss-def">Plain-text instruction file read by Claude Code. Three tiers: <strong>global</strong> (<code class="inline">~/.claude</code>), <strong>project</strong> (repo root), and <strong>subdirectory</strong> (loaded on demand). All applicable files are concatenated; contradictions between tiers may resolve arbitrarily — scope each rule to one tier.</dd>
       </div>
       <div class="gloss-item" data-term="compaction">
         <div class="gloss-term-row">
@@ -5129,7 +5103,7 @@ def ask_with_placement(placement):
           <dt class="gloss-term">Context window</dt>
           <span class="gloss-domain">D5 · Context</span>
         </div>
-        <dd class="gloss-def">Total token budget the model can attend to in one call. Claude Sonnet 4.6 default is 200K tokens; 1M-token context is opt-in for certain workloads.</dd>
+        <dd class="gloss-def">Total token budget the model can attend to in one call. Claude Sonnet 4.6 has a <strong>1M-token window as standard</strong> — no opt-in header, billed at standard pricing.</dd>
       </div>
       <div class="gloss-item" data-term="end_turn">
         <div class="gloss-term-row">
@@ -5164,7 +5138,7 @@ def ask_with_placement(placement):
           <dt class="gloss-term">JSON Schema</dt>
           <span class="gloss-domain">D4 · Prompt Eng.</span>
         </div>
-        <dd class="gloss-def">Contract describing the expected shape of a tool's <code class="inline">input</code> (or a structured output). Paired with tool-use to coerce valid JSON and drive retries on validation failure. See <a href="#tut-7">Tutorial 07</a>.</dd>
+        <dd class="gloss-def">Contract describing the expected shape of a tool's <code class="inline">input</code> (or a structured output). Paired with tool use to coerce valid JSON and drive retries on validation failure. See <a href="#tut-7">Tutorial 07</a>.</dd>
       </div>
       <div class="gloss-item" data-term="lost in the middle">
         <div class="gloss-term-row">
@@ -5189,17 +5163,17 @@ def ask_with_placement(placement):
       </div>
       <div class="gloss-item" data-term="memory tool">
         <div class="gloss-term-row">
-          <dt class="gloss-term">Memory tool <span class="caps">beta</span></dt>
+          <dt class="gloss-term">Memory tool</dt>
           <span class="gloss-domain">D5 · Context</span>
         </div>
-        <dd class="gloss-def">Anthropic's managed persistent memory. Currently beta — exact API surface may still shift, so no dedicated tutorial yet.</dd>
+        <dd class="gloss-def">A <strong>client-side</strong> tool (<code class="inline">memory_20250818</code>, now GA): Claude requests file reads/writes in a <code class="inline">/memories</code> directory, and <em>your application</em> executes them — you control where and how the data is stored. No dedicated tutorial yet.</dd>
       </div>
       <div class="gloss-item" data-term="premium cache">
         <div class="gloss-term-row">
           <dt class="gloss-term">Premium cache</dt>
           <span class="gloss-domain">D5 · Context</span>
         </div>
-        <dd class="gloss-def">Opt-in cache type with a <strong>1-hour TTL</strong>. Higher write cost; lower read cost amortised over longer reuse windows. Best for stable system prompts and tool catalogues.</dd>
+        <dd class="gloss-def">Community nickname — not official terminology — for the <strong>1-hour TTL</strong> option (<code class="inline">cache_control: {"type": "ephemeral", "ttl": "1h"}</code>). Reads cost the same ~10% as the 5-minute cache; the write premium doubles (2× vs 1.25×). Best for stable system prompts and tool catalogues reused across long gaps.</dd>
       </div>
       <div class="gloss-item" data-term="prompt caching">
         <div class="gloss-term-row">
@@ -5234,14 +5208,14 @@ def ask_with_placement(placement):
           <dt class="gloss-term"><code>stop_reason</code></dt>
           <span class="gloss-domain">D1 · Agentic</span>
         </div>
-        <dd class="gloss-def">Field on every Messages response telling you why the model stopped. Values: <code class="inline">end_turn</code>, <code class="inline">tool_use</code>, <code class="inline">max_tokens</code>, <code class="inline">stop_sequence</code>, <code class="inline">pause_turn</code>.</dd>
+        <dd class="gloss-def">Field on every Messages response telling you why the model stopped. Values: <code class="inline">end_turn</code>, <code class="inline">tool_use</code>, <code class="inline">max_tokens</code>, <code class="inline">stop_sequence</code>, <code class="inline">pause_turn</code>, <code class="inline">refusal</code> (the model declined to respond — handle it before reading content), and <code class="inline">model_context_window_exceeded</code> (the response filled the context window).</dd>
       </div>
       <div class="gloss-item" data-term="structured output">
         <div class="gloss-term-row">
           <dt class="gloss-term">Structured output</dt>
           <span class="gloss-domain">D4 · Prompt Eng.</span>
         </div>
-        <dd class="gloss-def">Forcing the model to return JSON that conforms to a schema. In 2026 this is implemented via <em>tool-use with a single mandatory tool</em>, not prose "please return JSON" prompts.</dd>
+        <dd class="gloss-def">Forcing the model to return JSON that conforms to a schema. Native API support is GA: <code class="inline">output_config.format</code> (a JSON schema on the response) and <code class="inline">strict: true</code> (guaranteed tool-input validation). Tool use with a single mandatory tool remains a solid pattern; prose "please return JSON" is the unreliable one. See Tutorial 07.</dd>
       </div>
       <div class="gloss-item" data-term="sub-agent">
         <div class="gloss-term-row">
@@ -5290,7 +5264,7 @@ def ask_with_placement(placement):
           <dt class="gloss-term">Transport</dt>
           <span class="gloss-domain">D2 · Tools/MCP</span>
         </div>
-        <dd class="gloss-def">How an MCP server is reached. Three today: <code class="inline">stdio</code> (local subprocess), <code class="inline">http</code> (remote), <code class="inline">sse</code> (server-sent events). Remote-with-auth is under-specified — stdio is the safe default.</dd>
+        <dd class="gloss-def">How an MCP server is reached. The current spec defines two: <code class="inline">stdio</code> (local subprocess) and <code class="inline">Streamable HTTP</code> (remote; may stream responses over SSE, which replaced the old standalone HTTP+SSE transport). Remote auth is specified via OAuth 2.1. stdio remains the default for local servers.</dd>
       </div>
     </dl>
     <div class="gloss-empty" id="glossEmpty">No terms match. Try a broader keyword or clear the filter.</div>
@@ -5303,7 +5277,7 @@ def ask_with_placement(placement):
 <section class="block" id="troubleshooting" aria-labelledby="troubleshooting-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">03 /</span>
+      <span class="eyebrow-num">§</span>
       <span class="eyebrow-label">Troubleshooting</span>
     </div>
     <h2 id="troubleshooting-heading">When things go wrong.</h2>
@@ -5342,11 +5316,11 @@ from dotenv import load_dotenv; load_dotenv()</pre>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <span><code>Your credit balance is too low to access the Anthropic API. Please go to Plans &amp; Billing to upgrade or purchase credits.</code></span>
         </p>
-        <p class="trouble-cause"><strong>Cause.</strong> Your API key is valid (auth succeeded) but the account has no usable credit. New accounts start at $0; any free trial credit from onboarding may have expired or been consumed. <strong>Important gotcha:</strong> an API key created <em>before</em> the account had credit can stay stuck on this error even after you buy credits — the credit-check state attached to that key doesn't always refresh. The reliable fix is to buy credit first, then mint a new key.</p>
+        <p class="trouble-cause"><strong>Cause.</strong> Your API key is valid (auth succeeded) but the account has no usable credit. New accounts start at $0; any free trial credit from onboarding may have expired or been consumed. <strong>Important gotcha (observed in our testing, not officially documented):</strong> an API key created <em>before</em> the account had credit can stay stuck on this error even after you buy credits — the credit-check state attached to that key doesn't always refresh. The reliable fix is to buy credit first, then mint a new key.</p>
         <div class="trouble-fix">
           <span class="trouble-fix-label">Fix · do these in order</span>
           <ol style="margin:0 0 var(--s-3); padding-left: var(--s-5)">
-            <li><strong>Buy credit first.</strong> Open <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener noreferrer">console.anthropic.com/settings/billing</a>, add a payment method, and purchase credits. Minimum is <strong>$5</strong> — the whole workbook budgets ~$2–4 on Sonnet 4.6, so $5 covers it several times over.</li>
+            <li><strong>Buy credit first.</strong> Open <a href="https://console.anthropic.com/settings/billing" target="_blank" rel="noopener noreferrer">console.anthropic.com/settings/billing</a>, add a payment method, and purchase credits. The minimum purchase was <strong>$5</strong> at the time of writing (check the billing page) — the whole workbook budgets ~$2–4 on Sonnet 4.6, so the minimum covers it several times over.</li>
             <li><strong>Wait 1–2 minutes</strong> and confirm the balance shows on the billing page. Credits occasionally lag behind the purchase confirmation.</li>
             <li><strong>Then create a new API key</strong> at <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com/settings/keys</a>. If you already created a key <em>before</em> buying credit, delete that one and mint a fresh one — the new key will pick up the credited balance cleanly.</li>
             <li><strong>Export and retry</strong> in the same shell where you run the script:</li>
@@ -5369,7 +5343,7 @@ python3 loop.py</pre>
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           <span><code>The virtual environment was not created successfully because ensurepip is not available</code></span>
         </p>
-        <p class="trouble-cause"><strong>Cause.</strong> Ubuntu and Debian ship a minimal Python 3 by default — the stdlib <code class="inline">venv</code> module needs the separate <code class="inline">python3-venv</code> package to actually bootstrap a virtualenv.</p>
+        <p class="trouble-cause"><strong>Cause.</strong> Ubuntu and Debian ship a minimal Python 3 by default — the stdlib <code class="inline">venv</code> module needs the separate <code class="inline">python3-venv</code> package to actually bootstrap a virtual environment.</p>
         <div class="trouble-fix">
           <span class="trouble-fix-label">Fix</span>
           <div class="codeblock">
@@ -5498,9 +5472,9 @@ python3 -c "import anthropic; [print(m.id) for m in anthropic.Anthropic().models
       <article class="trouble-item">
         <p class="trouble-symptom">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span><code>claude: command not found</code> after <code>sudo npm i -g @anthropic-ai/claude-code</code></span>
+          <span><code>claude: command not found</code> after <code>npm i -g @anthropic-ai/claude-code</code></span>
         </p>
-        <p class="trouble-cause"><strong>Cause.</strong> npm's global bin directory is not on your PATH. On Ubuntu with a system-packaged Node, this happens because the default prefix is <code class="inline">/usr/local</code> but shells installed earlier may not include it; with nvm, each version has its own bin dir that must be sourced.</p>
+        <p class="trouble-cause"><strong>Cause.</strong> npm's global bin directory is not on your PATH. On Ubuntu with a system-packaged Node, this happens because the default prefix is <code class="inline">/usr/local</code> but shells installed earlier may not include it; with nvm, each version has its own bin dir that must be sourced. (The native installer — <code class="inline">curl -fsSL https://claude.ai/install.sh | bash</code> — sidesteps all of this, which is why the official docs recommend it and warn against <code class="inline">sudo npm install -g</code>.)</p>
         <div class="trouble-fix">
           <span class="trouble-fix-label">Fix</span>
           <div class="codeblock">
@@ -5533,7 +5507,7 @@ python3 server.py  # Ctrl-C once it reports "ready" or prints a traceback</pre>
 
     </div>
 
-    <p class="muted" style="margin-top: var(--s-5); font-size: 0.9rem">Still stuck? Open an issue on <a href="https://github.com/jamesbuckett/ccaf-claude-certified-architect-practical/issues" target="_blank" rel="noopener noreferrer">the GitHub repo</a> — the more specific the error and the command that produced it, the faster it gets added here.</p>
+    <p class="muted" style="margin-top: var(--s-5); font-size: 0.9rem">Still stuck? Open an issue on <a href="https://github.com/jamesbuckett/ccaf-exam-tutorial/issues" target="_blank" rel="noopener noreferrer">the GitHub repo</a> — the more specific the error and the command that produced it, the faster it gets added here.</p>
   </div>
 </section>
 
@@ -5543,7 +5517,7 @@ python3 server.py  # Ctrl-C once it reports "ready" or prints a traceback</pre>
 <section class="block" id="utilities" aria-labelledby="utilities-heading">
   <div class="page">
     <div class="eyebrow">
-      <span class="eyebrow-num">04 /</span>
+      <span class="eyebrow-num">§</span>
       <span class="eyebrow-label">Utilities</span>
     </div>
     <h2 id="utilities-heading">Helper scripts for the workbook.</h2>
@@ -5571,7 +5545,7 @@ Reads ANTHROPIC_API_KEY from the environment, same as every tutorial.
 <span class="ccaf-line">PRICING = {</span>
 <span class="ccaf-line">    "claude-sonnet-4-6":         ( 3.00, 15.00),</span>
 <span class="ccaf-line">    "claude-haiku-4-5-20251001": ( 1.00,  5.00),</span>
-<span class="ccaf-line">    "claude-opus-4-7":           (15.00, 75.00),</span>
+<span class="ccaf-line">    "claude-opus-4-7":           ( 5.00, 25.00),</span>
 <span class="ccaf-line">}</span>
 
 def estimate(text: str) -&gt; None:
@@ -5641,9 +5615,9 @@ if __name__ == "__main__":
 <pre>$ python3 usage.py --prompt "Summarise this repository in one sentence."
 model                           input tokens     input $    $/1k out
 --------------------------------------------------------------------
-claude-sonnet-4-6                         13   $0.00004    $0.01500
-claude-haiku-4-5-20251001                 13   $0.00001    $0.00500
-claude-opus-4-7                           13   $0.00020    $0.07500</pre>
+claude-sonnet-4-6                         13    $0.00004    $0.01500
+claude-haiku-4-5-20251001                 13    $0.00001    $0.00500
+claude-opus-4-7                           13    $0.00006    $0.02500</pre>
     </div>
 
     <p class="muted" style="margin-top: var(--s-5); font-size: 0.9rem">The <code class="inline">count_tokens</code> path doesn't draw from your balance — it's a free-of-charge preview. The smoke test does draw (around a tenth of a cent on Sonnet 4.6), but that's the whole point: you want to see real <code class="inline">.usage</code> fields come back before spending six hours on tutorials. Keep the <code class="inline">PRICING</code> table aligned with the official <a href="https://www.anthropic.com/pricing" target="_blank" rel="noopener noreferrer">Anthropic pricing page</a> — the numbers here match the workbook's tested date but can drift.</p>
@@ -5653,12 +5627,128 @@ claude-opus-4-7                           13   $0.00020    $0.07500</pre>
 
 </main>
 
+<aside class="toc-sidebar" id="index" aria-label="Index">
+  <div class="toc-inner">
+    <div class="toc-top">
+      <span class="toc-eyebrow"><span class="toc-eyebrow-num">§</span> Tutorial Index</span>
+      <button class="toc-close" id="tocClose" aria-label="Close navigation" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <h2 class="toc-title">Pick a tutorial.</h2>
+    <p class="toc-intro">Ordered by exam domain. Do Tutorial 01 first — 02, 04 and 08 build on its environment and concepts; the rest are self-contained. Progress saves locally.</p>
+
+    <nav class="toc-list" aria-label="Tutorials">
+      <a class="index-row" data-tut="1" href="#tut-1">
+        <span class="idx-num"><span>01</span></span>
+        <span class="idx-body">
+          <span class="idx-title">The Agentic Loop</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
+            <span class="idx-time">45m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="2" href="#tut-2">
+        <span class="idx-num"><span>02</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Hub-and-Spoke Orchestration</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D1 · Agentic</span>
+            <span class="idx-time">60m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="3" href="#tut-3">
+        <span class="idx-num"><span>03</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Build an MCP Server</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
+            <span class="idx-time">75m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="4" href="#tut-4">
+        <span class="idx-num"><span>04</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Tool Description Discipline</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D2 · Tools/MCP</span>
+            <span class="idx-time">30m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="5" href="#tut-5">
+        <span class="idx-num"><span>05</span></span>
+        <span class="idx-body">
+          <span class="idx-title">CLAUDE.md Hierarchy</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
+            <span class="idx-time">40m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="6" href="#tut-6">
+        <span class="idx-num"><span>06</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Hooks vs Skills vs Slash</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D3 · Claude Code</span>
+            <span class="idx-time">45m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="7" href="#tut-7">
+        <span class="idx-num"><span>07</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Structured Output Retry</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D4 · Prompt Eng.</span>
+            <span class="idx-time">50m</span>
+          </span>
+        </span>
+      </a>
+      <a class="index-row" data-tut="8" href="#tut-8">
+        <span class="idx-num"><span>08</span></span>
+        <span class="idx-body">
+          <span class="idx-title">Prompt Caching & Lost-in-Middle</span>
+          <span class="idx-meta">
+            <span class="idx-domain"><span class="idx-domain-dot"></span>D5 · Context</span>
+            <span class="idx-time">45m</span>
+          </span>
+        </span>
+      </a>
+    </nav>
+
+    <div class="caps" style="margin: var(--s-3) 0 var(--s-2)">Reference</div>
+    <nav class="toc-list" aria-label="Reference">
+      <a class="index-row" href="#venv-setup"><span class="idx-num"><span>V</span></span><span class="idx-body"><span class="idx-title">Virtual environments</span></span></a>
+      <a class="index-row" href="#glossary"><span class="idx-num"><span>G</span></span><span class="idx-body"><span class="idx-title">Glossary</span></span></a>
+      <a class="index-row" href="#troubleshooting"><span class="idx-num"><span>T</span></span><span class="idx-body"><span class="idx-title">Troubleshooting</span></span></a>
+      <a class="index-row" href="#utilities"><span class="idx-num"><span>U</span></span><span class="idx-body"><span class="idx-title">Utilities</span></span></a>
+      <a class="index-row" href="study-guide.html"><span class="idx-num"><span>→</span></span><span class="idx-body"><span class="idx-title">Study guide (theory)</span></span></a>
+    </nav>
+
+    <div class="toc-footer">
+      <div class="toc-progress-row">
+        <span><strong id="doneCount">0</strong> / 8 complete</span>
+        <span>progress</span>
+      </div>
+      <div class="mini-bar"><span id="miniBar"></span></div>
+      <button class="reset-btn" id="resetProgress" type="button">Reset progress</button>
+    </div>
+  </div>
+</aside>
+<div class="toc-backdrop" id="tocBackdrop"></div>
+
 <footer class="site-foot">
   <div class="page">
     <div class="foot-inner">
       <div class="foot-col">
         <h5>Companion</h5>
         <ul>
+          <li><a href="study-guide.html">CCA-F Atlas — theory study guide</a></li>
           <li><a href="#tut-1">Index</a></li>
           <li><a href="#venv-setup">Virtual environments</a></li>
           <li><a href="#glossary">Glossary · 33 terms</a></li>
@@ -5726,11 +5816,19 @@ function wireChecklists() {
   document.querySelectorAll('.checklist li').forEach(li => {
     if (li.dataset.wired) return;
     li.dataset.wired = '1';
+    li.setAttribute('role', 'checkbox');
+    li.setAttribute('tabindex', '0');
     const key = li.dataset.key;
     if (key && localStorage.getItem('ccaf-check-' + key) === '1') li.classList.add('checked');
-    li.addEventListener('click', () => {
+    li.setAttribute('aria-checked', li.classList.contains('checked') ? 'true' : 'false');
+    const toggle = () => {
       li.classList.toggle('checked');
+      li.setAttribute('aria-checked', li.classList.contains('checked') ? 'true' : 'false');
       if (key) localStorage.setItem('ccaf-check-' + key, li.classList.contains('checked') ? '1' : '0');
+    };
+    li.addEventListener('click', toggle);
+    li.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
     });
   });
 }
@@ -5776,7 +5874,7 @@ function wireReset() {
   r.addEventListener('click', () => {
     if (!confirm('Clear all tutorial progress and checklist state?')) return;
     Object.keys(localStorage).filter(k => k.startsWith('ccaf-done-') || k.startsWith('ccaf-check-')).forEach(k => localStorage.removeItem(k));
-    document.querySelectorAll('.checklist li.checked').forEach(li => li.classList.remove('checked'));
+    document.querySelectorAll('.checklist li.checked').forEach(li => { li.classList.remove('checked'); li.setAttribute('aria-checked', 'false'); });
     updateProgress();
   });
 }
