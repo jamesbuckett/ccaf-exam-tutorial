@@ -19,6 +19,12 @@ Open `index.html` in a browser — no build step, no framework, no server. The w
 |---|---|---|
 | ![Desktop screenshot](screenshots/desktop.png) | ![Tablet screenshot](screenshots/tablet.png) | ![Mobile screenshot](screenshots/mobile.png) |
 
+The companion theory guide, `study-guide.html`, follows the same pattern:
+
+| Desktop | Tablet | Mobile |
+|---|---|---|
+| ![Study guide desktop screenshot](screenshots/study-guide-desktop.png) | ![Study guide tablet screenshot](screenshots/study-guide-tablet.png) | ![Study guide mobile screenshot](screenshots/study-guide-mobile.png) |
+
 ```bash
 git clone https://github.com/jamesbuckett/ccaf-exam-tutorial.git
 cd ccaf-exam-tutorial

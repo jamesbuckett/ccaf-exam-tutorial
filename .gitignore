@@ -8,6 +8,9 @@ screenshots/*
 !screenshots/desktop.png
 !screenshots/tablet.png
 !screenshots/mobile.png
+!screenshots/study-guide-desktop.png
+!screenshots/study-guide-tablet.png
+!screenshots/study-guide-mobile.png
 
 # Playwright MCP browser-check artifacts
 .playwright-mcp/
