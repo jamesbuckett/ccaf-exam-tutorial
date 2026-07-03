@@ -1,0 +1,2541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pass Anthropic's Claude Architect Exam — Slide Deck</title>
+  <meta name="description" content="Eight runnable tutorials for Anthropic's Claude Certified Architect (CCA-F) exam. Build each concept, trigger a deliberate failure, tick a checklist.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    /* ------------------------------------------------------------------
+       Design tokens — identical to skill-style-guide's palette and spacing
+       contract. Edit values only by syncing with that skill's template;
+       this deck must stay token-compatible. Swap --accent to one of the
+       curated alternatives; do not introduce a second accent.
+       ------------------------------------------------------------------ */
+    :root {
+      /* Light palette (default) */
+      --bg: #FAFAFA;
+      --surface: #FFFFFF;
+      --text: #0A0A0A;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+      --border-strong: #D1D5DB;
+
+      /* Pick exactly ONE accent. Alternatives commented for reference. */
+      /* --accent: #2563EB; */  /* restrained blue */
+      --accent: #4F46E5;        /* indigo (default) */
+      /* --accent: #059669; */  /* emerald */
+      /* --accent: #EA580C; */  /* warm orange */
+      --accent-hover: color-mix(in srgb, var(--accent) 88%, black);
+      --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--bg));
+
+      /* Categorical (data-viz) palette. ROYGBIV for charts, multi-series
+         diagrams, or taxonomy badges only. Do NOT use for CTAs, headings,
+         links, or chrome — the one-accent rule above still applies. */
+      --cat-1: #DC2626;  /* red */
+      --cat-2: #EA580C;  /* orange */
+      --cat-3: #CA8A04;  /* yellow */
+      --cat-4: #16A34A;  /* green */
+      --cat-5: #2563EB;  /* blue */
+      --cat-6: #4F46E5;  /* indigo */
+      --cat-7: #7C3AED;  /* violet */
+
+      /* Spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 48px;
+      --space-8: 64px;
+      --space-9: 96px;
+
+      /* Type */
+      --font-sans: "Noto Sans", -apple-system, BlinkMacSystemFont, "Inter", "Geist", "Segoe UI", Roboto, sans-serif;
+      --font-mono: "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      /* Deck type ramp — sized for the fixed 1280x720 design space, which
+         the stage scales as one unit. Do not use viewport-relative units
+         inside slides; they would fight the stage scaling. */
+      --fs-deck-h1: 64px;
+      --fs-deck-h2: 44px;
+      --fs-deck-h3: 30px;
+      --fs-deck-body: 24px;
+      --fs-deck-small: 18px;
+      --fs-deck-mono: 20px;
+      --leading-body: 1.5;
+      --leading-tight: 1.15;
+      --tracking-tight: -0.02em;
+
+      /* Layout */
+      --radius: 8px;
+      --radius-lg: 12px;
+      --shadow-sm: 0 1px 2px rgba(10, 10, 10, 0.04);
+      --shadow: 0 1px 3px rgba(10, 10, 10, 0.06), 0 1px 2px rgba(10, 10, 10, 0.04);
+      --transition: 180ms ease;
+      --transition-slide: 200ms ease;
+
+      /* 16:9 design space. The engine scales this to fit the viewport. */
+      --deck-w: 1280px;
+      --deck-h: 720px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0B0B0C;
+      --surface: #161618;
+      --text: #F5F5F5;
+      --text-muted: #9CA3AF;
+      --border: #27272A;
+      --border-strong: #3F3F46;
+      --accent-soft: color-mix(in srgb, var(--accent) 18%, var(--bg));
+      /* Categorical palette — lifted for near-black backgrounds. */
+      --cat-1: #F87171;
+      --cat-2: #FB923C;
+      --cat-3: #FACC15;
+      --cat-4: #4ADE80;
+      --cat-5: #60A5FA;
+      --cat-6: #818CF8;
+      --cat-7: #A78BFA;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ------------------------------------------------------------------
+       Reset and base
+       ------------------------------------------------------------------ */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden; /* the stage is the viewport; overlays scroll internally */
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: var(--fs-deck-body);
+      line-height: var(--leading-body);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color var(--transition), color var(--transition);
+    }
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+      line-height: var(--leading-tight);
+      margin: 0;
+    }
+    p { margin: 0; }
+    code, pre, kbd { font-family: var(--font-mono); font-size: var(--fs-deck-mono); }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    a:hover { color: var(--accent-hover); }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    /* The stage receives programmatic focus (a keyboard sink when overlays
+       close); it isn't an interactive control, so no ring on it. */
+    .stage:focus-visible { outline: none; }
+
+    /* ------------------------------------------------------------------
+       Deck header — theme toggle + personal branding badges. Fixed chrome,
+       unscaled, hidden in print.
+       ------------------------------------------------------------------ */
+    .deck-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-2) var(--space-5);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: saturate(180%) blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+      color: var(--text);
+    }
+    .brand-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+    }
+    .header-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .icon-button {
+      display: inline-grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color var(--transition), border-color var(--transition);
+    }
+    .icon-button:hover { background: var(--surface); border-color: var(--border-strong); }
+    .icon-button svg { width: 18px; height: 18px; }
+    a.icon-button { color: var(--text-muted); }
+    a.icon-button:hover { color: var(--text); }
+    [data-theme="light"] #icon-moon { display: block; }
+    [data-theme="light"] #icon-sun { display: none; }
+    [data-theme="dark"]  #icon-moon { display: none; }
+    [data-theme="dark"]  #icon-sun  { display: block; }
+
+    /* ------------------------------------------------------------------
+       Stage — a fixed 1280x720 canvas centered in the viewport and scaled
+       as one unit, so the deck letterboxes on mismatched windows. The
+       engine sets --deck-scale and --notes-shift from JS on resize.
+       ------------------------------------------------------------------ */
+    .stage {
+      position: fixed;
+      left: 50%;
+      top: calc(50% - var(--notes-shift, 0px));
+      width: var(--deck-w);
+      height: var(--deck-h);
+      transform: translate(-50%, -50%) scale(var(--deck-scale, 1));
+    }
+
+    /* ------------------------------------------------------------------
+       Slides — absolutely stacked; only .is-current is visible. The fade
+       stays at 200ms and dies entirely under prefers-reduced-motion.
+       No entrance animations.
+       ------------------------------------------------------------------ */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-8);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--transition-slide), visibility 0s 200ms;
+    }
+    .slide.is-current {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity var(--transition-slide);
+    }
+
+    .slide-kicker {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-3);
+    }
+    .slide-title { font-size: var(--fs-deck-h2); margin-bottom: var(--space-6); }
+    .slide-body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    /* Bullets — the workhorse. Content rules cap these at 6 per slide.
+       ol.bullets keeps source numbering (use start="N" on continuations). */
+    ul.bullets, ol.bullets {
+      margin: 0;
+      padding-left: var(--space-6);
+    }
+    ul.bullets li, ol.bullets li { padding-left: var(--space-2); }
+    ul.bullets li + li, ol.bullets li + li { margin-top: var(--space-4); }
+    ul.bullets li::marker { color: var(--accent); }
+    ol.bullets li::marker {
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 20px;
+    }
+    ul.bullets ul {
+      margin-top: var(--space-3);
+      padding-left: var(--space-5);
+      font-size: var(--fs-deck-small);
+      color: var(--text-muted);
+    }
+    ul.bullets ul li + li { margin-top: var(--space-2); }
+    ul.bullets ul li::marker { color: var(--text-muted); }
+    .slide-body strong { font-weight: 700; }
+    .slide-body code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0 var(--space-1);
+      font-size: 20px;
+    }
+    /* Inside <pre> the inline-code pill must not apply — the block carries
+       the chrome, the lines stay bare. */
+    .slide-body pre code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    /* Title + closing slides */
+    .slide-title-page, .slide-closing {
+      justify-content: center;
+      align-items: flex-start;
+      gap: var(--space-6);
+    }
+    .slide-title-page h1 { font-size: var(--fs-deck-h1); max-width: 20ch; }
+    .slide-closing h2 { font-size: var(--fs-deck-h1); }
+    .deck-lede {
+      font-size: 28px;
+      line-height: 1.4;
+      color: var(--text-muted);
+      max-width: 44ch;
+    }
+    .deck-meta {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* Personal branding row — same pattern as the style guide template. */
+    .branding {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin: 0;
+      list-style: none;
+      padding: 0;
+    }
+    .branding a {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 16px;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .branding a:hover { color: var(--text); border-color: var(--border-strong); }
+    .branding svg { width: 16px; height: 16px; }
+
+    /* Agenda */
+    ol.agenda {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    ol.agenda.agenda-2col { grid-template-columns: 1fr 1fr; column-gap: var(--space-7); }
+    ol.agenda li {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-tight);
+    }
+    ol.agenda .agenda-num {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    /* ------------------------------------------------------------------
+       Deck controls — prev/next, counter, key hints. Fixed chrome,
+       unscaled, hidden in print. Sits above the notes panel when open.
+       ------------------------------------------------------------------ */
+    .deck-controls {
+      position: fixed;
+      right: var(--space-5);
+      bottom: calc(var(--space-5) + var(--notes-h, 0px));
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: bottom var(--transition);
+    }
+    .deck-controls .icon-button:disabled {
+      opacity: 0.35;
+      cursor: default;
+      background: transparent;
+      border-color: var(--border);
+    }
+    #slide-counter {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--text-muted);
+      padding-inline: var(--space-2);
+      min-width: 64px;
+      text-align: center;
+    }
+    .key-hint {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-inline: var(--space-2);
+      border-left: 1px solid var(--border);
+    }
+    @media (max-width: 719px) { .key-hint { display: none; } }
+
+    /* ------------------------------------------------------------------
+       Overview grid — toggled with O or Escape. A keyboard-accessible
+       card per slide; Enter jumps, Escape closes.
+       ------------------------------------------------------------------ */
+    .overview {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: var(--bg);
+      overflow-y: auto;
+      padding: var(--space-8) var(--space-6) var(--space-6);
+    }
+    .overview-head {
+      max-width: 1280px;
+      margin: 0 auto var(--space-5);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+    .overview-head h2 { font-size: 24px; }
+    .overview-head p { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+    .overview-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-4);
+    }
+    .ov-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+      min-height: 96px;
+      padding: var(--space-4);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .ov-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+    .ov-card[aria-current="true"] { border-color: var(--accent); }
+    .ov-card[aria-current="true"] .ov-num { color: var(--accent); }
+    .ov-num { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+    .ov-title { font-size: 15px; font-weight: 700; line-height: 1.35; letter-spacing: var(--tracking-tight); }
+    body:not(.overview-open) .overview { display: none; }
+    body.overview-open .stage { visibility: hidden; }
+
+    /* ------------------------------------------------------------------
+       Speaker notes — <aside class="notes"> inside each slide, hidden in
+       the deck, mirrored into a readable unscaled bottom panel on N.
+       ------------------------------------------------------------------ */
+    .slide .notes { display: none; }
+    body.notes-open { --notes-h: 24vh; }
+    .notes-panel {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 24vh;
+      z-index: 12;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: var(--space-4) var(--space-6);
+      overflow-y: auto;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    body:not(.notes-open) .notes-panel { display: none; }
+    .notes-panel .notes-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-2);
+    }
+    .notes-panel p { margin: 0; }
+    .notes-panel p + p { margin-top: var(--space-2); }
+    .notes-panel ul { margin: 0; padding-left: var(--space-5); }
+    .notes-panel .notes-empty { color: var(--text-muted); }
+
+    /* Two-column slide */
+    .cols-2 {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-7);
+      align-content: start;
+    }
+    .cols-2 .col h3 {
+      font-size: var(--fs-deck-h3);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Code slide */
+    pre.code-block {
+      flex: 1;
+      min-height: 0;
+      margin: 0;
+      padding: var(--space-5);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      font-size: var(--fs-deck-mono);
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+    .code-caption {
+      font-family: var(--font-mono);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* Section divider */
+    .slide-divider {
+      justify-content: center;
+      gap: var(--space-4);
+    }
+    .slide-divider .divider-num {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      color: var(--accent);
+    }
+    .slide-divider h2 { font-size: var(--fs-deck-h1); max-width: 18ch; }
+
+    /* ------------------------------------------------------------------
+       Print — one slide per page, chrome removed, light palette forced.
+       With notes mode on (press N before printing), notes append below
+       each slide and pages may flow onto a second sheet.
+       ------------------------------------------------------------------ */
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      /* Force the light palette so a dark-toggled deck doesn't print ink-heavy. */
+      :root, [data-theme="dark"] {
+        --bg: #FFFFFF;
+        --surface: #FFFFFF;
+        --text: #0A0A0A;
+        --text-muted: #6B7280;
+        --border: #E5E7EB;
+        --border-strong: #D1D5DB;
+      }
+      body { overflow: visible; }
+      .deck-header, .deck-controls, .overview, .notes-panel { display: none !important; }
+      .stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none;
+      }
+      .slide {
+        position: relative;
+        inset: auto;
+        width: var(--deck-w);
+        height: var(--deck-h);
+        margin: 0 auto;
+        opacity: 1 !important;
+        visibility: visible !important;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; break-after: auto; }
+      body.notes-open .slide { height: auto; min-height: var(--deck-h); overflow: visible; }
+      body.notes-open .slide .notes {
+        display: block;
+        margin-top: var(--space-5);
+        padding-top: var(--space-4);
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: var(--fs-deck-small);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="deck-header">
+    <span class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <!-- Lucide: square -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+      </span>
+      <span class="deck-name">CCA-F Exam Workbook</span>
+    </span>
+    <div class="header-links">
+      <a class="icon-button" href="https://github.com/jamesbuckett" rel="noopener noreferrer" target="_blank" aria-label="GitHub" title="GitHub">
+        <!-- Lucide: github -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      </a>
+      <a class="icon-button" href="https://twitter.com/jamesbuckett" rel="noopener noreferrer" target="_blank" aria-label="Twitter / X" title="Twitter / X">
+        <!-- Lucide: twitter (x glyph) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>
+      </a>
+      <a class="icon-button" href="https://www.linkedin.com/in/jamesbuckett" rel="noopener noreferrer" target="_blank" aria-label="LinkedIn" title="LinkedIn">
+        <!-- Lucide: linkedin -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle theme" title="Toggle theme">
+        <!-- Lucide: moon -->
+        <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <!-- Lucide: sun -->
+        <svg id="icon-sun"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage" tabindex="-1" aria-label="Presentation slides">
+    <!-- SLIDES:BEGIN — replace the placeholder slides below with the deck
+         planned from outline.json. Rules: ids must be slide-1..slide-N in
+         order; every slide keeps its <aside class="notes">; pull CSS for
+         table / code / two-column / divider slides from
+         references/slide-components.md. -->
+    <section class="slide slide-title-page" id="slide-1" data-title="Title">
+      <h1>Pass Anthropic's Claude Architect exam by building every concept yourself.</h1>
+      <p class="deck-lede">Eight runnable tutorials for Anthropic's Claude Certified Architect (CCA-F) exam. Build each concept, trigger a deliberate failure, tick a checklist.</p>
+      <p class="deck-meta">James Buckett &middot; July 2026</p>
+      <ul class="branding" aria-label="Personal links">
+        <li><a href="https://github.com/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: github --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a></li>
+        <li><a href="https://twitter.com/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: twitter (x glyph) --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>Twitter / X</a></li>
+        <li><a href="https://www.linkedin.com/in/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: linkedin --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a></li>
+      </ul>
+      <aside class="notes">
+        <p>Every CCA-F domain as runnable code — with a deliberate failure to trigger and a checklist designed so you can only honestly tick it after you've seen it on your own terminal. A hands-on prep workbook: independent, not affiliated with or endorsed by Anthropic. All code runs on a clean laptop with an ANTHROPIC_API_KEY exported.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-2" data-title="Agenda (1/3)">
+      <p class="slide-kicker">Agenda</p>
+      <h2 class="slide-title">What this deck covers (1/3)</h2>
+      <div class="slide-body">
+        <ol class="agenda">
+          <li><span class="agenda-num">01</span> Two minutes of setup, then you're doing exam-relevant work</li>
+          <li><span class="agenda-num">02</span> Enabling <code>venv</code> to run the tutorials</li>
+          <li><span class="agenda-num">03</span> Before you commit six hours</li>
+          <li><span class="agenda-num">04</span> The Agentic Loop — think / act / observe with the Anthropic SDK</li>
+          <li><span class="agenda-num">05</span> Hub-and-Spoke Orchestration with Isolated Sub-agent Context</li>
+          <li><span class="agenda-num">06</span> Build an MCP Server Exposing Tools, Resources, and Prompts</li>
+        </ol>
+      </div>
+      <aside class="notes">
+        <p>One agenda item per section of the workbook, in source order. Sections 04 onward are the eight runnable tutorials, ordered by exam domain.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-3" data-title="Agenda (2/3)">
+      <p class="slide-kicker">Agenda</p>
+      <h2 class="slide-title">What this deck covers (2/3)</h2>
+      <div class="slide-body">
+        <ol class="agenda">
+          <li><span class="agenda-num">07</span> Tool Description Discipline — Break It, Then Fix It</li>
+          <li><span class="agenda-num">08</span> CLAUDE.md Hierarchy in Claude Code</li>
+          <li><span class="agenda-num">09</span> Hooks vs Skills vs Slash Commands</li>
+          <li><span class="agenda-num">10</span> Structured Output with Tool Use + JSON Schema Retry Loop</li>
+          <li><span class="agenda-num">11</span> Prompt Caching &amp; Fighting "Lost in the Middle"</li>
+          <li><span class="agenda-num">12</span> Turn 8/8 into a booked exam</li>
+        </ol>
+      </div>
+      <aside class="notes">
+        <p>Tutorials 04–11 on this numbering are workbook tutorials 04–08 plus the wrap-up. Every tutorial follows the same skeleton: setup, code trace, walkthrough, build-and-break, verification checklist, cleanup.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-4" data-title="Agenda (3/3)">
+      <p class="slide-kicker">Agenda</p>
+      <h2 class="slide-title">What this deck covers (3/3)</h2>
+      <div class="slide-body">
+        <ol class="agenda">
+          <li><span class="agenda-num">13</span> Thirty-three terms you'll meet in the tutorials</li>
+          <li><span class="agenda-num">14</span> When things go wrong</li>
+          <li><span class="agenda-num">15</span> Helper scripts for the workbook</li>
+          <li><span class="agenda-num">16</span> Pick a tutorial</li>
+        </ol>
+      </div>
+      <aside class="notes">
+        <p>The back matter is reference material: a glossary, a troubleshooting catalogue of the twelve errors people actually hit, the usage.py helper, and ordering guidance.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-5" data-title="Pre-start · Fit">
+      <p class="slide-kicker">Pre-start</p>
+      <h2 class="slide-title">Two minutes of setup, then you're doing exam-relevant work</h2>
+      <div class="slide-body">
+        <p>Qualify the fit, install the toolchain, then dive in. Everything on one laptop — no cluster, no infra account, no SaaS signup beyond Anthropic.</p>
+        <div class="cols-2">
+          <div class="col">
+            <h3>For you if…</h3>
+            <ul class="bullets">
+              <li>You're preparing for CCA-F and want muscle memory, not just notes.</li>
+              <li>You're comfortable reading Python and using a terminal.</li>
+              <li>You learn better by breaking code and watching the failure.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>Skip this if…</h3>
+            <ul class="bullets">
+              <li>You don't have (or can't get) an Anthropic API key.</li>
+              <li>You want passive reading — the tutorials are verification-gated on observed behaviour.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>The full "for you if" line reads: preparing for Anthropic's CCA-F certification and want muscle memory, not just notes. Reading specs is the alternative this workbook deliberately avoids.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-6" data-title="Pre-start · Five domains">
+      <p class="slide-kicker">Pre-start</p>
+      <h2 class="slide-title">The five CCA-F domains</h2>
+      <div class="slide-body">
+        <p>Official exam weights (per the exam guide, July 2026). The "D1 · Agentic"-style chips throughout the workbook map to these.</p>
+        <ul class="bullets">
+          <li><strong>D1 · Agentic Architecture &amp; Orchestration</strong> — 27% · Tutorials 01–02</li>
+          <li><strong>D2 · Tool Design &amp; MCP Integration</strong> — 18% · Tutorials 03–04</li>
+          <li><strong>D3 · Claude Code Configuration &amp; Workflows</strong> — 20% · Tutorials 05–06</li>
+          <li><strong>D4 · Prompt Engineering &amp; Structured Output</strong> — 20% · Tutorial 07</li>
+          <li><strong>D5 · Context Management &amp; Reliability</strong> — 15% · Tutorial 08</li>
+        </ul>
+        <p>One-time install is ~2 minutes; verify your key with <code>usage.py</code> before Tutorial 01.</p>
+      </div>
+      <aside class="notes">
+        <p>Full theory deep-dives live in the companion study guide. Each tutorial creates its own .venv, so Python packages get installed per tutorial — only the toolchain itself is global. The usage.py smoke call costs a fraction of a cent and prints live .usage fields.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-7" data-title="venv · Why">
+      <p class="slide-kicker">Setup &middot; venv</p>
+      <h2 class="slide-title">Enabling venv to run the tutorials</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Every tutorial installs its packages into a throwaway <code>.venv</code> — each tutorial's SDK version stays isolated.</li>
+          <li>Keeps system Python clean and sidesteps PEP 668 errors on Ubuntu 23.04+ and current Homebrew.</li>
+          <li>Do the whole dance once on Tutorial 01, then repeat the short version for every later tutorial.</li>
+          <li>Activation is per-shell — the <code>(.venv)</code> prompt prefix is the signal it's live.</li>
+          <li>Windows PowerShell activates with <code>.\.venv\Scripts\Activate.ps1</code> instead.</li>
+          <li>Hit an error? Every venv symptom has a dedicated troubleshooting entry with a fix and a reason.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>PEP 668 is the rule that makes system Python refuse global pip install to protect OS packages. If PowerShell blocks activation on "execution policy", run Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass in that shell first. The dedicated entries: ensurepip is not available, externally-managed-environment, ModuleNotFoundError on an already-installed package.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-8" data-title="venv · Steps 1–3">
+      <p class="slide-kicker">Setup &middot; venv</p>
+      <h2 class="slide-title">Create, activate, install (steps 1–3)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code># 1 · Ubuntu / Debian only — venv ships as a separate package
+sudo apt update &amp;&amp; sudo apt install -y python3 python3-venv python3-pip
+
+# 2 · create and activate inside the tutorial directory
+python3 -m venv .venv
+source .venv/bin/activate      # prompt gains a (.venv) prefix
+
+# 3 · with the venv active, pip writes into .venv/ — no sudo
+pip install "anthropic&gt;=0.40"</code></pre>
+        <p class="code-caption">bash &middot; macOS and most Linux distros ship venv with Python — step 1 is Ubuntu/Debian only</p>
+      </div>
+      <aside class="notes">
+        <p>Each tutorial's setup block lists exactly which packages it needs. After activation, both python3 and pip resolve inside .venv, which is what makes sudo unnecessary.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-9" data-title="venv · Steps 4–5">
+      <p class="slide-kicker">Setup &middot; venv</p>
+      <h2 class="slide-title">Verify, deactivate, re-enter (steps 4–5)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code># 4 · verify you're actually inside the venv
+which python3 pip              # both must point inside .venv/
+python3 -c "import anthropic; print(anthropic.__version__)"
+
+# 5 · leave, come back later — no re-install needed
+deactivate                     # .venv/ stays on disk
+# — later, in a new shell —
+cd ~/agentic-loop
+source .venv/bin/activate      # re-enter, no re-create</code></pre>
+        <p class="code-caption">bash &middot; if which points to /usr/bin/, activation silently didn't run — re-source and re-install</p>
+      </div>
+      <aside class="notes">
+        <p>Activation lives only in the current shell: close the terminal and it's gone, but the .venv folder persists on disk. Explicit deactivate drops an active shell back to system Python without closing it.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-10" data-title="FAQ">
+      <p class="slide-kicker">FAQ</p>
+      <h2 class="slide-title">Before you commit six hours</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Independent, community-made — <strong>not affiliated with or endorsed by Anthropic</strong>.</li>
+          <li>Time: about 6 h 30 m across eight tutorials, usually spread over 1–2 weeks.</li>
+          <li>Cost: roughly $2–4 on Claude Sonnet 4.6 with the shown iteration caps — set a billing alert.</li>
+          <li>Needs: Python 3.11+, the Claude Code CLI, an exported <code>ANTHROPIC_API_KEY</code>, a terminal.</li>
+          <li>Enough alone? Probably not — pair it with the companion CCA-F Atlas study guide and practice questions.</li>
+          <li>Issues go to the GitHub repo; the freshness stamp shows when the code was last verified.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Every loop has a termination limit to prevent runaway spend — Tutorial 01 exists precisely to show what happens when you remove it. No Docker, no cloud accounts, no cluster. The workbook's job is the muscle-memory half; reserve the final week for revision rather than more tutorials. Each tutorial posts its own time budget and progress saves automatically to localStorage.</p>
+      </aside>
+    </section>
+    <section class="slide slide-divider" id="slide-11" data-title="Domain 1">
+      <p class="divider-num">Domain 1 &middot; 27% &middot; Tutorials 01–02</p>
+      <h2>Agentic Architecture &amp; Orchestration</h2>
+      <aside class="notes">
+        <p>The heaviest-weighted domain. Tutorial 01 builds the single-agent loop; Tutorial 02 composes loops into hub-and-spoke orchestration.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-12" data-title="T01 · Overview">
+      <p class="slide-kicker">Tutorial 01 &middot; Domain 1</p>
+      <h2 class="slide-title">The Agentic Loop — think / act / observe with the Anthropic SDK</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>An agent is a Claude instance wrapped in a loop that calls tools, observes results, and decides the next action until a stop condition fires.</li>
+              <li><code>stop_reason</code> is the gate — <code>tool_use</code> goes back around, <code>end_turn</code> exits. <code>MAX_ITERATIONS</code> is the last-resort seatbelt.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>A think → act → observe loop from scratch</li>
+              <li><code>stop_reason</code> flipping from <code>tool_use</code> to <code>end_turn</code></li>
+              <li>A runaway loop, by removing the termination cap</li>
+              <li>Each turn's <code>tool_use</code> / <code>tool_result</code> round-trip</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 1, the Agentic Loop mental model in the companion study guide. Each turn is one client.messages.create() call. Prerequisites: Python 3.11+, anthropic SDK 0.40+, an exported API key — nothing else, it runs locally. Before starting, record a spend baseline at console.anthropic.com/usage so you can check the delta afterwards.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-13" data-title="T01 · loop.py (1/3)">
+      <p class="slide-kicker">Tutorial 01 &middot; loop.py</p>
+      <h2 class="slide-title">The catalogue and the cap (1/3)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>client = anthropic.Anthropic()   # reads ANTHROPIC_API_KEY
+MODEL = "claude-sonnet-4-6"
+MAX_ITERATIONS = 5               # the termination cap
+
+tools = [{
+    "name": "get_weather",
+    "description":
+        "Return the current temperature in Celsius for a given city.",
+    "input_schema": {"type": "object",
+                     "properties": {"city": {"type": "string"}},
+                     "required": ["city"]},
+}]
+messages = [{"role": "user",
+             "content": "Compare the weather in Paris and Tokyo right now."}]</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Trimmed here: import anthropic, json, os and the run_tool dispatcher — a pure-Python function returning fake temperatures for Paris, Tokyo, and Cape Town. The model never executes run_tool; you do. MAX_ITERATIONS is the single most important line in the file: without it the loop is while True and the bill grows without bound. Three tool fields matter: name, description (the routing signal), input_schema (guaranteed by the API only with strict: true).</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-14" data-title="T01 · loop.py (2/3)">
+      <p class="slide-kicker">Tutorial 01 &middot; loop.py</p>
+      <h2 class="slide-title">Think, then the exit gate (2/3)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>for turn in range(MAX_ITERATIONS):
+    resp = client.messages.create(
+        model=MODEL, max_tokens=1024, tools=tools, messages=messages
+    )
+    print(f"--- turn {turn} · stop_reason={resp.stop_reason} ---")
+    messages.append({"role": "assistant", "content": resp.content})
+
+    if resp.stop_reason == "end_turn":
+        print("FINAL:", resp.content[-1].text)
+        break</code></pre>
+        <p class="code-caption">python &middot; "think" is the create() call; end_turn is the healthy exit</p>
+      </div>
+      <aside class="notes">
+        <p>resp.content[-1].text grabs the prose answer — the last block, because earlier blocks might be thinking text. The break means the for/else clause on the next slide is not executed; else on a for only fires when the loop exhausts without break.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-15" data-title="T01 · loop.py (3/3)">
+      <p class="slide-kicker">Tutorial 01 &middot; loop.py</p>
+      <h2 class="slide-title">Act, observe, and the safety cap (3/3)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>    tool_results = []
+    for block in resp.content:
+        if block.type == "tool_use":
+            result = run_tool(block.name, block.input)
+            tool_results.append({
+                "type": "tool_result",
+                "tool_use_id": block.id,
+                "content": json.dumps(result),
+            })
+    messages.append({"role": "user", "content": tool_results})
+else:
+    print("!! loop exhausted without end_turn — safety cap hit")</code></pre>
+        <p class="code-caption">python &middot; "act" is run_tool; "observe" is appending the tool_result</p>
+      </div>
+      <aside class="notes">
+        <p>Iteration-cap exit — the else branch — means something went wrong; the model wanted another turn and you cut it off. Tutorial 01's build-and-break triggers exactly this on purpose.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-16" data-title="T01 · Code trace">
+      <p class="slide-kicker">Tutorial 01 &middot; Code trace</p>
+      <h2 class="slide-title">What happens when you run it</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>Turn 0 · think</strong> — the model can't answer without the tool: <code>stop_reason="tool_use"</code> plus a Paris <code>ToolUseBlock</code>.</li>
+          <li>Act and observe share the same Python iteration: <code>run_tool</code> executes, the result rides back as a <code>tool_result</code>.</li>
+          <li><code>tool_use_id</code> must echo the block's <code>id</code>; <code>content</code> must be a string — the first <code>BadRequestError</code> readers hit.</li>
+          <li><strong>Turn 1</strong> — Tokyo. Sonnet may batch both calls in turn 0; the <code>for block</code> loop handles that identically.</li>
+          <li><strong>Turn 2 · end</strong> — <code>end_turn</code>, prose answer, <code>break</code>; the <code>for/else</code> fires only when the cap exhausts.</li>
+          <li>The model has no memory between calls — every <code>create()</code> re-sends the full <code>messages</code> list.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Before running, walk it in your head: one get_weather tool, two cities, so the model must call twice. HTTP call #1 returns the Paris request; call #2 carries the Paris result and returns the Tokyo request; call #3 has both temperatures and composes the answer. The loop's job is really just to accrete history.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-17" data-title="T01 · Messages ledger">
+      <p class="slide-kicker">Tutorial 01 &middot; Code trace</p>
+      <h2 class="slide-title">The final messages ledger — six entries</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>[0] user       "Compare the weather in Paris and Tokyo right now."
+[1] assistant  [ToolUseBlock(name='get_weather', input={'city': 'Paris'})]
+[2] user       [tool_result(Paris → {'temp_c': 14})]
+[3] assistant  [ToolUseBlock(name='get_weather', input={'city': 'Tokyo'})]
+[4] user       [tool_result(Tokyo → {'temp_c': 22})]
+[5] assistant  [TextBlock("Paris is 14 °C while Tokyo is 22 °C…")]</code></pre>
+        <p>Tool results ride inside <strong>user</strong> messages — there is no third role. State lives in your Python process, not on Anthropic's side.</p>
+      </div>
+      <aside class="notes">
+        <p>Two things to internalise from this shape: the model has no memory between calls (every create() re-sends the whole list), and from the model's perspective "you told me something" and "the tool told me something" are both inputs from the user role. The loop is a three-state machine — think (create), act (run_tool), observe (append tool_result) — that terminates on end_turn, an iteration cap, or an error.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-18" data-title="T01 · Walkthrough">
+      <p class="slide-kicker">Tutorial 01 &middot; Walkthrough</p>
+      <h2 class="slide-title">Three runs, three observations</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Run <code>python loop.py</code> — two turns with <code>stop_reason=tool_use</code>, then <code>end_turn</code> and prose.
+            <ul><li>The think → act → observe cycle is explicit; the API never hides it.</li></ul>
+          </li>
+          <li>Add <code>print(resp.content[0])</code> after the turn header — a <code>ToolUseBlock</code> on tool turns, a <code>TextBlock</code> at the end.
+            <ul><li>Tool use is a structured response block, not parsed text — the contract you code against.</li></ul>
+          </li>
+          <li>Print the role list after the loop — <code>user → assistant → user → …</code> alternating.
+            <ul><li>The loop builds the history; the model keeps nothing between calls.</li></ul>
+          </li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Step 3's exact line: print(json.dumps([{'role': m['role']} for m in messages], indent=2)) appended after the for/else block. Expected: user, assistant, user, assistant, user, assistant with tool_use / tool_result alternating inside.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-19" data-title="T01 · Build and break">
+      <p class="slide-kicker">Tutorial 01 &middot; Build-and-break</p>
+      <h2 class="slide-title">Starve the loop of iterations</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Edit 1: <code>MAX_ITERATIONS = 1</code> — was 5, deliberately too low.</li>
+          <li>Edit 2: widen the prompt to three cities — Paris, Tokyo, <em>and Cape Town</em> — so one turn can't finish.</li>
+          <li><strong>Expected failure:</strong> exit via the <code>else</code> branch — <code>!! loop exhausted without end_turn</code>.</li>
+          <li><strong>Confirm:</strong> the final printed <code>stop_reason</code> is <code>tool_use</code>, not <code>end_turn</code>.</li>
+          <li><strong>Revert:</strong> restore <code>MAX_ITERATIONS = 5</code>.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The model wanted another turn; you cut it off. This is the same mechanism that protects you when a loop genuinely runs away — watch it fire once on purpose and you'll never ship an unbounded loop.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-20" data-title="T01 · Checklist">
+      <p class="slide-kicker">Tutorial 01 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I can name the three states of the agentic loop without looking at the diagram.</li>
+          <li>I can point to the line of code that is the termination condition.</li>
+          <li>I've seen <code>stop_reason</code> flip from <code>tool_use</code> to <code>end_turn</code>.</li>
+          <li>I can explain why the model has no memory between <code>create()</code> calls.</li>
+          <li>I've watched the loop exit because of the cap, not the model.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The checklist is designed so you can only honestly tick items after observing the behaviour on your own terminal — that's the workbook's whole verification model.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-21" data-title="T01 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 01 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Keep the directory — 02 and 04 reuse it</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>deactivate</code> — keep <code>agentic-loop/</code>; Tutorials 02 and 04 reuse its <code>.venv</code>.</li>
+          <li>Add <code>stop_sequences=["TASK_COMPLETE"]</code> and watch how <code>stop_reason</code> changes.</li>
+          <li>Wire in streaming — <code>client.messages.stream(...)</code> — and see tool-use blocks arrive incrementally.</li>
+          <li>Check your spend delta at <code>console.anthropic.com/usage</code> against the ~$2–4 workbook budget.</li>
+          <li>Optional tally after each call: print <code>resp.usage.input_tokens</code> / <code>output_tokens</code>.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Once Tutorials 02 and 04 are done: cd .. and rm -rf agentic-loop. The in-code tally line is print(f"[usage] in={resp.usage.input_tokens} out={resp.usage.output_tokens}") after each client.messages.create().</p>
+      </aside>
+    </section>
+    <section class="slide" id="slide-22" data-title="T02 · Overview">
+      <p class="slide-kicker">Tutorial 02 &middot; Domain 1</p>
+      <h2 class="slide-title">Hub-and-Spoke Orchestration with Isolated Sub-agent Context</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>One orchestrator delegates independent slices of work to sub-agents running in their own context windows.</li>
+              <li>Sub-agents return <strong>summaries, not transcripts</strong> — and there are no worker-to-worker edges. That's how the hub's context stays bounded.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li><code>spawn_subagent(task_brief) → summary</code></li>
+              <li>Proof the parent holds no sub-agent transcripts</li>
+              <li>The leaky-context bug, triggered on purpose</li>
+              <li>Token counts on parent vs child — the isolation boundary</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 1, Hub-and-Spoke model, Scenario 03 (Multi-Agent Research). The orchestrator sees everything; each sub-agent sees only its slice. Direct edges between workers reintroduce the context-bloat problem hub-and-spoke was built to solve. Prereqs: Tutorial 01 complete, same Python environment and key. Record a spend baseline first.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-23" data-title="T02 · spawn_subagent">
+      <p class="slide-kicker">Tutorial 02 &middot; orchestrator.py</p>
+      <h2 class="slide-title">The spawn — one isolated conversation per child</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>def spawn_subagent(task_brief: str, subagent_name: str) -&gt; str:
+    """Run an isolated sub-agent; return a summary string only."""
+    resp = client.messages.create(
+        model=MODEL, max_tokens=512,
+        system=(f"You are a {subagent_name} sub-agent. Do the task "
+                "briefly and return ONE paragraph of findings. "
+                "Do not narrate your process."),
+        messages=[{"role": "user", "content": task_brief}],
+    )
+    return resp.content[0].text</code></pre>
+        <p class="code-caption">python &middot; the system line is the summary contract; messages holds only the brief</p>
+      </div>
+      <aside class="notes">
+        <p>Trimmed: the [spawn] and [done] print lines that log each child's character and token counts. Sub-agent identity lives in the system prompt, not in history — which is why each child starts fresh. Reuse Tutorial 01's .venv: cd agentic-loop and source .venv/bin/activate.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-24" data-title="T02 · orchestrate()">
+      <p class="slide-kicker">Tutorial 02 &middot; orchestrator.py</p>
+      <h2 class="slide-title">The hub — three spawns, one synthesis</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>def orchestrate(user_goal: str) -&gt; str:
+    plan = [
+        ("researcher",  f"Find 3 key facts relevant to: {user_goal}"),
+        ("critic",      f"List 2 likely counter-arguments to: {user_goal}"),
+        ("synthesizer", f"Suggest a 1-sentence thesis for: {user_goal}"),
+    ]
+    findings = {name: spawn_subagent(brief, name) for name, brief in plan}
+
+    resp = client.messages.create(
+        model=MODEL, max_tokens=512,
+        system="You are an orchestrator. Combine sub-agent findings into a brief.",
+        messages=[{"role": "user", "content": f"Goal: {user_goal}\n\n"
+                   + "\n\n".join(f"[{k}]\n{v}" for k, v in findings.items())}],
+    )
+    return resp.content[0].text</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Run with: print(orchestrate("Should a startup adopt Kubernetes on day one?")). The plan list is a static three-tuple of (role, task brief); the spawns run sequentially — swap in the async client and asyncio.gather to parallelise. The final create() concatenates summaries, never transcripts.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-25" data-title="T02 · Code trace">
+      <p class="slide-kicker">Tutorial 02 &middot; Code trace</p>
+      <h2 class="slide-title">Four independent create() calls</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Three spawns, then one synthesis at the hub — none of the four share a conversation.</li>
+          <li>Each child gets its own empty <code>messages</code> and its own system prompt; the researcher never sees the user's original goal, only its pre-framed brief.</li>
+          <li>Isolation buys genuinely independent critique — the critic's counter-arguments aren't biased by the researcher's facts.</li>
+          <li>The hub reads summaries only: ~500–700 input tokens. Full transcripts would be 3–10× larger.</li>
+          <li>At <em>N</em>=10 sub-agents, that difference is the whole tutorial.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Hub-and-spoke = N isolated conversations plus one synthesis conversation. Workers never talk to each other; the hub only ever receives summaries. Every deviation from that shape — leaking transcripts, adding worker-to-worker edges — is a Domain 1 anti-pattern.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-26" data-title="T02 · Walkthrough">
+      <p class="slide-kicker">Tutorial 02 &middot; Walkthrough</p>
+      <h2 class="slide-title">Watch the token boundary</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Run <code>python orchestrator.py</code> — three <code>[spawn]</code>/<code>[done]</code> pairs, then an <code>[orchestrator]</code> token report.</li>
+          <li>Extend the <code>[done]</code> log with <code>input_tokens</code>: each sub-agent runs 50–150 in; the orchestrator ~600 — three summaries.
+            <ul><li>Without the boundary, transcripts would 3–10× the parent's token bill.</li></ul>
+          </li>
+          <li>Re-read the child's system prompt — "return ONE paragraph… do not narrate".
+            <ul><li>Sub-agents return artifacts, not history — the summary-not-state rule, enforced at the prompt layer.</li></ul>
+          </li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The parent never sees the children's internal reasoning — each child starts with only its own system prompt and task brief. The summary-not-state rule comes from the companion study guide's Domain 1 material.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-27" data-title="T02 · Build and break">
+      <p class="slide-kicker">Tutorial 02 &middot; Build-and-break</p>
+      <h2 class="slide-title">Forward the full child transcript up to the parent</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Add <code>spawn_subagent_LEAKY</code> — it returns the child's full <code>messages</code>, not a summary string.</li>
+          <li>Flatten all three transcripts into the parent's history and synthesise from that.</li>
+          <li><strong>Expected failure:</strong> the orchestrator's <code>input_tokens</code> roughly triples.</li>
+          <li>At <em>N</em>=10 the parent explodes its budget and starts losing the middle — Domain 5's failure mode.</li>
+          <li><strong>Confirm:</strong> print <code>resp.usage.input_tokens</code> in both versions. <strong>Revert</strong> to the original spawn.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The leaky variant returns {"messages": [user brief, assistant reply]} and the orchestrator's messages becomes sum((f["messages"] for f in findings), []) — a flattened multi-conversation history masquerading as one conversation.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-28" data-title="T02 · Checklist">
+      <p class="slide-kicker">Tutorial 02 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I can explain why sub-agents return summaries, not transcripts.</li>
+          <li>I've seen the parent's token count stay small in the isolated version.</li>
+          <li>I can identify a mesh anti-pattern vs a hub-and-spoke.</li>
+          <li>I've compared the sub-agents' summed tokens against the orchestrator's, and can say where the savings come from.</li>
+          <li>I know the first question before splitting: is the work actually independent?</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>If the work isn't independent, hub-and-spoke adds cost without adding parallel value — the split question comes before any architecture choice.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-29" data-title="T02 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 02 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>rm orchestrator.py</code></li>
+          <li>Wrap the three spawns in <code>asyncio.gather</code> with the async client — wall-clock savings.</li>
+          <li>Add a <code>max_subagents</code> guard and a circuit-breaker for failing sub-agents.</li>
+          <li>Check the spend delta on the usage console; add it to your running tally.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The optional per-call tally works here too: print [usage] in / out after each client.messages.create().</p>
+      </aside>
+    </section>
+    <section class="slide slide-divider" id="slide-30" data-title="Domain 2">
+      <p class="divider-num">Domain 2 &middot; 18% &middot; Tutorials 03–04</p>
+      <h2>Tool Design &amp; MCP Integration</h2>
+      <aside class="notes">
+        <p>Tutorial 03 stands up an MCP server exposing all three primitives; Tutorial 04 measures what tool descriptions actually do to routing.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-31" data-title="T03 · Overview">
+      <p class="slide-kicker">Tutorial 03 &middot; Domain 2</p>
+      <h2 class="slide-title">Build an MCP Server Exposing Tools, Resources, and Prompts</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>MCP exposes three primitive types from one server — three control surfaces.</li>
+              <li>Tools are <strong>model</strong>-controlled, resources <strong>app</strong>-controlled, prompts <strong>user</strong>-controlled. Mixing up who controls what is Domain 2's most common exam trap.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>An MCP server exposing all three primitives</li>
+              <li>A stdio wiring into Claude Code</li>
+              <li>Each primitive fired by its correct initiator</li>
+              <li>A deliberate mis-categorisation, to watch it fail</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 2, the MCP Triangle, plus the Tool / Resource / Prompt Template flashcards. Prereqs: Python 3.11+, pip install mcp (the official Model Context Protocol SDK), the Claude Code CLI (one-line native installer: curl -fsSL https://claude.ai/install.sh | bash), and basic JSON Schema familiarity.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-32" data-title="T03 · server.py (1/2)">
+      <p class="slide-kicker">Tutorial 03 &middot; server.py</p>
+      <h2 class="slide-title">The tool — the model decides to call (1/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("triangle-demo")
+
+# --- TOOL: model decides to call ------------------------------
+@mcp.tool()
+def lookup_order(order_id: str) -&gt; dict:
+    """Fetch current status of a customer order. Call only when
+    the user references an order ID or asks 'where is my order'.
+    Do not call for general product questions."""
+    fake = {"A-100": {"status": "shipped"},
+            "A-200": {"status": "processing"}}
+    return fake.get(order_id, {"status": "not_found"})</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Setup: mkdir mcp-triangle, fresh venv, pip install "mcp>=1.0". The decorator fires at import time — it introspects the function, pulls the docstring out as the description, and registers the tool in the server's capability table. The docstring is doing real routing work: when-to-call and when-not-to-call, in prose the model reads.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-33" data-title="T03 · server.py (2/2)">
+      <p class="slide-kicker">Tutorial 03 &middot; server.py</p>
+      <h2 class="slide-title">The resource and the prompt (2/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code># --- RESOURCE: app preloads, model reads ----------------------
+@mcp.resource("docs://shipping-policy")
+def shipping_policy() -&gt; str:
+    """Our shipping policy document. Read when explaining delivery times."""
+    return "Orders ship in 2 business days. International adds 5–7 days."
+
+# --- PROMPT: user types /refund -------------------------------
+@mcp.prompt("refund-flow")
+def refund_flow(order_id: str) -&gt; str:
+    """Walk the user through a refund for a specific order."""
+    return (f"Start a refund flow for order {order_id}. Verify eligibility, "
+            "confirm with the user, then call lookup_order to get status.")
+
+mcp.run()   # defaults to stdio transport</code></pre>
+      </div>
+      <aside class="notes">
+        <p>mcp.run() starts the stdio event loop: the server blocks on stdin waiting for a JSON-RPC frame from Claude Code — JSON-RPC being the small request/response format MCP speaks over the pipe: a JSON object with a method name, params, and an id.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-34" data-title="T03 · .mcp.json">
+      <p class="slide-kicker">Tutorial 03 &middot; Wiring</p>
+      <h2 class="slide-title">Wire it into Claude Code — .mcp.json</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>{
+  "mcpServers": {
+    "triangle": {
+      "command": "python",
+      "args": ["server.py"]
+    }
+  }
+}</code></pre>
+        <p>When Claude Code launches in this directory it reads <code>.mcp.json</code>, spawns <code>python server.py</code> as a subprocess, and handshakes over that subprocess's stdin/stdout.</p>
+      </div>
+      <aside class="notes">
+        <p>After the handshake, Claude Code knows the server offers exactly one tool, one resource, one prompt — visible when you type /mcp. The file lives in the project root.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-35" data-title="T03 · Three initiators">
+      <p class="slide-kicker">Tutorial 03 &middot; Code trace</p>
+      <h2 class="slide-title">Three primitives, three initiator paths</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>TOOL — the model initiates.</strong> <code>stop_reason=tool_use</code> → Claude Code forwards a <code>tools/call</code> JSON-RPC frame over stdio → the result returns as a <code>tool_result</code> block. The description is the routing signal.</li>
+          <li><strong>RESOURCE — the application initiates.</strong> Your <code>@triangle:docs://…</code> mention triggers <code>resources/read</code>; the content is inlined into the prompt. The model never emits a tool-use block.</li>
+          <li><strong>PROMPT — the user initiates.</strong> <code>/triangle:refund-flow</code> is intercepted by the CLI, expanded via <code>prompts/get</code>, and submitted as if you had typed it.</li>
+          <li>Every MCP design choice reduces to: <em>who should be in control of firing this?</em></li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Unlike earlier tutorials there is no single linear flow — that's the whole lesson. Claude Code implements app-control by letting you attach resources with @-mentions; other MCP hosts may attach relevant resources automatically. Either way the initiator is the application, not the model. Prompts don't change model behaviour — they change what the user has to type.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-36" data-title="T03 · Walkthrough">
+      <p class="slide-kicker">Tutorial 03 &middot; Walkthrough</p>
+      <h2 class="slide-title">Fire each primitive from its own initiator</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Boot check: <code>python server.py &lt; /dev/null</code> — starts and waits on stdio; Ctrl-C to kill.</li>
+          <li>Launch <code>claude</code>, type <code>/mcp</code> — <code>triangle</code> appears with 1 tool, 1 resource, 1 prompt.</li>
+          <li>Ask "What's the status of order A-100?" — Claude calls <code>lookup_order</code> and answers "shipped".</li>
+          <li>Attach <code>@triangle:docs://shipping-policy</code> and ask about delivery — content attached, <strong>no tool call</strong> in the transcript.</li>
+          <li>Type <code>/triangle:refund-flow</code> — the template runs; the human decided when.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Typing @ lists every available resource. Stdio is the transport Claude Code uses for local MCP servers; the CLI auto-loads .mcp.json and introspects the server. In the refund flow the model will likely call lookup_order itself — a prompt composing with a tool.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-37" data-title="T03 · Build and break">
+      <p class="slide-kicker">Tutorial 03 &middot; Build-and-break</p>
+      <h2 class="slide-title">Convert the shipping-policy resource into a tool</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Rewrite it as <code>get_shipping_policy()</code> with a minimal description: "Returns shipping policy text."</li>
+          <li>Then ask a non-shipping question: "What's our return policy?"</li>
+          <li><strong>Expected failures:</strong> a pointless call ("policy" matched loosely) — or no attach at all — or token bloat as the full document lands in every tool result.</li>
+          <li><strong>Confirm:</strong> the spurious <code>get_shipping_policy</code> call in the transcript. A resource is attached up front; a tool demands the model find a reason.</li>
+          <li><strong>Revert:</strong> restore the <code>@mcp.resource</code> decorator.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Mis-categorising a resource as a tool shifts the initiator from the app to the model — that's why it produces wrong-time calls and wasted tokens. The @-mention decides when a resource joins context; a tool's description has to argue for every single call.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-38" data-title="T03 · Checklist">
+      <p class="slide-kicker">Tutorial 03 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I can state "who initiates?" for each of the three primitives without looking.</li>
+          <li>I've seen a tool mis-used because its description was too loose.</li>
+          <li>I can point to my <code>.mcp.json</code> and explain stdio vs Streamable HTTP transport.</li>
+          <li>My MCP server exposes one of each primitive and all register in <code>/mcp</code>.</li>
+          <li>I've watched Claude choose (or not) to call a tool based on its description.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Tool = model decides. Resource = app decides. Prompt = user decides. If you can answer "who initiates?" cold, the Domain 2 trap questions lose their teeth.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-39" data-title="T03 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 03 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>deactivate &amp;&amp; cd .. &amp;&amp; rm -rf mcp-triangle</code></li>
+          <li>Convert to Streamable HTTP — <code>FastMCP("triangle-demo", port=3333)</code> plus <code>mcp.run(transport="streamable-http")</code> — and connect from a remote host.</li>
+          <li>Add a second tool with an anti-example in the description ("Do NOT call when…").</li>
+          <li>Explore the <code>resources/list</code> MCP method directly with <code>mcp-cli</code> or <code>curl</code>.</li>
+          <li>Spend: Claude Code makes the API calls here, so the usage console is your only live signal.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>This tutorial doesn't call the Anthropic API directly from Python — note the console delta and add it to the running tally.</p>
+      </aside>
+    </section>
+    <section class="slide" id="slide-40" data-title="T04 · Overview">
+      <p class="slide-kicker">Tutorial 04 &middot; Domain 2</p>
+      <h2 class="slide-title">Tool Description Discipline — Break It, Then Fix It</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>The description is the <strong>only</strong> signal the model has for when to call a tool — it routes by semantic match, not by function name.</li>
+              <li>Great descriptions state parameters, units, side effects, and anti-examples ("when NOT to call") — or an adjacent tool swallows the call.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>The same prompts against vague vs precise descriptions</li>
+              <li>A count of incorrect invocations per description</li>
+              <li>Proof that "when NOT to call" cuts false positives</li>
+              <li>The rename-to-refresh-attention anti-pattern, debunked</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 2, Common Traps, Quiz Q7. A tool description is a contract with the model's tool-selection (routing) logic — include trigger words, scope boundaries, and explicit non-examples like "NOT for weather". Prereqs: Tutorial 01 complete; reuse its environment.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-41" data-title="T04 · describe.py (1/2)">
+      <p class="slide-kicker">Tutorial 04 &middot; describe.py</p>
+      <h2 class="slide-title">The vague catalogue and the ground truth (1/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>VAGUE = [{
+    "name": "get_data",
+    "description": "Gets data.",
+    "input_schema": {"type": "object", "properties": {}},
+}]
+
+test_prompts = [
+    "Where is my order A-100?",           # should call
+    "What's your return policy?",         # should NOT call
+    "Tell me about the Widget Pro specs", # should NOT call
+    "Is my package A-200 on its way?",    # should call
+]</code></pre>
+        <p class="code-caption">python &middot; the comments are the ground truth you'll measure accuracy against</p>
+      </div>
+      <aside class="notes">
+        <p>The test driver run(tools, prompts, label) fires one create() per prompt with a fresh single-turn messages list — no conversation carry-over — and logs [b.name for b in resp.content if b.type == "tool_use"], so an empty list means the model decided not to call.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-42" data-title="T04 · describe.py (2/2)">
+      <p class="slide-kicker">Tutorial 04 &middot; describe.py</p>
+      <h2 class="slide-title">The precise catalogue — five routing signals (2/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>PRECISE = [{
+    "name": "get_latest_order_status",
+    "description": (
+        "Fetch the current shipping status of a CUSTOMER ORDER from "
+        "the orders database. Use ONLY when the user asks about a "
+        "specific order by ID or says 'where is my package'. DO NOT "
+        "use for returns, refunds, account info, or general product "
+        "questions. Returns: {order_id, status, eta}."
+    ),
+    "input_schema": {"type": "object",
+        "properties": {"order_id": {"type": "string",
+                                    "description": "Order ID, e.g. 'A-100'"}},
+        "required": ["order_id"]},
+}]</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Five elements, each a signal the model can route on: the domain, the trigger phrases, the anti-cases, the parameter with its own description, and the return shape. The script runs both catalogues over the same four prompts — eight API calls total, one variable.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-43" data-title="T04 · Code trace">
+      <p class="slide-kicker">Tutorial 04 &middot; Code trace</p>
+      <h2 class="slide-title">What the comparison measures</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>A two-batch experiment: the same four prompts against two catalogues — eight calls, one variable: the description.</li>
+          <li><strong>VAGUE</strong> ("Gets data.") — unreliable routing; outputs differ run to run. The real cost isn't "won't fire", it's that you can't predict when it will.</li>
+          <li><strong>PRECISE</strong> — the result table is stable across runs; the description is doing the routing work.</li>
+          <li>The description is effectively your tool's API contract with the model — vagueness there is the same bug as a vague interface in code.</li>
+          <li>Write descriptions the way you'd write instructions for a new hire.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Skip any of the five elements — domain, parameters with descriptions, when to use, when NOT to use, return shape — and the model fills the gap with a guess.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-44" data-title="T04 · Walkthrough">
+      <p class="slide-kicker">Tutorial 04 &middot; Walkthrough</p>
+      <h2 class="slide-title">Run, count, dissect</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Run <code>python describe.py</code> — the vague <code>get_data</code> is called on everything or nothing (both wrong); the precise tool fires only on the two order-status prompts.
+            <ul><li>Every spurious call is latency, cost, and a context-pollution risk.</li></ul>
+          </li>
+          <li>Count false positives per description — the measurement that separates "works" from "works reliably".</li>
+          <li>Dissect the precise description: domain, parameters, "use ONLY when", "DO NOT use for", return shape.
+            <ul><li>The concrete answer to Quiz Q7 — five elements every production description should have.</li></ul>
+          </li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Tally how often each description called the tool when it shouldn't have — the vague one has no anchor, so successive runs of the same prompts produce different outputs.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-45" data-title="T04 · Build and break">
+      <p class="slide-kicker">Tutorial 04 &middot; Build-and-break</p>
+      <h2 class="slide-title">Rename the tool to "refresh attention"</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Rename <code>get_data</code> to <code>get_data_v2</code> — keep the description at "Gets data." Run again.</li>
+          <li><strong>Expected:</strong> behaviour unchanged; the same two failure patterns persist.</li>
+          <li>The name alone is not information.</li>
+          <li><strong>Confirm:</strong> tool-call counts before and after are statistically identical. <strong>Revert</strong> to the precise description.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Renaming a tool to nudge the model is a recognised anti-pattern — the model routes on the description's semantics, so a content-free description stays content-free under any name.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-46" data-title="T04 · Checklist">
+      <p class="slide-kicker">Tutorial 04 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I have a side-by-side count of tool calls for vague vs precise.</li>
+          <li>I can list the five elements of a precise tool description.</li>
+          <li>I've seen that renaming a tool does not change model behaviour.</li>
+          <li>I understand why "gets data" is not a tool description.</li>
+          <li>I can write a description that includes a "DO NOT call when…" clause.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The five elements again: domain, parameters with descriptions, when to use, when NOT to use, return shape.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-47" data-title="T04 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 04 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>rm describe.py</code></li>
+          <li>Add a third variant with a parameters-only description — measure which field matters most.</li>
+          <li>Test with <code>claude-haiku-4-5</code> and <code>claude-opus-4-7</code> — does description quality matter more for smaller models?</li>
+          <li>Read Anthropic's tool-use documentation for the canonical description pattern.</li>
+          <li>Check your spend delta and add it to the running tally.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The per-call usage tally line works here as in Tutorial 01.</p>
+      </aside>
+    </section>
+    <section class="slide slide-divider" id="slide-48" data-title="Domain 3">
+      <p class="divider-num">Domain 3 &middot; 20% &middot; Tutorials 05–06</p>
+      <h2>Claude Code Configuration &amp; Workflows</h2>
+      <aside class="notes">
+        <p>Tutorial 05 makes the CLAUDE.md hierarchy observable; Tutorial 06 separates hooks, skills, and slash commands by who initiates them.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-49" data-title="T05 · Overview">
+      <p class="slide-kicker">Tutorial 05 &middot; Domain 3</p>
+      <h2 class="slide-title">CLAUDE.md Hierarchy in Claude Code</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>Three tiers: global <code>~/.claude/CLAUDE.md</code>, project <code>./CLAUDE.md</code>, subdirectory. All applicable files are <strong>concatenated</strong> into context.</li>
+              <li>The docs promise no winner when rules contradict — so personal goes global, team goes project, per-directory goes subdir, written so tiers never conflict.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>Three CLAUDE.md files loading simultaneously</li>
+              <li>A forced conflict — and why not to rely on a winner</li>
+              <li>A tier map: what belongs at team / personal / local</li>
+              <li>The wrong-tier bug: a user preference in a project file</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 3, the CLAUDE.md Pyramid, Quiz Q13. Global and project files load at session start; subdirectory files join on demand as Claude works in those paths. Scope narrows as you descend. Prereqs: Claude Code CLI, a throwaway directory — and your existing global CLAUDE.md gets backed up first (cp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.bak).</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-50" data-title="T05 · Three tiers">
+      <p class="slide-kicker">Tutorial 05 &middot; Setup</p>
+      <h2 class="slide-title">Three tiered files</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code># ~/.claude/CLAUDE.md                    · global — follows you
+- Always use emoji-free commit messages.
+- When writing code, prefer 4-space indentation.
+
+# ~/hierarchy-demo/CLAUDE.md             · project — checked in
+- All Python code must use type hints.
+- Do not add dependencies without asking first.
+
+# ~/hierarchy-demo/src/payments/CLAUDE.md · subdir — one module
+- This module uses 2-space indentation (legacy).
+- Never log raw card numbers, even in tests.</code></pre>
+        <p class="code-caption">markdown &middot; note the planted conflict: global says 4-space, payments says 2-space</p>
+      </div>
+      <aside class="notes">
+        <p>Setup: back up any existing global file, then mkdir -p ~/hierarchy-demo/src/payments and write the three files with cat heredocs. The project tier is the one teammates inherit through source control; the subdir tier only takes effect while Claude works inside that subtree.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-51" data-title="T05 · Scope walk">
+      <p class="slide-kicker">Tutorial 05 &middot; Code trace</p>
+      <h2 class="slide-title">How Claude Code resolves the hierarchy</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>Phase 1 · session start at the root:</strong> Claude Code walks cwd → home, loads project + global. Payments rules aren't loaded yet.</li>
+          <li><strong>Phase 2 · an edit targets <code>src/payments/</code>:</strong> the harness re-walks; the subdir file joins as the most specific tier.</li>
+          <li>The 4-space vs 2-space conflict: the most specific rule usually wins in practice — but contradictions "may resolve arbitrarily".</li>
+          <li><strong>Phase 3 · back at the root:</strong> subdir rules drop out of scope — a module rule shouldn't bleed into unrelated files.</li>
+          <li>On-demand loading is deliberate: a monorepo's dozens of subdir files would bloat context at startup.</li>
+          <li>Tiers are <strong>scopes, not a precedence ladder</strong> — write them so they never disagree.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>There's no Python to execute here — Claude Code runs a deterministic scope-walk every session start and every time its working scope changes. The documented model is concatenation of everything in scope; the design rule that follows is to put content at the tier whose audience matches the rule's scope.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-52" data-title="T05 · Walkthrough">
+      <p class="slide-kicker">Tutorial 05 &middot; Walkthrough</p>
+      <h2 class="slide-title">Ask Claude what it's carrying</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Launch at the root and ask: "What instructions are loaded for you right now?" — global + project rules, <strong>not</strong> payments.</li>
+          <li>Create <code>src/payments/charge.py</code>, then ask which indentation rule applies — typically "2-space", citing the payments file.
+            <ul><li>Specificity is a heuristic, not a contract — the docs guarantee nothing for contradictions.</li></ul>
+          </li>
+          <li>Force a conflict (project says tabs, global says 4-space) and re-run a few times — you may see it drift.
+            <ul><li>The fix is removing the contradiction, not hoping the "right" tier wins.</li></ul>
+          </li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Subdir CLAUDE.md only loads when Claude is working in that subdir — that's why the first question shows two tiers, not three. Conflicting rules resolving arbitrarily is the documented behaviour, so the real design rule is: delete the conflict.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-53" data-title="T05 · Build and break">
+      <p class="slide-kicker">Tutorial 05 &middot; Build-and-break</p>
+      <h2 class="slide-title">Put a personal preference in the project file</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Append to the project CLAUDE.md: "I like verbose commit messages with rationale in every line." Commit it.</li>
+          <li>Every teammate who clones now inherits your preference — never having asked for it.</li>
+          <li><strong>Confirm:</strong> ask Claude — who is "I" in this CLAUDE.md? Does this rule belong here? It should flag a user-scoped rule in the wrong tier.</li>
+          <li><strong>Revert:</strong> remove the line; restore your real global file from <code>~/.claude/CLAUDE.md.bak</code>.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The study guide's Domain 3 "Don't" list explicitly warns against this: personal preferences must never leave the global tier, because the project tier is checked into source control.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-54" data-title="T05 · Checklist">
+      <p class="slide-kicker">Tutorial 05 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I can name what belongs at global / project / subdir tiers.</li>
+          <li>I've seen Claude cite rules from multiple CLAUDE.md files.</li>
+          <li>I've seen a subdir rule shape output inside its path — and I know the docs don't guarantee it wins a contradiction.</li>
+          <li>I understand why "I prefer X" should not go in a checked-in CLAUDE.md.</li>
+          <li>I can explain why this is a hierarchy, not a flat config.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Global follows you. Project follows the repo. Subdir follows a specific path. Everything in scope is concatenated — that's the entire mental model.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-55" data-title="T05 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 05 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>rm -rf ~/hierarchy-demo</code></li>
+          <li>Use <code>/memory</code> in Claude Code to see which CLAUDE.md files are currently loaded.</li>
+          <li>Add a fourth tier via <code>CLAUDE.local.md</code> — untracked personal overrides per repo.</li>
+          <li>Spend: Claude Code makes the API calls here — the usage console is your only live signal.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Remember the restore step from the break exercise if you haven't already: mv ~/.claude/CLAUDE.md.bak ~/.claude/CLAUDE.md.</p>
+      </aside>
+    </section>
+    <section class="slide" id="slide-56" data-title="T06 · Overview">
+      <p class="slide-kicker">Tutorial 06 &middot; Domain 3</p>
+      <h2 class="slide-title">Hooks vs Skills vs Slash Commands</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>Three automation mechanisms, differing by <strong>who initiates</strong>: hooks fire deterministically on harness events; skills are model-chosen; slash commands are user-typed.</li>
+              <li>Pick by initiator, not by what you want to do — the wrong pick is the most frequent Domain 3 exam mistake.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>One hook, one skill, one slash command</li>
+              <li>Each fired by its correct initiator</li>
+              <li>A hook firing even when the model didn't "want" it</li>
+              <li>A skill that refuses to fire deterministically (it can't)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 3 flashcards, Quiz Q3 and Q8. Same outcome, different entry point: harness should react → hook; model should follow a recipe when it recognises a situation → skill; user should invoke a named workflow → slash command. Prereqs: Tutorial 05 complete, Claude Code CLI plus jq, a scratch directory.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-57" data-title="T06 · Hook">
+      <p class="slide-kicker">Tutorial 06 &middot; .claude/settings.json</p>
+      <h2 class="slide-title">The hook — harness event, shell command</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Edit|Write",
+      "hooks": [{
+        "type": "command",
+        "command": "echo \"[hook] file touched at $(date -Is)\" &gt;&gt; /tmp/hook.log"
+      }]
+    }]
+  }
+}</code></pre>
+        <p class="code-caption">json &middot; a declaration: run this whenever an Edit or Write tool call finishes</p>
+      </div>
+      <aside class="notes">
+        <p>Setup: mkdir ~/primitives, then .claude/skills/security-review and .claude/commands inside it. At session start Claude Code reads settings.json and registers the hook — nothing runs until a matching tool call finishes.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-58" data-title="T06 · Skill">
+      <p class="slide-kicker">Tutorial 06 &middot; .claude/skills/security-review/SKILL.md</p>
+      <h2 class="slide-title">The skill — a description the model routes on</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>---
+name: security-review
+description: Use when the user asks to review code for security
+  issues, audit for vulnerabilities, or check for injection/XSS/secrets.
+---
+
+# Security Review
+
+When invoked, scan the target file(s) for:
+1. Hardcoded secrets (API keys, passwords, tokens)
+2. SQL injection sinks (unparameterised queries)
+3. XSS risks (unescaped user input in HTML)
+4. Command injection (shell execution with user input)</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Trimmed: the final body line, "Report findings as a numbered list with file:line references." Only the frontmatter (name + description) is loaded into the skill catalogue at session start; the body stays on disk until the skill is invoked. The slash command is a one-line markdown file, .claude/commands/log-summary.md: "Summarise the last hour of entries in /tmp/hook.log and print a table of which files were touched most frequently."</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-59" data-title="T06 · Three initiators">
+      <p class="slide-kicker">Tutorial 06 &middot; Code trace</p>
+      <h2 class="slide-title">Three primitives, three initiators</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>HOOK — the harness initiates.</strong> A <code>Write</code> finishes → the <code>PostToolUse</code> matcher runs the shell command before control returns. The model cannot skip it — it didn't even know it ran. Deterministic → hook.</li>
+          <li><strong>SKILL — the model initiates.</strong> The frontmatter description is a routing signal the planner reads each turn; matching is a model decision. Change the user's wording and it may not fire.</li>
+          <li><strong>SLASH — the user initiates.</strong> The CLI intercepts <code>/log-summary</code> before it reaches the model and submits the file body verbatim. Firing is deterministic; execution stays probabilistic.</li>
+          <li>"What should this do?" is second-order — <strong>pick the initiator first</strong>.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>At session start: hooks registered from settings.json, each SKILL.md's frontmatter loaded into the catalogue (bodies stay on disk), command files indexed as prompt stubs. Hooks are enforcement, not advice — that's why the exam says deterministic → hook.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-60" data-title="T06 · Walkthrough">
+      <p class="slide-kicker">Tutorial 06 &middot; Walkthrough</p>
+      <h2 class="slide-title">Fire all three, watch who initiated</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Ask: "Create hello.txt containing 'hi'" — then <code>cat /tmp/hook.log</code> shows a <code>[hook] file touched at …</code> line. The harness saw a Write; Claude couldn't skip it.</li>
+          <li>Ask: "Review hello.txt for security issues" — the description matches, the model invokes the skill, its checklist becomes the plan for the turn.</li>
+          <li>Type <code>/log-summary</code> — Claude reads <code>/tmp/hook.log</code> and prints a table. No AI routing decided the firing; you did.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The skill's four-step checklist becomes the model's plan for that turn — the body is a mini instruction prompt. For the slash command, the model then proceeds normally: it will likely call Read on the log file and build the table.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-61" data-title="T06 · Build and break">
+      <p class="slide-kicker">Tutorial 06 &middot; Build-and-break</p>
+      <h2 class="slide-title">Try to make a skill fire on every edit</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Change only the frontmatter: <code>description: Use after every edit, no exceptions</code>.</li>
+          <li>Create five files in a row; count skill invocations in the transcript.</li>
+          <li><strong>Expected failure:</strong> the model may invoke it 0, 1, or 5 times — not deterministic.</li>
+          <li><strong>Confirm:</strong> <code>/tmp/hook.log</code> has exactly 5 entries; the skill count varies. Quiz Q3: deterministic → hook.</li>
+          <li><strong>Revert:</strong> restore the security-review description.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>If you need "always runs", you need a hook, not a skill — every step between "user said something" and "skill fires" involves a model decision, and no description wording removes that.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-62" data-title="T06 · Checklist">
+      <p class="slide-kicker">Tutorial 06 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I've watched one hook, one skill, and one slash command fire.</li>
+          <li>I can name the initiator for each of the three.</li>
+          <li>I've confirmed a skill is non-deterministic by running it multiple times.</li>
+          <li>I know which one to pick for "run gofmt after every edit" (hook).</li>
+          <li>I know which one to pick for "review PR when relevant" (skill).</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Hook = harness, deterministic. Skill = model, probabilistic match on description. Slash = user — deterministic firing, probabilistic execution.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-63" data-title="T06 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 06 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>cd ~ &amp;&amp; rm -rf ~/primitives /tmp/hook.log</code></li>
+          <li>Write a <code>PreToolUse</code> hook that blocks a tool call based on a <code>jq</code> filter on the input.</li>
+          <li>Chain a skill and a hook: the skill suggests an edit; the hook lints after.</li>
+          <li>Compare <code>.claude/skills/*/SKILL.md</code> to <code>.claude/agents/*.md</code> — sub-agent definitions, another Claude Code primitive.</li>
+          <li>Spend: Claude Code makes the API calls — the console is your only live signal.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>PreToolUse hooks run before the tool executes, which is what makes blocking possible — PostToolUse can only react.</p>
+      </aside>
+    </section>
+    <section class="slide slide-divider" id="slide-64" data-title="Domain 4">
+      <p class="divider-num">Domain 4 &middot; 20% &middot; Tutorial 07</p>
+      <h2>Prompt Engineering &amp; Structured Output</h2>
+      <aside class="notes">
+        <p>One tutorial, two layers: the API's native shape guarantees, and the validate-and-retry loop that closes the semantic gap.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-65" data-title="T07 · Overview">
+      <p class="slide-kicker">Tutorial 07 &middot; Domain 4</p>
+      <h2 class="slide-title">Structured Output with Tool Use + JSON Schema Retry Loop</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>Two layers: the API's native features — <code>output_config.format</code> and <code>strict: true</code> — guarantee schema-valid <strong>shape</strong>; a validate-and-retry loop closes the <strong>semantic</strong> gap.</li>
+              <li>On failure, feed the validator's exact error back and retry. Cap retries and fail loudly — no loop bound is a spend bomb.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li>Schema-shaped JSON via tool use, not prose</li>
+              <li>Validation against a <code>jsonschema</code> spec</li>
+              <li>The error-becomes-a-message retry</li>
+              <li>A comparison with "please return JSON" prose</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 4, the JSON Schema Retry mental model, Quiz Q4 and Q14. The validator is not optional — it's the contract. Setup: mkdir retry-loop, fresh venv, pip install anthropic jsonschema. MAX_RETRIES = 3.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-66" data-title="T07 · Schema">
+      <p class="slide-kicker">Tutorial 07 &middot; extract.py</p>
+      <h2 class="slide-title">The schema is the tool's input_schema</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>schema = {
+    "type": "object",
+    "properties": {
+        "name":   {"type": "string", "minLength": 1},
+        "email":  {"type": "string", "format": "email"},
+        "age":    {"type": "integer", "minimum": 0, "maximum": 130},
+        "topics": {"type": "array", "items": {"type": "string"},
+                   "minItems": 1},
+    },
+    "required": ["name", "email", "age", "topics"],
+    "additionalProperties": False,
+}
+validator = Draft202012Validator(schema)
+tools = [{"name": "record_contact", "input_schema": schema}]</code></pre>
+      </div>
+      <aside class="notes">
+        <p>Trimmed: the tool's description ("Record an extracted contact. All fields required.") and the source document — a short bio for Nadia Okafor with a name, email, age 34, and three topics. The API layer covers types and required fields; jsonschema enforces the rest: format email, minLength, numeric ranges, additionalProperties false. That gap is what retries close.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-67" data-title="T07 · Retry loop (1/2)">
+      <p class="slide-kicker">Tutorial 07 &middot; extract.py</p>
+      <h2 class="slide-title">Force the tool, validate the input (1/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>def extract_with_retry(doc: str) -&gt; dict:
+    messages = [{"role": "user",
+                 "content": f"Extract the contact from:\n&lt;doc&gt;{doc}&lt;/doc&gt;"}]
+    for attempt in range(MAX_RETRIES):
+        resp = client.messages.create(
+            model=MODEL, max_tokens=512, tools=tools, messages=messages,
+            tool_choice={"type": "tool", "name": "record_contact"},
+        )
+        tool_block = next(b for b in resp.content if b.type == "tool_use")
+        errors = list(validator.iter_errors(tool_block.input))
+        if not errors:
+            return tool_block.input</code></pre>
+        <p class="code-caption">python &middot; tool_choice removes the model's option to reply with prose</p>
+      </div>
+      <aside class="notes">
+        <p>Three design choices: tool use not prose (the input_schema is the target shape, so you never parse JSON out of prose); forced tool use via tool_choice (every response must contain a tool_use block); schema-level validation on top.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-68" data-title="T07 · Retry loop (2/2)">
+      <p class="slide-kicker">Tutorial 07 &middot; extract.py</p>
+      <h2 class="slide-title">The error becomes the next message (2/2)</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>        messages.append({"role": "assistant", "content": resp.content})
+        messages.append({
+            "role": "user",
+            "content": [{
+                "type": "tool_result",
+                "tool_use_id": tool_block.id,
+                "content": f"Validation failed: {errors[0].message}. "
+                           f"Path: {list(errors[0].path)}. Please retry.",
+                "is_error": True,
+            }],
+        })
+    raise RuntimeError("max retries exceeded")</code></pre>
+        <p class="code-caption">python &middot; is_error tells the model "fix this" — the raise is the seatbelt</p>
+      </div>
+      <aside class="notes">
+        <p>The loop turns a schema validator into a training signal: the failing message becomes the next turn's input, so the model reads its own mistake and corrects it. Without is_error: True the model tends to treat the message as data and carry on.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-69" data-title="T07 · Native features">
+      <p class="slide-kicker">Tutorial 07 &middot; Native structured outputs</p>
+      <h2 class="slide-title">The API now ships this natively — both GA on Sonnet 4.6</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><code>output_config={"format": {"type": "json_schema", "schema": …}}</code> constrains the response itself — no tool needed; the SDK's <code>client.messages.parse()</code> validates into a Pydantic model.</li>
+          <li><code>strict: true</code> on a tool makes the API <strong>guarantee</strong> that <code>tool_use.input</code> validates against <code>input_schema</code> (needs <code>additionalProperties: false</code> and a <code>required</code> list).</li>
+          <li>Reach for those first in production.</li>
+          <li>This tutorial still builds the loop: native output doesn't cover semantic constraints, and error-becomes-a-message generalises to every self-healing agent loop — what the exam probes.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>No beta header required for either feature. Without strict: true, conformance to a tool's input_schema is reliable but not contractual — one more reason the validator isn't optional.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-70" data-title="T07 · Code trace">
+      <p class="slide-kicker">Tutorial 07 &middot; Code trace</p>
+      <h2 class="slide-title">The self-healing retry loop, attempt by attempt</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>Attempt 1 · happy path:</strong> the tool block validates clean — return on attempt 1, never loop.</li>
+          <li><strong>Sad path:</strong> an ambiguous source ("about thirty-something") yields a type-valid guess or a string age — <code>iter_errors</code> returns a message and a JSON-pointer path.</li>
+          <li>The failing message becomes the next turn's input; <code>is_error: True</code> says "fix this", not "here's data".</li>
+          <li><strong>Attempt 2:</strong> the model reads its own error and corrects the exact path — generic "try again" wastes the turn.</li>
+          <li><strong>Attempt 3 exhausted:</strong> <code>raise</code> — never silently return bad data, never spin forever.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The retry message needs a concrete pointer to what failed — "Validation failed: 'age' is a required property. Path: []." — or the model has no signal and guesses a different wrong thing. Structured output = shape + semantics + retry.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-71" data-title="T07 · Walkthrough">
+      <p class="slide-kicker">Tutorial 07 &middot; Walkthrough</p>
+      <h2 class="slide-title">Clean run, forced retry, inspect the signal</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Run <code>python extract.py</code> — "valid on attempt 1" and a well-formed JSON dump. Retries are rare on a clean schema.</li>
+          <li>Force a retry: change "I'm 34" to "I'm about thirty-something" — attempt 1 fails (age won't coerce to integer), attempt 2 or 3 succeeds.
+            <ul><li>The model uses the validator's error as a signal, not a termination.</li></ul>
+          </li>
+          <li>Inspect <code>messages[-1]</code> before the retry — it's the validator error you fed back, a concrete pointer to what failed.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Add strict: true to the tool when you need the shape contractually guaranteed by the API — then attempt-1 structural failures disappear and only semantic ones remain for the loop.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-72" data-title="T07 · Build and break">
+      <p class="slide-kicker">Tutorial 07 &middot; Build-and-break</p>
+      <h2 class="slide-title">Replace tool use with a prose request</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Swap to <code>"Extract this as JSON matching {schema}"</code> and <code>json.loads(resp.content[0].text)</code>. Run 5–10 times.</li>
+          <li>Claude wraps the JSON in <code>```json</code> fences — <code>json.loads</code> throws.</li>
+          <li>Claude adds a sentence before the JSON — parse error.</li>
+          <li>Claude invents a field or drops one.</li>
+          <li>You cannot set <code>tool_choice</code> to force the shape — Quiz Q14: prose "return as JSON" is the most unreliable path. <strong>Revert.</strong></li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>This is why Domain 4 insists on schema-backed paths — tool use or native output_config.format — for anything a downstream parser consumes.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-73" data-title="T07 · Checklist">
+      <p class="slide-kicker">Tutorial 07 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I've seen valid JSON returned via <code>tool_use.input</code>.</li>
+          <li>I've forced a retry and watched the loop self-heal.</li>
+          <li>I've observed the prose-JSON approach fail in a specific way.</li>
+          <li>My retry loop has a cap and raises on exhaustion.</li>
+          <li>I feed the validator's error, not "please try again", back to the model.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Shape from the API, semantics from the validator, correction from the retry loop — all three, or it isn't structured output.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-74" data-title="T07 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 07 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>deactivate &amp;&amp; cd .. &amp;&amp; rm -rf retry-loop</code></li>
+          <li>Add <code>strict: true</code> — structural attempt-1 failures disappear; semantic ones remain.</li>
+          <li>Rewrite with native <code>output_config</code> and no tool at all — compare code size and token use.</li>
+          <li>Compare total tokens: tool use vs prose-parse-then-repair.</li>
+          <li>Check your spend delta against the running tally.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The native rewrite is the shortest version of this program — the point of comparing is to see what the loop still buys you on semantic constraints.</p>
+      </aside>
+    </section>
+    <section class="slide slide-divider" id="slide-75" data-title="Domain 5">
+      <p class="divider-num">Domain 5 &middot; 15% &middot; Tutorial 08</p>
+      <h2>Context Management &amp; Reliability</h2>
+      <aside class="notes">
+        <p>Two independent techniques for long-context reliability, one tutorial: prompt caching in Part A, the lost-in-the-middle attention curve in Part B.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-76" data-title="T08 · Overview">
+      <p class="slide-kicker">Tutorial 08 &middot; Domain 5</p>
+      <h2 class="slide-title">Prompt Caching &amp; Fighting "Lost in the Middle"</h2>
+      <div class="slide-body">
+        <div class="cols-2">
+          <div class="col">
+            <h3>Concept covered</h3>
+            <ul class="bullets">
+              <li>Caching pays you for discipline: freeze the static prefix, put variable bits last, mark the boundary with <code>cache_control</code> — repeats cost ~10% of uncached.</li>
+              <li>Attention is strongest at start and end; the middle is the memory black hole. Critical rules belong at both anchors.</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>You'll build</h3>
+            <ul class="bullets">
+              <li><code>cache_read</code> vs <code>cache_creation</code> counters, live</li>
+              <li>The 5-minute TTL cliff, observed</li>
+              <li>A fact planted middle vs end — recall measured</li>
+              <li>Rules placed where attention actually lives</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">
+        <p>Source: Domain 5, the Attention Curve, Quiz Q5 and Q10. Prereqs: Tutorial 01 complete; pip install anthropic requests in a fresh venv. This tutorial runs the scaffold twice — Part A (caching) and Part B (lost in the middle) each pair a walkthrough with an inline code trace.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-77" data-title="T08 · prep.py">
+      <p class="slide-kicker">Tutorial 08 &middot; prep.py</p>
+      <h2 class="slide-title">Fetch a long document once</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>import requests, pathlib
+text = requests.get(
+    "https://www.gutenberg.org/files/2701/2701-0.txt", timeout=30).text
+# Keep chapters 1–2 (~5K tokens) — comfortably past the ~2K-token
+# minimum prefix Sonnet 4.6 will cache. [1] is the TOC, [2] the body.
+body = text.split("CHAPTER 1. Loomings.")[2] \
+           .split("CHAPTER 3. The Spouter-Inn.")[0]
+assert len(body) &gt; 15_000, "extraction failed — grabbed the TOC instead?"
+pathlib.Path("moby.txt").write_text(body)
+print(f"saved {len(body)} chars")   # expect ≈ 20,000</code></pre>
+        <p class="code-caption">python &middot; Moby Dick chapters 1–2; any 3–5K-token text works</p>
+      </div>
+      <aside class="notes">
+        <p>The Gutenberg file lists every chapter in a table of contents before the body, so the split skips the TOC match. The ~2K-token minimum cacheable prefix is why the document needs to be this long.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-78" data-title="T08 · cache.py">
+      <p class="slide-kicker">Tutorial 08 &middot; Part A · cache.py</p>
+      <h2 class="slide-title">One marker on the stable prefix</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>doc = pathlib.Path("moby.txt").read_text()
+
+def ask(question, use_cache):
+    system = [
+        {"type": "text", "text": "You are a literary analyst."},
+        {"type": "text", "text": f"&lt;doc&gt;{doc}&lt;/doc&gt;",
+         **({"cache_control": {"type": "ephemeral"}} if use_cache else {})},
+    ]
+    resp = client.messages.create(
+        model=MODEL, max_tokens=256, system=system,
+        messages=[{"role": "user", "content": question}],
+    )</code></pre>
+        <p class="code-caption">python &middot; each call prints input_tokens, cache_read, cache_write, and wall time</p>
+      </div>
+      <aside class="notes">
+        <p>The marker says: everything up to and including this block is a stable prefix — cache it under a key derived from the token contents. The script makes three calls: two with use_cache=True (miss, then hit) and a control without the marker. The trimmed print line reads the usage fields via getattr with a 0 default.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-79" data-title="T08 · Cache states">
+      <p class="slide-kicker">Tutorial 08 &middot; Part A · Code trace</p>
+      <h2 class="slide-title">Three calls, three cache states</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><strong>Call 1 · miss:</strong> prefix hashed, no entry — full processing plus a cache write. <code>cache_creation_input_tokens ≈ 5000</code>, at a ~25% write premium.</li>
+          <li><strong>Call 2 · hit:</strong> same hash — ~5000 tokens served from cache at <strong>~10% of the input rate</strong>. That's the whole reason to cache.</li>
+          <li><strong>Call 3 · control:</strong> no marker — every token fresh, both counters zero. Your savings baseline.</li>
+          <li>The key is a hash of the exact prefix tokens — any edit, even punctuation, is a new key.</li>
+          <li>TTL: ephemeral entries live 5 minutes (1 hour premium). Insert <code>time.sleep(310)</code> and call 2 becomes a write again.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Why it matters: on a chatbot with a fixed 40K-token system prompt, nearly the whole prompt bills at a tenth the rate. Plan your wake-up intervals around the TTL — an expired entry is effectively a new key even though the prefix didn't change.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-80" data-title="T08 · middle.py">
+      <p class="slide-kicker">Tutorial 08 &middot; Part B · middle.py</p>
+      <h2 class="slide-title">Plant one fact, vary only its position</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>SECRET_FACT = "The secret passphrase is SPERMACETI-7."
+
+def ask_with_placement(placement):
+    if placement == "middle":
+        mid = len(doc) // 2
+        body = doc[:mid] + f"\n\n{SECRET_FACT}\n\n" + doc[mid:]
+    elif placement == "end":
+        body = doc + f"\n\n{SECRET_FACT}\n"
+    else:  # start
+        body = f"{SECRET_FACT}\n\n" + doc</code></pre>
+        <p class="code-caption">python &middot; the system prompt asks Claude to quote the passphrase; nine calls run — three placements × three trials</p>
+      </div>
+      <aside class="notes">
+        <p>Trimmed: the create() call whose system prompt says a secret passphrase is hidden in the document and asks for it verbatim, and the trial loop. The hit check is a substring test for SPERMACETI-7 in the reply; a miss means the model hedged, guessed a plausible-but-wrong phrase from Moby-Dick, or refused.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-81" data-title="T08 · Attention curve">
+      <p class="slide-kicker">Tutorial 08 &middot; Part B · Code trace</p>
+      <h2 class="slide-title">Nine trials across three placements</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Same document, same question, same model — the only variable is where the fact sits.</li>
+          <li><strong>start:</strong> first thing after the instruction — attention is strong. Expect 3/3.</li>
+          <li><strong>end:</strong> last thing read before the question — recency makes it almost as strong. Expect 3/3.</li>
+          <li><strong>middle:</strong> buried in ~5000 tokens of narrative — expect a mix, often 2 of 3, worse on bigger documents.</li>
+          <li>Three trials because this is an <em>unreliability</em> pattern, not a hard failure — sometimes-fail is exactly why teams ship the bug.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>This is the U-shaped attention curve from the Domain 5 source, now a number on your terminal rather than a diagram on a slide. If middle recall were always-fail the workaround would be obvious; because it's sometimes-fail, it survives code review.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-82" data-title="T08 · Build and break">
+      <p class="slide-kicker">Tutorial 08 &middot; Build-and-break</p>
+      <h2 class="slide-title">Bury a critical instruction in the middle</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Combine both failure modes: put "Before answering, always capitalise the first word" mid-document — and do NOT repeat it elsewhere.</li>
+          <li>Ask a question that requires following it.</li>
+          <li><strong>Expected:</strong> intermittent compliance.</li>
+          <li><strong>Fix</strong> per the Domain 5 "Do" list: repeat critical rules at start AND end — compliance jumps to ~100%.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>System-prompt rules at position 0 aren't always enough on very long contexts — the anchor at the end is what closes the loop. That's the design rule this whole part exists to make visceral.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-83" data-title="T08 · Checklist">
+      <p class="slide-kicker">Tutorial 08 &middot; Verification checklist</p>
+      <h2 class="slide-title">Tick these only after you've seen them</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>I've seen <code>cache_read_input_tokens</code> be non-zero on a repeat call.</li>
+          <li>I know the default ephemeral cache TTL (5 minutes).</li>
+          <li>I've measured middle-placement recall failing vs start/end.</li>
+          <li>I can explain why system-prompt rules at position 0 aren't always enough.</li>
+          <li>I've used <code>cache_control</code> on a stable prefix.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Part A and Part B are independent techniques — the checklist deliberately spans both.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-84" data-title="T08 · Cleanup + explore">
+      <p class="slide-kicker">Tutorial 08 &middot; Cleanup &amp; further exploration</p>
+      <h2 class="slide-title">Cleanup and where to push next</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Cleanup: <code>deactivate &amp;&amp; cd .. &amp;&amp; rm -rf cache-demo</code></li>
+          <li>Add a third cache breakpoint and measure hit rate across query patterns.</li>
+          <li>Run the same middle-vs-end test with Haiku 4.5 and compare attention curves.</li>
+          <li>Re-read Quiz Q10 and Q15 and reason through which primitive each maps to.</li>
+          <li>Spend: the cache-hit run should be dramatically cheaper than the cold run — that observation is the exercise.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Caching splits input_tokens across three counters — print all four to see what the cache actually paid for: input_tokens, cache_read_input_tokens, cache_creation_input_tokens, output_tokens.</p>
+      </aside>
+    </section>
+    <section class="slide" id="slide-85" data-title="Booked exam">
+      <p class="slide-kicker">Wrap-up</p>
+      <h2 class="slide-title">Turn 8/8 into a booked exam</h2>
+      <div class="slide-body">
+        <p>You've now watched every CCA-F domain run, fail, and recover on your own terminal. Three steps close the loop:</p>
+        <ul class="bullets">
+          <li>Take the 15-question mock exam in the companion study guide, and print its one-page cheat sheet for revision week.</li>
+          <li>Re-run any tutorial whose checklist items you couldn't honestly tick — the build-and-break variants are the fastest refreshers.</li>
+          <li>Register with Pearson VUE — $125 USD, online proctored or at a test center. The credential is valid for 12 months, so time your attempt.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The credential's 12-month validity is why timing matters — book the exam for when the muscle memory is fresh, not months after finishing the workbook.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-86" data-title="Glossary">
+      <p class="slide-kicker">Glossary</p>
+      <h2 class="slide-title">Thirty-three terms you'll meet in the tutorials</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Short, exam-relevant definitions live on the workbook page.</li>
+          <li>Filter by term, by domain (<code>D1</code>–<code>D5</code>), or by any phrase in a definition.</li>
+          <li>Use it as a reference while you work through the workbook.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The glossary is interactive on the page — a filterable table keyed to the same domain chips the tutorials use. It doesn't project to slides; point the audience at the page.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-87" data-title="Troubleshooting (1/2)">
+      <p class="slide-kicker">Troubleshooting</p>
+      <h2 class="slide-title">When things go wrong (1/2)</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><code>Could not resolve authentication method</code> — export <code>ANTHROPIC_API_KEY</code> in the same shell, or load a <code>.env</code> via python-dotenv.</li>
+          <li><code>credit balance is too low</code> — buy credit <em>first</em>, then mint a fresh key; a pre-credit key can stay stuck on this error.</li>
+          <li><code>ensurepip is not available</code> — <code>sudo apt install -y python3-venv</code>.</li>
+          <li><code>python: command not found</code> — Ubuntu ships <code>python3</code>; use it, or install <code>python-is-python3</code>.</li>
+          <li><code>externally-managed-environment</code> — PEP 668: activate the tutorial's venv before <code>pip install</code>.</li>
+          <li><code>ModuleNotFoundError: anthropic</code> — venv not activated; <code>which python3 pip</code> must point into <code>.venv</code>.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The errors most people hit running these tutorials, with the fix that actually works — especially on Ubuntu, where the defaults bite. The credit-balance gotcha is observed behaviour, not officially documented: the credit-check state attached to a key created before the account had credit doesn't always refresh. While in the console: keys must belong to a workspace that has balance, and auto-reload prevents mid-run balance drops in the fan-out tutorials (02, 07, 08). sudo also strips env vars — never run the scripts under sudo.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-88" data-title="Troubleshooting (2/2)">
+      <p class="slide-kicker">Troubleshooting</p>
+      <h2 class="slide-title">When things go wrong (2/2)</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li><code>404 model not found</code> — <code>pip install -U "anthropic&gt;=0.40"</code>, confirm the ID against <code>models.list()</code>; Haiku 4.5 is the fallback.</li>
+          <li><code>429 rate limit</code> — new accounts sit on tight tiers; lower iteration caps or switch to Haiku while testing.</li>
+          <li>Tutorial 01 loop never exits — that's the intended break: Ctrl-C, restore <code>MAX_ITERATIONS</code>.</li>
+          <li><code>tool_result.content must be a string</code> — <code>json.dumps</code> the result; never a raw dict.</li>
+          <li><code>claude: command not found</code> after npm — npm's bin dir isn't on PATH; the native installer sidesteps this.</li>
+          <li>MCP server hangs on stdio — run <code>python3 server.py</code> directly to surface the traceback; check <code>.mcp.json</code> paths.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>The SDK already retries transient 429s. The stdio hang is almost always a silent import error: Claude Code launches the server as a subprocess, so its stderr never surfaces in the CLI — the process dies quietly and the handshake never completes. If the direct run reports ready, check that the .mcp.json config path is absolute and the working directory is correct. Still stuck? Open a GitHub issue with the exact error and the command that produced it.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-89" data-title="usage.py">
+      <p class="slide-kicker">Utilities</p>
+      <h2 class="slide-title">usage.py — API smoke test and pre-flight cost estimator</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>Answers the two early questions in one file: does my key actually work, and what will this prompt cost?</li>
+          <li>No arguments — an 8-token smoke call on Sonnet 4.6; prints the full <code>.usage</code> block plus a dollar figure.</li>
+          <li><code>--prompt</code> / <code>--file</code> — per-model input tokens and cost via <code>count_tokens</code>: free, no completion runs.</li>
+          <li>Drop it in the workbook root; run <code>python3 usage.py</code> from any tutorial folder.</li>
+          <li>Keep its <code>PRICING</code> table aligned with the official pricing page — numbers drift.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>One file, no dependencies beyond the anthropic SDK the pre-start block already installs. The key is read from ANTHROPIC_API_KEY exactly like every tutorial. The smoke test costs around a tenth of a cent on Sonnet 4.6 — the point is to see real .usage fields come back before spending six hours on tutorials.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-90" data-title="usage.py · Output">
+      <p class="slide-kicker">Utilities &middot; usage.py</p>
+      <h2 class="slide-title">What a healthy key looks like</h2>
+      <div class="slide-body">
+        <pre class="code-block"><code>$ python3 usage.py
+[ok] API key works — model=claude-sonnet-4-6
+     response='OK'
+     usage: input=12 output=3
+            cache_read=0 cache_create=0
+     cost=$0.000081</code></pre>
+        <p class="code-caption">bash &middot; --prompt prints a per-model token and cost table instead, via the free count_tokens endpoint</p>
+      </div>
+      <aside class="notes">
+        <p>The pre-flight table lists input tokens and estimated input cost for Sonnet 4.6, Haiku 4.5, and Opus 4.7 side by side — 13 tokens costs $0.00004 on Sonnet. count_tokens doesn't draw from your balance.</p>
+      </aside>
+    </section>
+
+    <section class="slide" id="slide-91" data-title="Pick a tutorial">
+      <p class="slide-kicker">Start here</p>
+      <h2 class="slide-title">Pick a tutorial</h2>
+      <div class="slide-body">
+        <ul class="bullets">
+          <li>The tutorials are ordered by exam domain.</li>
+          <li>Do Tutorial 01 first — 02, 04 and 08 build on its environment and concepts.</li>
+          <li>The rest are self-contained.</li>
+          <li>Progress saves locally as you tick checklists.</li>
+        </ul>
+      </div>
+      <aside class="notes">
+        <p>Progress persists in the browser's localStorage, so the workbook remembers ticked checklist items between sessions on the same machine.</p>
+      </aside>
+    </section>
+
+    <section class="slide slide-closing" id="slide-92" data-title="Closing">
+      <p class="slide-kicker">Thanks</p>
+      <h2>Thank you</h2>
+      <p class="deck-lede">You've now watched every CCA-F domain run, fail, and recover on your own terminal.</p>
+      <ul class="branding" aria-label="Personal links">
+        <li><a href="https://github.com/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: github --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</a></li>
+        <li><a href="https://twitter.com/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: twitter (x glyph) --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/></svg>Twitter / X</a></li>
+        <li><a href="https://www.linkedin.com/in/jamesbuckett" rel="noopener noreferrer" target="_blank"><!-- Lucide: linkedin --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a></li>
+      </ul>
+      <aside class="notes">
+        <p>Close the loop: mock exam, re-run weak checklists, book with Pearson VUE. Questions and issues go to the GitHub repo.</p>
+      </aside>
+    </section>
+    <!-- SLIDES:END -->
+  </main>
+
+  <div class="deck-controls">
+    <button id="nav-prev" class="icon-button" type="button" aria-label="Previous slide" aria-keyshortcuts="ArrowLeft" title="Previous slide (Left arrow)">
+      <!-- Lucide: chevron-left -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span id="slide-counter" aria-live="polite">1 / 1</span>
+    <button id="nav-next" class="icon-button" type="button" aria-label="Next slide" aria-keyshortcuts="ArrowRight" title="Next slide (Right arrow)">
+      <!-- Lucide: chevron-right -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <span class="key-hint" aria-hidden="true">O overview &middot; N notes</span>
+  </div>
+
+  <div class="overview" id="overview" role="dialog" aria-modal="true" aria-label="Slide overview">
+    <div class="overview-head">
+      <h2>Overview</h2>
+      <p>Enter jumps to a slide &middot; Esc closes</p>
+    </div>
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+
+  <aside class="notes-panel" id="notes-panel" role="region" aria-label="Speaker notes" aria-live="polite"></aside>
+
+  <script>
+    (function () {
+      // Theme bootstrap — same pattern as skill-style-guide's template:
+      // stored preference wins, otherwise honour the OS scheme on first visit.
+      const root = document.documentElement;
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', stored ?? (prefersDark ? 'dark' : 'light'));
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+
+      // ---------------------------------------------------------------
+      // Deck engine
+      // ---------------------------------------------------------------
+      const stage = document.getElementById('stage');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const counter = document.getElementById('slide-counter');
+      const prevBtn = document.getElementById('nav-prev');
+      const nextBtn = document.getElementById('nav-next');
+      const overview = document.getElementById('overview');
+      const overviewGrid = document.getElementById('overview-grid');
+      const notesPanel = document.getElementById('notes-panel');
+      const DESIGN_W = 1280;
+      const DESIGN_H = 720;
+      let current = 0;
+
+      // Scale the 1280x720 stage to fit the viewport (letterboxing on
+      // mismatched aspect ratios) and shift it up when the notes panel is open.
+      function fit() {
+        const notesH = document.body.classList.contains('notes-open')
+          ? notesPanel.getBoundingClientRect().height : 0;
+        const scale = Math.min(window.innerWidth / DESIGN_W, (window.innerHeight - notesH) / DESIGN_H);
+        stage.style.setProperty('--deck-scale', String(scale));
+        stage.style.setProperty('--notes-shift', (notesH / 2) + 'px');
+      }
+
+      function slideLabel(slide, i) {
+        const heading = slide.querySelector('h1, h2, h3');
+        return slide.dataset.title || (heading ? heading.textContent.trim() : 'Slide ' + (i + 1));
+      }
+
+      function goTo(n, opts = {}) {
+        current = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach((s, i) => s.classList.toggle('is-current', i === current));
+        counter.textContent = (current + 1) + ' / ' + slides.length;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === slides.length - 1;
+        if (opts.updateHash !== false) {
+          history.replaceState(null, '', '#/' + slides[current].id);
+        }
+        syncNotes();
+        syncOverview();
+      }
+      const next = () => goTo(current + 1);
+      const prev = () => goTo(current - 1);
+
+      function parseHash(hash) {
+        const m = /^#\/(slide-\d+)$/.exec(hash || '');
+        if (!m) return null;
+        const idx = slides.findIndex((s) => s.id === m[1]);
+        return idx >= 0 ? idx : null;
+      }
+
+      // Overview grid — one keyboard-focusable card per slide.
+      slides.forEach((slide, i) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'ov-card';
+        const num = document.createElement('span');
+        num.className = 'ov-num';
+        num.textContent = String(i + 1).padStart(2, '0');
+        const title = document.createElement('span');
+        title.className = 'ov-title';
+        title.textContent = slideLabel(slide, i);
+        card.append(num, title);
+        card.addEventListener('click', () => { goTo(i); toggleOverview(false); });
+        overviewGrid.append(card);
+      });
+      const cards = Array.from(overviewGrid.children);
+
+      function syncOverview() {
+        cards.forEach((c, i) => {
+          if (i === current) c.setAttribute('aria-current', 'true');
+          else c.removeAttribute('aria-current');
+        });
+      }
+
+      function toggleOverview(force) {
+        const open = force ?? !document.body.classList.contains('overview-open');
+        document.body.classList.toggle('overview-open', open);
+        if (open) cards[current]?.focus();
+        else stage.focus({ preventScroll: true });
+      }
+
+      function syncNotes() {
+        if (!document.body.classList.contains('notes-open')) return;
+        const notes = slides[current].querySelector('.notes');
+        notesPanel.innerHTML = '<span class="notes-label">Notes &mdash; slide ' + (current + 1) + '</span>'
+          + (notes ? notes.innerHTML : '<p class="notes-empty">No notes for this slide.</p>');
+      }
+
+      function toggleNotes() {
+        document.body.classList.toggle('notes-open');
+        syncNotes();
+        fit();
+      }
+
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const key = e.key;
+        if (key === 'Escape' || key === 'o' || key === 'O') {
+          e.preventDefault();
+          toggleOverview();
+          return;
+        }
+        if (document.body.classList.contains('overview-open')) return;
+        // Don't hijack Space/Enter when a button or link has focus.
+        if ((key === ' ' || key === 'Enter') && e.target.closest('button, a, input, select, textarea')) return;
+        switch (key) {
+          case 'ArrowRight':
+          case 'PageDown':
+            e.preventDefault(); next(); break;
+          case ' ':
+            e.preventDefault(); e.shiftKey ? prev() : next(); break;
+          case 'ArrowLeft':
+          case 'PageUp':
+            e.preventDefault(); prev(); break;
+          case 'Home':
+            e.preventDefault(); goTo(0); break;
+          case 'End':
+            e.preventDefault(); goTo(slides.length - 1); break;
+          case 'n':
+          case 'N':
+            toggleNotes(); break;
+        }
+      });
+
+      window.addEventListener('hashchange', () => {
+        const idx = parseHash(location.hash);
+        if (idx !== null) goTo(idx, { updateHash: false });
+      });
+      window.addEventListener('resize', fit);
+
+      fit();
+      goTo(parseHash(location.hash) ?? 0);
+    })();
+  </script>
+</body>
+</html>

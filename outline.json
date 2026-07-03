@@ -1,0 +1,2971 @@
+{
+  "source": "./index.html",
+  "title": "Pass Anthropic's Claude Architect exam by building every concept yourself.",
+  "docTitle": "CCA-F Exam Prep — 8 Hands-On Claude Architect Tutorials",
+  "description": "Eight runnable tutorials for Anthropic's Claude Certified Architect (CCA-F) exam. Build each concept, trigger a deliberate failure, tick a checklist.",
+  "lede": "Every CCA-F domain as runnable code — with a deliberate failure to trigger and a checklist designed so you can only honestly tick it after you've seen it on your own terminal.",
+  "intro": [
+    {
+      "type": "p",
+      "text": "A hands-on CCA-F prep workbook. Independent, not affiliated with or endorsed by Anthropic. All code runs on a clean laptop with an `ANTHROPIC_API_KEY` exported."
+    }
+  ],
+  "sections": [
+    {
+      "id": "prestart-heading",
+      "heading": "Two minutes of setup, then you're doing exam-relevant work.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Qualify the fit, install the toolchain, then dive in. Everything on one laptop — no cluster, no infra account, no SaaS signup beyond Anthropic."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "for-you-if",
+          "heading": "For you if…",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "You're preparing for Anthropic's CCA-F certification and want muscle memory, not just notes."
+                },
+                {
+                  "text": "You're comfortable reading Python and using a terminal."
+                },
+                {
+                  "text": "You learn better by breaking code and watching the failure than by reading specs."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "skip-this-if",
+          "heading": "Skip this if…",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "You don't have (or can't get) an Anthropic API key."
+                },
+                {
+                  "text": "You want passive reading without running code — the tutorials are verification-gated on observed behaviour."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "the-five-cca-f-domains",
+          "heading": "The five CCA-F domains",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Official exam weights (per the exam guide, July 2026). The \"D1 · Agentic\"-style chips throughout this workbook map to these. Full theory deep-dives live in the companion study guide."
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "D1 · Agentic Architecture & Orchestration — 27% · Tutorials 01–02"
+                },
+                {
+                  "text": "D2 · Tool Design & MCP Integration — 18% · Tutorials 03–04"
+                },
+                {
+                  "text": "D3 · Claude Code Configuration & Workflows — 20% · Tutorials 05–06"
+                },
+                {
+                  "text": "D4 · Prompt Engineering & Structured Output — 20% · Tutorial 07"
+                },
+                {
+                  "text": "D5 · Context Management & Reliability — 15% · Tutorial 08"
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "One-time install (~2 minutes) — each tutorial creates its own `.venv`, so Python packages get installed per tutorial. Only these are truly global:"
+            },
+            {
+              "type": "p",
+              "text": "Never set up a Python virtual environment before? Walk through the venv setup section below — it covers the activate / install / deactivate cycle every tutorial assumes."
+            },
+            {
+              "type": "p",
+              "text": "Key exported? Verify it works before Tutorial 01: grab `usage.py` from Utilities and run `python3 usage.py` — a fraction-of-a-cent smoke call that prints live `.usage` fields."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 248,
+        "bullets": 10,
+        "blocks": 8
+      }
+    },
+    {
+      "id": "venv-heading",
+      "heading": "Enabling `venv` to run the tutorials.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Every tutorial installs its Python packages into a throwaway virtual environment under `.venv`. That keeps each tutorial's SDK version isolated, avoids polluting your system Python, and sidesteps PEP 668 errors (the rule that makes system Python refuse global `pip install` to protect OS packages) on Ubuntu 23.04+ and current Homebrew. If you've never set one up before, this is the whole dance — do it once on Tutorial 01, then repeat the short version for every later tutorial."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "1-install-the-venv-package-ubuntu-debian-only",
+          "heading": "1. Install the `venv` package (Ubuntu / Debian only)",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "macOS and most other Linux distros ship the `venv` module with Python. Ubuntu and Debian split it into a separate apt package that has to be installed once:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "sudo apt update && sudo apt install -y python3 python3-venv python3-pip"
+            }
+          ]
+        },
+        {
+          "id": "2-create-and-activate-a-venv-inside-the-tutorial-directory",
+          "heading": "2. Create and activate a venv inside the tutorial directory",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "From the project directory (e.g. `agentic-loop` for Tutorial 01), create the `.venv` folder and activate it. After activation, your shell prompt gains a `(.venv)` prefix — that's the signal the venv is live:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "python3 -m venv .venv\nsource .venv/bin/activate"
+            },
+            {
+              "type": "p",
+              "text": "Windows PowerShell: activate with `.\\.venv\\Scripts\\Activate.ps1` instead. If PowerShell blocks it on \"execution policy\", run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in that shell first."
+            }
+          ]
+        },
+        {
+          "id": "3-install-the-tutorial-s-python-packages",
+          "heading": "3. Install the tutorial's Python packages",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "With the venv active, `pip install` writes into `.venv/` — not your system Python, no `sudo` needed. Each tutorial's setup block lists exactly what it needs:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "pip install \"anthropic>=0.40\""
+            }
+          ]
+        },
+        {
+          "id": "4-verify-you-re-actually-inside-the-venv",
+          "heading": "4. Verify you're actually inside the venv",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Both `python3` and `pip` should resolve to paths inside `.venv`. If `which` points to `/usr/bin/`, activation silently didn't run — re-source the activate script and re-install:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "which python3 pip\n# → /path/to/tutorial/.venv/bin/python3\n# → /path/to/tutorial/.venv/bin/pip\npython3 -c \"import anthropic; print(anthropic.__version__)\""
+            }
+          ]
+        },
+        {
+          "id": "5-deactivate-and-re-enter-in-a-fresh-shell",
+          "heading": "5. Deactivate and re-enter in a fresh shell",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Activation lives only in the current shell. Close the terminal and it's gone — but the `.venv` folder persists on disk. The next time you come back to a tutorial, `cd` into it and re-run the activate line; you don't need to re-create the venv or re-install packages. Explicit `deactivate` drops an active shell back to system Python without closing it."
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "deactivate                    # leaves the venv; .venv/ stays on disk\n# — later, in a new shell —\ncd ~/agentic-loop\nsource .venv/bin/activate     # re-enter, no re-install needed"
+            },
+            {
+              "type": "p",
+              "text": "Hit an error? `ensurepip is not available`, `externally-managed-environment`, and `ModuleNotFoundError` on an already-installed package all have dedicated entries in troubleshooting — every symptom has a fix and a short reason."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 305,
+        "bullets": 0,
+        "blocks": 13
+      }
+    },
+    {
+      "id": "faq-heading",
+      "heading": "Before you commit six hours.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "The questions people ask about this workbook — up front, so you don't get three tutorials in and wonder."
+        },
+        {
+          "type": "p",
+          "text": "No. This is an independent, community-made study resource. It is not affiliated with or endorsed by Anthropic. The CCA-F exam, domain definitions, and certification itself are Anthropic's."
+        },
+        {
+          "type": "p",
+          "text": "About 6 hours 30 minutes of focused time across all eight tutorials — most people spread that across one or two weeks. Each tutorial posts its own time budget in the chip row at the top, and progress saves automatically to `localStorage`."
+        },
+        {
+          "type": "p",
+          "text": "Approximately $2–4 on Claude Sonnet 4.6 with the iteration caps shown. Every loop has a termination limit to prevent runaway spend — the point of Tutorial 01 is precisely to watch what happens when you remove it. Set a billing alert before you start."
+        },
+        {
+          "type": "p",
+          "text": "Python 3.11+, the Claude Code CLI (one-line native installer — Node 20+ only if you take the npm alternative), an exported `ANTHROPIC_API_KEY`, and comfort with a terminal. Everything you need is in the pre-start install block above — no Docker, no cloud accounts, no cluster, everything runs locally."
+        },
+        {
+          "type": "p",
+          "text": "Honestly? Probably not on its own. Exam prep benefits from broader theoretical context alongside hands-on work. This workbook's job is the muscle memory half — every CCA-F domain translated into runnable code with a deliberate failure to trigger, so when you see a scenario on the exam you've already watched the behaviour on your own terminal. Pair it with the companion CCA-F Atlas study guide (domain deep-dives, flashcards, and a 15-question mock — it's what every tutorial's \"Source\" line cites) plus practice questions, and reserve the final week for revision rather than more tutorials."
+        },
+        {
+          "type": "p",
+          "text": "Open an issue on the GitHub repo. The freshness stamp at the top of the page shows when the code was last verified against a live SDK and model version."
+        }
+      ],
+      "subsections": [],
+      "stats": {
+        "words": 304,
+        "bullets": 0,
+        "blocks": 7
+      }
+    },
+    {
+      "id": "the-agentic-loop-think-act-observe-with-the-anthropic-sdk",
+      "heading": "The Agentic Loop — think / act / observe with the Anthropic SDK",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. An agent is a Claude instance wrapped in a loop that calls tools, observes results, and decides the next action until a stop condition fires. Every loop needs a termination condition."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 1 · The Agentic Loop mental model — companion study guide"
+        },
+        {
+          "type": "p",
+          "text": "Each turn is one `client.messages.create()` call. The `stop_reason` is the gate — `tool_use` sends you back around the loop, `end_turn` exits. The outer `MAX_ITERATIONS` bound is your last-resort seatbelt against runaway spend."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Python 3.11+"
+            },
+            {
+              "text": "`anthropic` Python SDK ≥ 0.40"
+            },
+            {
+              "text": "An Anthropic API key exported as `ANTHROPIC_API_KEY`"
+            },
+            {
+              "text": "Nothing else — runs locally, no cluster needed"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Implement a think → act → observe → think loop from scratch"
+            },
+            {
+              "text": "Observe `stop_reason` flip from `tool_use` to `end_turn`"
+            },
+            {
+              "text": "Break the loop by removing the termination cap and watch it run away"
+            },
+            {
+              "text": "Verify each turn's `tool_use` block and `tool_result` round-trip"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Ubuntu / Debian users: the stdlib `venv` module needs a one-time package install — run this once, then skip it for every later tutorial:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "sudo apt update && sudo apt install -y python3 python3-venv python3-pip"
+            },
+            {
+              "type": "p",
+              "text": "Now create the project directory and a fresh virtual environment. On macOS and most Linux distros, `python3` is the canonical binary — `python` on its own is not reliable across systems."
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "mkdir agentic-loop && cd agentic-loop\npython3 -m venv .venv && source .venv/bin/activate\npip install \"anthropic>=0.40\""
+            },
+            {
+              "type": "p",
+              "text": "Create `loop.py`:"
+            },
+            {
+              "type": "p",
+              "text": "Lines with a coloured left-stripe are Claude API / agentic-loop code (CCA-F exam content). Unmarked lines are application plumbing you'd swap out for your own logic."
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, json, os\n\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\nMAX_ITERATIONS = 5\n\ntools = [{\n    \"name\": \"get_weather\",\n    \"description\": \"Return the current temperature in Celsius for a given city.\",\n    \"input_schema\": {\n        \"type\": \"object\",\n        \"properties\": {\"city\": {\"type\": \"string\"}},\n        \"required\": [\"city\"],\n    },\n}]\n\ndef run_tool(name, args):\n    if name == \"get_weather\":\n        fake = {\"Paris\": 14, \"Tokyo\": 22, \"Cape Town\": 27}\n        return {\"temp_c\": fake.get(args[\"city\"], 20)}\n    raise ValueError(f\"unknown tool {name}\")\n\nmessages = [{\"role\": \"user\",\n             \"content\": \"Compare the weather in Paris and Tokyo right now.\"}]\n\nfor turn in range(MAX_ITERATIONS):\n    resp = client.messages.create(\n        model=MODEL, max_tokens=1024, tools=tools, messages=messages\n    )\n    print(f\"--- turn {turn} · stop_reason={resp.stop_reason} ---\")\n    messages.append({\"role\": \"assistant\", \"content\": resp.content})\n\n    if resp.stop_reason == \"end_turn\":\n        print(\"FINAL:\", resp.content[-1].text)\n        break\n\n    tool_results = []\n    for block in resp.content:\n        if block.type == \"tool_use\":\n            result = run_tool(block.name, block.input)\n            print(f\"  → {block.name}({block.input}) = {result}\")\n            tool_results.append({\n                \"type\": \"tool_result\",\n                \"tool_use_id\": block.id,\n                \"content\": json.dumps(result),\n            })\n    messages.append({\"role\": \"user\", \"content\": tool_results})\nelse:\n    print(\"!! loop exhausted without end_turn — safety cap hit\")"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-what-happens-when-you-run-it",
+          "heading": "Code trace — what happens when you run it",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Before you run the script, walk through it in your head. The user asks \"Compare the weather in Paris and Tokyo right now.\" A single `get_weather` tool is available. The model cannot answer without calling it — twice, once per city — and this is how the three-turn conversation unfolds."
+            },
+            {
+              "type": "p",
+              "text": "Before the loop"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "`anthropic.Anthropic()` reads `ANTHROPIC_API_KEY` from env and constructs an HTTP client. No network call yet."
+                },
+                {
+                  "text": "`MAX_ITERATIONS = 5` is the termination cap — the single most important line in the file. Without it, `for turn in range(MAX_ITERATIONS)` becomes `while True:` and your bill grows without bound. Tutorial 01's build-and-break exercise deletes exactly this line on purpose."
+                },
+                {
+                  "text": "`tools = [...]` is the catalogue the model sees. Three fields matter: `name` (identifier the model emits), `description` (free text it reads to decide when to call), and `input_schema` (JSON Schema the model follows when emitting arguments — guaranteed by the API only if the tool sets `strict: true`)."
+                },
+                {
+                  "text": "`run_tool(...)` is a pure-Python dispatcher. The model never executes this — you do. The model only asks you to."
+                },
+                {
+                  "text": "`messages` starts with a single user turn. Everything below gets appended to it; state lives in your Python process, not on Anthropic's side."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Turn 0 — \"Think\". Model requests the Paris tool call. `client.messages.create(...)` is HTTP call #1. The model reads the user prompt plus the tool catalogue, decides it cannot answer directly, and returns: responseCCAF stop_reason = \"tool_use\" content = [ ToolUseBlock(id='toolu_01A…', name='get_weather', input={'city': 'Paris'}) ] The loop appends the assistant turn, then — because `stop_reason` is not `end_turn` — falls through into the tool-dispatch block. \"Act\" and \"observe\" happen in the same Python iteration: `run_tool` runs, a `tool_result` block is built, and it's appended as a new user message. Two subtle things. `tool_use_id` must match the `id` the model gave you — that's the correlation key. And `content` has to be a string (or a list of content blocks) — passing a raw dict here is the BadRequestError readers hit first."
+                },
+                {
+                  "text": "Turn 1 — model now knows Paris, still needs Tokyo. Same `create()` call, but `messages` now carries the Paris `tool_result`. The model returns another `ToolUseBlock(city='Tokyo')`. Loop dispatches it, appends the Tokyo result, moves on. Parallel tool use. Sonnet sometimes returns both tool-use blocks in turn 0 as an optimisation. The `for block in resp.content` loop handles that identically — it just dispatches both before the next `create()` call, and turn 1 never happens."
+                },
+                {
+                  "text": "Turn 2 — \"End\". Model has both temperatures, composes the answer. HTTP call #3. The conversation history now contains both tool results. No tool is needed. The model returns: responseCCAF stop_reason = \"end_turn\" content = [ TextBlock(text='Paris is currently 14 °C while Tokyo is 22 °C, so Tokyo is 8 °C warmer…') ] Now the `if resp.stop_reason == \"end_turn\":` branch fires. `resp.content[-1].text` grabs the prose answer (the last block, because earlier blocks might be thinking text), prints it, and `break` exits the loop entirely — meaning the `for/else` clause is not executed. `else` on a `for` only fires when the loop exhausts without `break`. Why it matters: `end_turn` is the healthy exit. Iteration-cap exit (the `else` branch) means something went wrong."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "The final `messages` ledger"
+            },
+            {
+              "type": "p",
+              "text": "When the loop breaks, `messages` is a 6-element record of the whole conversation:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "[0] user       \"Compare the weather in Paris and Tokyo right now.\"\n[1] assistant  [ToolUseBlock(name='get_weather', input={'city': 'Paris'})]\n[2] user       [tool_result(Paris → {'temp_c': 14})]\n[3] assistant  [ToolUseBlock(name='get_weather', input={'city': 'Tokyo'})]\n[4] user       [tool_result(Tokyo → {'temp_c': 22})]\n[5] assistant  [TextBlock(\"Paris is 14 °C while Tokyo is 22 °C…\")]"
+            },
+            {
+              "type": "p",
+              "text": "Two things worth internalising from this shape:"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "The model has no memory between calls. Every `create()` re-sends the full `messages` list. That's why the loop's job is really just to accrete history."
+                },
+                {
+                  "text": "Tool results ride inside user messages, not a third role. From the model's perspective, \"you told me something\" and \"the tool told me something\" are both inputs from the user role."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "The agentic loop is a three-state machine — think (the `create()` call), act (your `run_tool`), observe (appending a `tool_result` back into `messages`) — that terminates on `stop_reason == \"end_turn\"`, an iteration cap, or an error. Every line in `loop.py` exists to implement one of those three states."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run the loop once. bash python loop.py Expected: two turns with `stop_reason=tool_use` (one per city), then a turn with `stop_reason=end_turn` and a prose answer. Why it matters: You can see the Think → Act → Observe cycle explicitly — the API never hides it."
+                },
+                {
+                  "text": "Inspect the first content block each turn. Inside the `for turn` loop, right after the turn-header `print`, add one line. The full file now looks like this (the new line is highlighted): python · loop.py import anthropic, json, os client = anthropic.Anthropic() MODEL = \"claude-sonnet-4-6\" MAX_ITERATIONS = 5 tools = [{ \"name\": \"get_weather\", \"description\": \"Return the current temperature in Celsius for a given city.\", \"input_schema\": { \"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], }, }] def run_tool(name, args): if name == \"get_weather\": fake = {\"Paris\": 14, \"Tokyo\": 22, \"Cape Town\": 27} return {\"temp_c\": fake.get(args[\"city\"], 20)} raise ValueError(f\"unknown tool {name}\") messages = [{\"role\": \"user\", \"content\": \"Compare the weather in Paris and Tokyo right now.\"}] for turn in range(MAX_ITERATIONS): resp = client.messages.create( model=MODEL, max_tokens=1024, tools=tools, messages=messages ) print(f\"--- turn {turn} · stop_reason={resp.stop_reason} ---\") print(resp.content[0]) # ← added: inspect first content block messages.append({\"role\": \"assistant\", \"content\": resp.content}) if resp.stop_reason == \"end_turn\": print(\"FINAL:\", resp.content[-1].text) break tool_results = [] for block in resp.content: if block.type == \"tool_use\": result = run_tool(block.name, block.input) print(f\" → {block.name}({block.input}) = {result}\") tool_results.append({ \"type\": \"tool_result\", \"tool_use_id\": block.id, \"content\": json.dumps(result), }) messages.append({\"role\": \"user\", \"content\": tool_results}) else: print(\"!! loop exhausted without end_turn — safety cap hit\") Re-run the script. On turns where `stop_reason=tool_use` you'll see a structured block — `ToolUseBlock(id='toolu_…', input={'city': 'Paris'}, name='get_weather', type='tool_use')` — and on the final `end_turn` turn you'll see a `TextBlock(text='…', type='text')` instead. Why it matters: Tool use is a structured response block, not parsed text. The block type differs by turn, and your loop depends on that difference — this is the contract you're coding against."
+                },
+                {
+                  "text": "Trace the message list after run completes. Append one line to the bottom of `loop.py`, after the `for/else` block. Full file (both instrumentation lines from steps 2 and 3 are highlighted): python · loop.py import anthropic, json, os client = anthropic.Anthropic() MODEL = \"claude-sonnet-4-6\" MAX_ITERATIONS = 5 tools = [{ \"name\": \"get_weather\", \"description\": \"Return the current temperature in Celsius for a given city.\", \"input_schema\": { \"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], }, }] def run_tool(name, args): if name == \"get_weather\": fake = {\"Paris\": 14, \"Tokyo\": 22, \"Cape Town\": 27} return {\"temp_c\": fake.get(args[\"city\"], 20)} raise ValueError(f\"unknown tool {name}\") messages = [{\"role\": \"user\", \"content\": \"Compare the weather in Paris and Tokyo right now.\"}] for turn in range(MAX_ITERATIONS): resp = client.messages.create( model=MODEL, max_tokens=1024, tools=tools, messages=messages ) print(f\"--- turn {turn} · stop_reason={resp.stop_reason} ---\") print(resp.content[0]) # ← added in step 2: inspect first content block messages.append({\"role\": \"assistant\", \"content\": resp.content}) if resp.stop_reason == \"end_turn\": print(\"FINAL:\", resp.content[-1].text) break tool_results = [] for block in resp.content: if block.type == \"tool_use\": result = run_tool(block.name, block.input) print(f\" → {block.name}({block.input}) = {result}\") tool_results.append({ \"type\": \"tool_result\", \"tool_use_id\": block.id, \"content\": json.dumps(result), }) messages.append({\"role\": \"user\", \"content\": tool_results}) else: print(\"!! loop exhausted without end_turn — safety cap hit\") print(json.dumps([{'role': m['role']} for m in messages], indent=2)) # ← added in step 3: trace message roles Expected: `user → assistant → user → assistant → user → assistant` with tool_use / tool_result alternating inside the user messages. Why it matters: The loop builds the history — the model has no memory between `create()` calls except what you pass."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Starve the loop of iterations"
+            },
+            {
+              "type": "p",
+              "text": "Two small edits to `loop.py`: lower the iteration cap near the top, and widen the prompt to three cities so the model needs more than one tool-use turn. Full file with both edits highlighted — save over your existing `loop.py` to run the exercise:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, json, os\n\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\nMAX_ITERATIONS = 1          # ← was 5 — deliberately too low\n\ntools = [{\n    \"name\": \"get_weather\",\n    \"description\": \"Return the current temperature in Celsius for a given city.\",\n    \"input_schema\": {\n        \"type\": \"object\",\n        \"properties\": {\"city\": {\"type\": \"string\"}},\n        \"required\": [\"city\"],\n    },\n}]\n\ndef run_tool(name, args):\n    if name == \"get_weather\":\n        fake = {\"Paris\": 14, \"Tokyo\": 22, \"Cape Town\": 27}\n        return {\"temp_c\": fake.get(args[\"city\"], 20)}\n    raise ValueError(f\"unknown tool {name}\")\n\nmessages = [{\"role\": \"user\",\n             \"content\": \"Compare weather in Paris, Tokyo, and Cape Town.\"}]   # ← was two cities\n\nfor turn in range(MAX_ITERATIONS):\n    resp = client.messages.create(\n        model=MODEL, max_tokens=1024, tools=tools, messages=messages\n    )\n    print(f\"--- turn {turn} · stop_reason={resp.stop_reason} ---\")\n    messages.append({\"role\": \"assistant\", \"content\": resp.content})\n\n    if resp.stop_reason == \"end_turn\":\n        print(\"FINAL:\", resp.content[-1].text)\n        break\n\n    tool_results = []\n    for block in resp.content:\n        if block.type == \"tool_use\":\n            result = run_tool(block.name, block.input)\n            print(f\"  → {block.name}({block.input}) = {result}\")\n            tool_results.append({\n                \"type\": \"tool_result\",\n                \"tool_use_id\": block.id,\n                \"content\": json.dumps(result),\n            })\n    messages.append({\"role\": \"user\", \"content\": tool_results})\nelse:\n    print(\"!! loop exhausted without end_turn — safety cap hit\")"
+            },
+            {
+              "type": "p",
+              "text": "Expected failure: the loop exits via the `else` branch with `!! loop exhausted without end_turn`. The model wanted another turn; you cut it off."
+            },
+            {
+              "type": "p",
+              "text": "Confirm: the printed `stop_reason` on the final turn is `tool_use`, not `end_turn`."
+            },
+            {
+              "type": "p",
+              "text": "Revert: restore `MAX_ITERATIONS = 5`."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I can name the three states of the agentic loop without looking at the diagram."
+                },
+                {
+                  "text": "I can point to the line of code that is the termination condition."
+                },
+                {
+                  "text": "I've seen `stop_reason` flip from `tool_use` to `end_turn`."
+                },
+                {
+                  "text": "I can explain why the model has no memory between `create()` calls."
+                },
+                {
+                  "text": "I've watched the loop exit because of the cap, not the model."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "deactivate   # keep the agentic-loop directory — Tutorials 02 and 04 reuse its .venv\n# once you've finished Tutorials 02 and 04:\n# cd .. && rm -rf agentic-loop"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Add a `stop_sequences=[\"TASK_COMPLETE\"]` parameter and watch how `stop_reason` changes."
+                },
+                {
+                  "text": "Wire in streaming (`client.messages.stream(...)`) and see tool-use blocks arrive incrementally."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. The difference from your baseline is what this tutorial actually cost on Sonnet 4.6 — add it to a running tally so you can compare against the ~$2–4 total budget for the whole workbook."
+            },
+            {
+              "type": "p",
+              "text": "Optional in-code tally. Drop this line after each `client.messages.create(…)` call to see per-request token counts in your terminal:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "print(f\"[usage] in={resp.usage.input_tokens} out={resp.usage.output_tokens}\")"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1693,
+        "bullets": 28,
+        "blocks": 38
+      }
+    },
+    {
+      "id": "hub-and-spoke-orchestration-with-isolated-sub-agent-context",
+      "heading": "Hub-and-Spoke Orchestration with Isolated Sub-agent Context",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. One orchestrator delegates independent slices of work to sub-agents running in their own context windows. Sub-agents return summaries, not full transcripts. No worker-to-worker edges."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 1 · Hub-and-Spoke model · Scenario 03 (Multi-Agent Research)"
+        },
+        {
+          "type": "p",
+          "text": "The orchestrator sees everything; each sub-agent sees only the slice it was given. Sub-agents return summaries, not transcripts — that's how the hub's context stays bounded. Direct edges between workers break the pattern and reintroduce the context-bloat problem hub-and-spoke was built to solve."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Tutorial 01 complete (you understand the single-agent loop)"
+            },
+            {
+              "text": "Same Python environment, `anthropic` SDK"
+            },
+            {
+              "text": "Anthropic API key"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Implement `spawn_subagent(task_brief) → summary`"
+            },
+            {
+              "text": "Verify parent context does NOT contain sub-agent transcripts"
+            },
+            {
+              "text": "Trigger the leaky-context bug by forwarding a child's full history"
+            },
+            {
+              "text": "Measure token counts on parent vs child to see the isolation boundary"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-2",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Reuse the `.venv` from Tutorial 01 (`cd agentic-loop && source .venv/bin/activate` if you're in a fresh shell). Create `orchestrator.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\n\ndef spawn_subagent(task_brief: str, subagent_name: str) -> str:\n    \"\"\"Run an isolated sub-agent; return a summary string only.\"\"\"\n    print(f\"  [spawn] {subagent_name}: {task_brief[:60]}…\")\n    resp = client.messages.create(\n        model=MODEL, max_tokens=512,\n        system=(f\"You are a {subagent_name} sub-agent. Do the task briefly and \"\n                \"return ONE paragraph of findings. Do not narrate your process.\"),\n        messages=[{\"role\": \"user\", \"content\": task_brief}],\n    )\n    summary = resp.content[0].text\n    print(f\"  [done]  {subagent_name}: {len(summary)} chars, \"\n          f\"{resp.usage.output_tokens} tokens\")\n    return summary\n\ndef orchestrate(user_goal: str) -> str:\n    plan = [\n        (\"researcher\", f\"Find 3 key facts relevant to: {user_goal}\"),\n        (\"critic\",     f\"List 2 likely counter-arguments to: {user_goal}\"),\n        (\"synthesizer\",f\"Suggest a 1-sentence thesis for: {user_goal}\"),\n    ]\n    findings = {name: spawn_subagent(brief, name) for name, brief in plan}\n\n    resp = client.messages.create(\n        model=MODEL, max_tokens=512,\n        system=\"You are an orchestrator. Combine sub-agent findings into a brief.\",\n        messages=[{\"role\": \"user\",\n                   \"content\": f\"Goal: {user_goal}\\n\\n\"\n                              + \"\\n\\n\".join(f\"[{k}]\\n{v}\" for k,v in findings.items())}],\n    )\n    print(f\"[orchestrator] {resp.usage.input_tokens} in, \"\n          f\"{resp.usage.output_tokens} out\")\n    return resp.content[0].text\n\nif __name__ == \"__main__\":\n    print(orchestrate(\"Should a startup adopt Kubernetes on day one?\"))"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-what-happens-when-you-run-it-2",
+          "heading": "Code trace — what happens when you run it",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "`orchestrate()` fires four independent `create()` calls — three sub-agent spawns, then one synthesis at the hub. None of the sub-agents share a conversation with each other or with the orchestrator. That isolation is the entire pattern."
+            },
+            {
+              "type": "p",
+              "text": "Before any API call"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "The `plan` list is a static 3-tuple of (role, task_brief). Sub-agent identity lives in the `system` prompt, not in the history — which is why each child starts fresh."
+                },
+                {
+                  "text": "`findings = {name: spawn_subagent(brief, name) for name, brief in plan}` runs the three spawns sequentially. To run them in parallel, swap in the async client and `asyncio.gather` (see Further exploration)."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Call 1 — Researcher spawn. `spawn_subagent(\"Find 3 key facts…\", \"researcher\")` makes a fresh `create()`. The child's `system` is \"You are a researcher sub-agent. Do the task briefly and return ONE paragraph…\" — that line is the summary contract. `messages` contains only the task brief. Response is a one-paragraph `TextBlock`; `resp.content[0].text` is pulled out and returned as a plain string. What doesn't happen: the researcher never sees the user's original goal. It only sees \"Find 3 key facts relevant to: Should a startup adopt Kubernetes…\". The parent pre-framed the brief."
+                },
+                {
+                  "text": "Call 2 — Critic spawn. Call 3 — Synthesizer spawn. Identical shape, different `subagent_name` and different task brief. Each gets its own empty `messages` list and its own system prompt. The critic has no idea what the researcher said; the synthesizer has no idea what either said. Each returns one paragraph (or one sentence, in the synthesizer's case). Why that isolation matters: if the critic had seen the researcher's findings, its counter-arguments would be biased toward those specific facts. Fresh context = genuinely independent critique."
+                },
+                {
+                  "text": "Call 4 — Orchestrator synthesis at the hub. The last `create()` uses a different `system` prompt (\"You are an orchestrator…\") and a constructed user message that concatenates all three summaries — not transcripts. The orchestrator never sees how the critic reasoned, only its one-paragraph conclusion. Why it matters: this is where the token savings show up. Print `resp.usage.input_tokens` and you'll see ~500–700 for the orchestrator — three summaries. If you passed full transcripts, it would be 3× to 10× larger. At `N=10` sub-agents, that difference is the whole tutorial."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Hub-and-spoke = N isolated conversations plus one synthesis conversation. Workers never talk to each other; the hub only ever receives summaries. Every deviation from that shape — leaking transcripts, adding worker-to-worker edges — is an anti-pattern from Domain 1."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-2",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run the orchestrator. bashpython orchestrator.py Expected: three `[spawn]`/`[done]` pairs, then an `[orchestrator]` token report. Why it matters: Each sub-agent starts with only its own system prompt and task brief. The parent never sees their internal reasoning."
+                },
+                {
+                  "text": "Compare token budgets. Extend the existing `[done]` line inside `spawn_subagent` so it also reports `input_tokens`. Full file with the change highlighted: python · orchestrator.py import anthropic client = anthropic.Anthropic() MODEL = \"claude-sonnet-4-6\" def spawn_subagent(task_brief: str, subagent_name: str) -> str: \"\"\"Run an isolated sub-agent; return a summary string only.\"\"\" print(f\" [spawn] {subagent_name}: {task_brief[:60]}…\") resp = client.messages.create( model=MODEL, max_tokens=512, system=(f\"You are a {subagent_name} sub-agent. Do the task briefly and \" \"return ONE paragraph of findings. Do not narrate your process.\"), messages=[{\"role\": \"user\", \"content\": task_brief}], ) summary = resp.content[0].text print(f\" [done] {subagent_name}: {len(summary)} chars, \" f\"in={resp.usage.input_tokens} out={resp.usage.output_tokens} tokens\") # ← added in= return summary def orchestrate(user_goal: str) -> str: plan = [ (\"researcher\", f\"Find 3 key facts relevant to: {user_goal}\"), (\"critic\", f\"List 2 likely counter-arguments to: {user_goal}\"), (\"synthesizer\",f\"Suggest a 1-sentence thesis for: {user_goal}\"), ] findings = {name: spawn_subagent(brief, name) for name, brief in plan} resp = client.messages.create( model=MODEL, max_tokens=512, system=\"You are an orchestrator. Combine sub-agent findings into a brief.\", messages=[{\"role\": \"user\", \"content\": f\"Goal: {user_goal}\\n\\n\" + \"\\n\\n\".join(f\"[{k}]\\n{v}\" for k,v in findings.items())}], ) print(f\"[orchestrator] {resp.usage.input_tokens} in, \" f\"{resp.usage.output_tokens} out\") return resp.content[0].text if __name__ == \"__main__\": print(orchestrate(\"Should a startup adopt Kubernetes on day one?\")) Re-run and watch the numbers: each sub-agent uses 50–150 input tokens; the orchestrator's `[orchestrator]` line shows ~600 (three summaries). Why it matters: Without the hub-and-spoke boundary, passing full transcripts up would 3–10× the parent's token bill."
+                },
+                {
+                  "text": "Observe the summary contract. The sub-agent's system prompt says \"return ONE paragraph… do not narrate.\" Sub-agents return artifacts, not history. Why it matters: This is the summary-not-state rule from the companion study guide's Domain 1 material, enforced at the prompt layer."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-2",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Forward the full child transcript up to the parent"
+            },
+            {
+              "type": "p",
+              "text": "Two edits to `orchestrator.py`: add a leaky variant of `spawn_subagent`, then swap the orchestrator's `findings` line to use it and flatten transcripts into the parent's history. Full file with both edits highlighted — save over your existing `orchestrator.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\n\ndef spawn_subagent(task_brief: str, subagent_name: str) -> str:\n    \"\"\"Run an isolated sub-agent; return a summary string only.\"\"\"\n    print(f\"  [spawn] {subagent_name}: {task_brief[:60]}…\")\n    resp = client.messages.create(\n        model=MODEL, max_tokens=512,\n        system=(f\"You are a {subagent_name} sub-agent. Do the task briefly and \"\n                \"return ONE paragraph of findings. Do not narrate your process.\"),\n        messages=[{\"role\": \"user\", \"content\": task_brief}],\n    )\n    summary = resp.content[0].text\n    print(f\"  [done]  {subagent_name}: {len(summary)} chars, \"\n          f\"{resp.usage.output_tokens} tokens\")\n    return summary\n\ndef spawn_subagent_LEAKY(task_brief, subagent_name):                              # ← new leaky function\n    resp = client.messages.create(\n        model=MODEL, max_tokens=512,\n        system=f\"You are a {subagent_name} sub-agent. Do the task briefly.\",\n        messages=[{\"role\": \"user\", \"content\": task_brief}],\n    )\n    return {\"messages\": [{\"role\": \"user\", \"content\": task_brief},\n                         {\"role\": \"assistant\", \"content\": resp.content[0].text}]}\n\ndef orchestrate(user_goal: str) -> str:\n    plan = [\n        (\"researcher\", f\"Find 3 key facts relevant to: {user_goal}\"),\n        (\"critic\",     f\"List 2 likely counter-arguments to: {user_goal}\"),\n        (\"synthesizer\",f\"Suggest a 1-sentence thesis for: {user_goal}\"),\n    ]\n    # findings = {name: spawn_subagent(brief, name) for name, brief in plan}      # ← commented out\n    findings = [spawn_subagent_LEAKY(brief, name) for name, brief in plan]        # ← new (leaky)\n    flattened = sum((f[\"messages\"] for f in findings), [])                        # ← new\n\n    resp = client.messages.create(\n        model=MODEL, max_tokens=512,\n        system=\"You are an orchestrator. Combine sub-agent findings into a brief.\",\n        messages=flattened,                                                       # ← was the findings dict\n    )\n    print(f\"[orchestrator] {resp.usage.input_tokens} in, \"\n          f\"{resp.usage.output_tokens} out\")\n    return resp.content[0].text\n\nif __name__ == \"__main__\":\n    print(orchestrate(\"Should a startup adopt Kubernetes on day one?\"))"
+            },
+            {
+              "type": "p",
+              "text": "Expected failure: the orchestrator's `input_tokens` roughly triples. With `N=10` sub-agents, the parent explodes its budget and starts losing information in the middle (Domain 5's failure mode)."
+            },
+            {
+              "type": "p",
+              "text": "Confirm: print `resp.usage.input_tokens` in both versions and compare."
+            },
+            {
+              "type": "p",
+              "text": "Revert: restore the original `spawn_subagent`."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-2",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I can explain why sub-agents return summaries, not transcripts."
+                },
+                {
+                  "text": "I've seen the parent's token count stay small in the isolated version."
+                },
+                {
+                  "text": "I can identify a mesh anti-pattern vs a hub-and-spoke."
+                },
+                {
+                  "text": "I've compared the sub-agents' summed token counts against the orchestrator's, and can say where the savings come from."
+                },
+                {
+                  "text": "I know the first question before splitting: is the work actually independent?"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-2",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "rm orchestrator.py"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-2",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Wrap the three spawn calls in `asyncio.gather` using the async client — parallelise for wall-clock savings."
+                },
+                {
+                  "text": "Add a `max_subagents` guard and a circuit-breaker for failing sub-agents."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. The difference from your baseline is what this tutorial actually cost on Sonnet 4.6 — add it to a running tally so you can compare against the ~$2–4 total budget for the whole workbook."
+            },
+            {
+              "type": "p",
+              "text": "Optional in-code tally. Drop this line after each `client.messages.create(…)` call to see per-request token counts in your terminal:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "print(f\"[usage] in={resp.usage.input_tokens} out={resp.usage.output_tokens}\")"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1119,
+        "bullets": 22,
+        "blocks": 28
+      }
+    },
+    {
+      "id": "build-an-mcp-server-exposing-tools-resources-and-prompts",
+      "heading": "Build an MCP Server Exposing Tools, Resources, and Prompts",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. MCP exposes three primitive types from one server. Tools are model-invoked actions. Resources are app-controlled data. Prompts are user-triggered templates. Picking the wrong primitive is the single most common Domain 2 exam trap."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 2 · MCP Triangle · Flashcards (Tool / Resource / Prompt Template)"
+        },
+        {
+          "type": "p",
+          "text": "Three primitives, three control surfaces. Tools are model-controlled — the LLM decides when to invoke. Resources are app-controlled — the host pulls them by URI. Prompts are user-controlled — surfaced as slash commands. Mixing up who controls what is Domain 2's most common exam trap."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Python 3.11+"
+            },
+            {
+              "text": "`mcp` package (official Model Context Protocol SDK): `pip install mcp`"
+            },
+            {
+              "text": "Claude Code CLI installed (`curl -fsSL https://claude.ai/install.sh | bash` — see the pre-start block)"
+            },
+            {
+              "text": "Basic familiarity with JSON Schema"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Stand up an MCP server that exposes all three primitives"
+            },
+            {
+              "text": "Wire it into Claude Code as a stdio MCP server"
+            },
+            {
+              "text": "Invoke each primitive and see which initiator triggers it (model / app / user)"
+            },
+            {
+              "text": "Deliberately mis-categorise a feature to see the model pick the wrong primitive"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-3",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "mkdir mcp-triangle && cd mcp-triangle\npython3 -m venv .venv && source .venv/bin/activate\npip install \"mcp>=1.0\""
+            },
+            {
+              "type": "p",
+              "text": "Create `server.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "from mcp.server.fastmcp import FastMCP\n\nmcp = FastMCP(\"triangle-demo\")\n\n# --- TOOL: model decides to call ------------------------------------------\n@mcp.tool()\ndef lookup_order(order_id: str) -> dict:\n    \"\"\"Fetch current status of a customer order. Call only when the user\n    references an order ID or asks 'where is my order'. Do not call for\n    general product questions.\"\"\"\n    fake = {\"A-100\": {\"status\": \"shipped\"}, \"A-200\": {\"status\": \"processing\"}}\n    return fake.get(order_id, {\"status\": \"not_found\"})\n\n# --- RESOURCE: app preloads, model reads -----------------------------------\n@mcp.resource(\"docs://shipping-policy\")\ndef shipping_policy() -> str:\n    \"\"\"Our shipping policy document. Read when explaining delivery times.\"\"\"\n    return \"Orders ship in 2 business days. International adds 5–7 days.\"\n\n# --- PROMPT: user types /refund ------------------------------------------\n@mcp.prompt(\"refund-flow\")\ndef refund_flow(order_id: str) -> str:\n    \"\"\"Walk the user through a refund for a specific order.\"\"\"\n    return (f\"Start a refund flow for order {order_id}. Verify eligibility, \"\n            \"confirm with the user, then call lookup_order to get status.\")\n\nif __name__ == \"__main__\":\n    mcp.run()   # defaults to stdio transport"
+            },
+            {
+              "type": "p",
+              "text": "Wire it into Claude Code. Create `.mcp.json` in the project root:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "{\n  \"mcpServers\": {\n    \"triangle\": {\n      \"command\": \"python\",\n      \"args\": [\"server.py\"]\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-the-three-initiator-paths",
+          "heading": "Code trace — the three initiator paths",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Unlike earlier tutorials there is no single linear flow here. `server.py` registers three primitives that are invoked by three different initiators. Each one follows a completely different path through the system — that's the whole lesson."
+            },
+            {
+              "type": "p",
+              "text": "Before any user interaction"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "`FastMCP(\"triangle-demo\")` constructs the server object. The three decorators (`@mcp.tool()`, `@mcp.resource(...)`, `@mcp.prompt(...)`) fire at import time — they introspect the Python functions, pull the docstrings out as descriptions, and register each primitive with the server's capability table."
+                },
+                {
+                  "text": "`mcp.run()` starts the stdio event loop. The server now blocks on `stdin` waiting for a JSON-RPC frame from Claude Code (JSON-RPC is the small request/response message format MCP speaks over the pipe — a JSON object with a method name, params, and an id)."
+                },
+                {
+                  "text": "When Claude Code launches in this directory, it reads `.mcp.json`, spawns `python server.py` as a subprocess, and handshakes with it over that subprocess's `stdin`/`stdout`. After the handshake, Claude Code knows the server offers exactly: 1 tool, 1 resource, 1 prompt — visible when you type `/mcp`."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "TOOL — the model initiates. You ask \"What's the status of order A-100?\". Claude's next response has `stop_reason=tool_use` and a `ToolUseBlock(name='lookup_order', input={'order_id': 'A-100'})`. Claude Code forwards that to the MCP server over stdio as a `tools/call` JSON-RPC frame. The server routes to the decorated Python function, executes it, gets `{'status': 'shipped'}`, sends that back as a `tools/call` result. Claude Code wraps the result as a `tool_result` content block and appends it to the conversation — the standard agentic loop picks up from there. Key point: the model chose to call the tool. The description (\"Call only when the user references an order ID…\") is the routing signal. Claude Code could not call the tool on its own — it only executes what the model requests."
+                },
+                {
+                  "text": "RESOURCE — the application initiates. You attach the resource with an @-mention: type `@triangle:docs://shipping-policy` in your prompt (typing `@` lists every available resource), then ask \"Explain our shipping timeline.\". Claude Code's harness — the application machinery wrapped around the model — issues a `resources/read` JSON-RPC call to the server. The `shipping_policy()` function returns its string, Claude Code inlines it into the prompt context (as a content block attached to the user message), and the model just reads. The model never emits a tool-use block; it never decided to call anything. Key point: resources are attached, not called — the app layer controls when. Claude Code implements app-control by letting you attach resources with @-mentions; other MCP hosts may attach relevant resources automatically. Either way the initiator is the application, not the model — which is why \"mis-categorising a Resource as a Tool\" (the build-and-break exercise) produces wrong-time calls and wasted tokens: you've shifted the initiator to the model."
+                },
+                {
+                  "text": "PROMPT — the user initiates. You type `/triangle:refund-flow`. Claude Code intercepts the slash before it reaches the model, looks up the `refund-flow` prompt on the `triangle` server via `prompts/get`, receives the template string \"Start a refund flow for order <id>…\", expands any arguments, and submits the result to Claude as if you had typed it. From the model's perspective this is just a user message — it then proceeds normally, likely calling `lookup_order` inside the flow. Key point: prompts are user-authored shortcuts. They don't change model behaviour — they change what the user has to type. The model's routing logic is unchanged."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Tool = model decides. Resource = app decides. Prompt = user decides. Every MCP design choice reduces to: who should be in control of firing this? The exam trap (and this tutorial's build-and-break) is putting a thing under the wrong initiator."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-3",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Verify the server boots. bashpython server.py < /dev/null It should start and wait for stdio input — kill with `Ctrl-C`. Why it matters: Stdio is the transport Claude Code uses for local MCP servers."
+                },
+                {
+                  "text": "Launch Claude Code at this directory. bashclaude At the prompt, type `/mcp`. Expected: `triangle` appears with 1 tool, 1 resource, 1 prompt. Why it matters: The CLI auto-loads `.mcp.json` and introspects the server."
+                },
+                {
+                  "text": "Trigger the TOOL (model-initiated). Ask Claude: What's the status of order A-100? Expected: Claude calls `lookup_order` and answers \"shipped.\" Why it matters: The model chose to call the tool because the description told it when to."
+                },
+                {
+                  "text": "Trigger the RESOURCE (app-controlled). Type `@` to see the triangle server's resources, then submit: @triangle:docs://shipping-policy Explain our shipping timeline. Expected: the resource content is attached to your message and Claude reads it to answer — no tool call in the transcript. Why it matters: Resources aren't \"chosen\" by the model — the app layer attaches them. In Claude Code that attachment is your @-mention; the model never issues the read."
+                },
+                {
+                  "text": "Trigger the PROMPT (user-initiated). Type `/triangle:refund-flow`, then answer the order ID question. Why it matters: Prompts are slash-command templates — the human decides when to fire them."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-3",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Convert the shipping-policy Resource into a Tool"
+            },
+            {
+              "type": "p",
+              "text": "Rewrite the shipping policy as a Tool called `get_shipping_policy()` with a minimal description: `\"Returns shipping policy text.\"`."
+            },
+            {
+              "type": "p",
+              "text": "Then ask Claude a non-shipping question: What's our return policy?"
+            },
+            {
+              "type": "p",
+              "text": "Expected failure modes (one or more):"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Claude calls `get_shipping_policy` pointlessly (because \"policy\" matched loosely)."
+                },
+                {
+                  "text": "It doesn't call the resource-that-should-be-there at all."
+                },
+                {
+                  "text": "Token use balloons because the full document is injected into each tool result."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Confirm: watch the Claude Code transcript — you'll see the spurious `get_shipping_policy` call. A resource is attached up front (your @-mention decides); a tool demands that the model find a reason to call it."
+            },
+            {
+              "type": "p",
+              "text": "Revert: restore the `@mcp.resource` decorator."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-3",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I can state \"who initiates?\" for each of the three primitives without looking."
+                },
+                {
+                  "text": "I've seen a tool mis-used because its description was too loose."
+                },
+                {
+                  "text": "I can point to my `.mcp.json` and explain stdio vs Streamable HTTP transport."
+                },
+                {
+                  "text": "My MCP server exposes one of each primitive and all register in `/mcp`."
+                },
+                {
+                  "text": "I've watched Claude choose (or not) to call a tool based on its description."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-3",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "deactivate && cd .. && rm -rf mcp-triangle"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-3",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Convert the server to the Streamable HTTP transport — `FastMCP(\"triangle-demo\", port=3333)` plus `mcp.run(transport=\"streamable-http\")` — and connect from a remote host."
+                },
+                {
+                  "text": "Add a second tool with an anti-example in the description (`\"Do NOT call when…\"`)."
+                },
+                {
+                  "text": "Explore the `resources/list` MCP method directly with `mcp-cli` or `curl`."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. This tutorial doesn't call the Anthropic API directly from Python — Claude Code makes the requests on your behalf — so the Console is your only live signal for spend. Note the delta and add it to the running tally."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1275,
+        "bullets": 30,
+        "blocks": 30
+      }
+    },
+    {
+      "id": "tool-description-discipline-break-it-then-fix-it",
+      "heading": "Tool Description Discipline — Break It, Then Fix It",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. The tool description is the only signal the model has for when to call a tool. Vague descriptions cause wrong-time calls; great descriptions state parameters, units, side effects, and anti-examples (\"when NOT to call\")."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 2 · Common Traps · Quiz Q7"
+        },
+        {
+          "type": "p",
+          "text": "A tool description is a contract with the model's tool-selection (\"routing\") logic. The model picks by semantic match, not by function name. Include trigger-words, scope boundaries, and explicit non-examples — e.g. `\"NOT for weather\"` — or an adjacent tool will swallow the call."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Tutorial 01 complete"
+            },
+            {
+              "text": "Python, `anthropic` SDK, API key"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Run the same prompt against vague vs. precise tool descriptions"
+            },
+            {
+              "text": "Count incorrect tool invocations per description"
+            },
+            {
+              "text": "Observe how \"when NOT to call\" guidance reduces false positives"
+            },
+            {
+              "text": "Recognise the anti-pattern of renaming a tool to \"refresh attention\""
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-4",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Reuse Tutorial 01's environment (`cd agentic-loop && source .venv/bin/activate`). Create `describe.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, json\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\n\nVAGUE = [{\n    \"name\": \"get_data\",\n    \"description\": \"Gets data.\",\n    \"input_schema\": {\"type\": \"object\", \"properties\": {}},\n}]\n\nPRECISE = [{\n    \"name\": \"get_latest_order_status\",\n    \"description\": (\n        \"Fetch the current shipping status of a CUSTOMER ORDER from the orders \"\n        \"database. Use ONLY when the user asks about a specific order by ID or \"\n        \"says 'where is my package'. DO NOT use for returns, refunds, account \"\n        \"info, or general product questions. Returns: {order_id, status, eta}.\"\n    ),\n    \"input_schema\": {\n        \"type\": \"object\",\n        \"properties\": {\"order_id\": {\"type\": \"string\",\n                                    \"description\": \"Order ID, e.g. 'A-100'\"}},\n        \"required\": [\"order_id\"],\n    },\n}]\n\ntest_prompts = [\n    \"Where is my order A-100?\",           # should call\n    \"What's your return policy?\",         # should NOT call\n    \"Tell me about the Widget Pro specs\", # should NOT call\n    \"Is my package A-200 on its way?\",    # should call\n]\n\ndef run(tools, prompts, label):\n    print(f\"\\n=== {label} ===\")\n    for p in prompts:\n        resp = client.messages.create(\n            model=MODEL, max_tokens=256, tools=tools,\n            messages=[{\"role\": \"user\", \"content\": p}],\n        )\n        called = [b.name for b in resp.content if b.type == \"tool_use\"]\n        print(f\"  prompt: {p!r:50s} → tool_calls={called}\")\n\nrun(VAGUE,   test_prompts, \"VAGUE tool description\")\nrun(PRECISE, test_prompts, \"PRECISE tool description\")"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-what-the-comparison-measures",
+          "heading": "Code trace — what the comparison measures",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "This script is a two-batch experiment. It fires the same four prompts against two tool catalogues — one deliberately vague, one deliberately precise — and records which prompt triggers a tool call. Eight API calls total. The single variable is the tool's description."
+            },
+            {
+              "type": "p",
+              "text": "Before either batch"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "The `test_prompts` list is labelled in the source comments: two should call (order-ID lookups), two should not (policy + product questions). That label is the ground truth you'll measure accuracy against."
+                },
+                {
+                  "text": "`VAGUE` has a single sentence description (\"Gets data.\") and an empty `input_schema`. `PRECISE` names the domain, the trigger phrases, the anti-cases, the parameter with its own description, and the return shape — five elements, each of which is a signal the model can route on."
+                },
+                {
+                  "text": "`run(tools, prompts, label)` is the test driver: one `create()` per prompt, with a fresh single-turn `messages` list each time — no conversation carry-over. The log line extracts `[b.name for b in resp.content if b.type == \"tool_use\"]`, so an empty list means \"model decided not to call\"."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Batch 1 — VAGUE. Four calls, four unreliable outcomes. For each prompt, the model sees a tool named `get_data` with no signal about when to use it. Two failure modes appear: Either way, the `tool_calls=` column is inconsistent run-to-run. You'll see different outputs on successive runs of the same prompts — the vague description has no anchor. Why it matters: unreliable routing is the real cost of vague descriptions — not that the tool \"won't fire\", but that you can't predict when it will.",
+                  "sub": [
+                    "Over-calling. The model guesses \"the user is asking something, I have a tool, I should try it\" and calls `get_data` on the policy and product prompts too.",
+                    "Under-calling. The model decides the tool is unlikely to help and answers from general knowledge — including the order-status prompts it should have delegated."
+                  ]
+                },
+                {
+                  "text": "Batch 2 — PRECISE. Four calls, four predictable outcomes. Same four prompts, but now the description contains `\"Use ONLY when the user asks about a specific order by ID\"` and `\"DO NOT use for returns, refunds, account info, or general product questions.\"`. The model parses these as explicit routing rules: The result table is now stable across runs — the description is doing the routing work. Why it matters: the description is effectively your tool's API contract with the model. Vagueness there is the same bug as a vague interface in code.",
+                  "sub": [
+                    "\"Where is my order A-100?\" — matches the trigger → calls `get_latest_order_status(order_id='A-100')`.",
+                    "\"What's your return policy?\" — matches the DO NOT list → no call. Model answers from its own knowledge.",
+                    "\"Tell me about the Widget Pro specs\" — general product question, matches DO NOT → no call.",
+                    "\"Is my package A-200 on its way?\" — matches the \"where is my package\" trigger phrase verbatim → calls with `order_id='A-200'`."
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Write tool descriptions the way you'd write instructions for a new hire. Five elements: domain, parameters with descriptions, when to use, when NOT to use, return shape. Skip any of them and the model fills the gap with a guess."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-4",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run both versions side by side. bashpython describe.py Expected: the vague `get_data` is either called on everything or nothing — both wrong. The precise tool fires only on the two order-status prompts. Why it matters: Every spurious tool call is latency and cost — and a context-pollution risk."
+                },
+                {
+                  "text": "Count false positives. Tally: how often did each description call the tool when it shouldn't have? Why it matters: This is the measurement that separates \"works\" from \"works reliably.\""
+                },
+                {
+                  "text": "Dissect the precise description. Re-read it. It includes: (i) domain (\"customer order\"), (ii) parameters with descriptions, (iii) an explicit \"use ONLY when,\" (iv) an explicit \"DO NOT use for,\" (v) a return shape. Why it matters: This is the concrete answer to Quiz Q7 — five elements every production tool description should have."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-4",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Rename the tool to \"refresh attention\""
+            },
+            {
+              "type": "p",
+              "text": "Rename `get_data` to `get_data_v2` while keeping the description at `\"Gets data.\"` Run again."
+            },
+            {
+              "type": "p",
+              "text": "Expected: behaviour is unchanged. The same two failure patterns persist. The name alone is not information."
+            },
+            {
+              "type": "p",
+              "text": "Confirm: compare tool-call counts before and after the rename. They'll be statistically identical."
+            },
+            {
+              "type": "p",
+              "text": "Revert: switch back to the precise description."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-4",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I have a side-by-side count of tool calls for vague vs precise."
+                },
+                {
+                  "text": "I can list the five elements of a precise tool description."
+                },
+                {
+                  "text": "I've seen that renaming a tool does not change model behaviour."
+                },
+                {
+                  "text": "I understand why \"gets data\" is not a tool description."
+                },
+                {
+                  "text": "I can write a description that includes a \"DO NOT call when…\" clause."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-4",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "rm describe.py"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-4",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Add a third variant with parameters-only description and measure which field matters most."
+                },
+                {
+                  "text": "Test with `claude-haiku-4-5` and `claude-opus-4-7` — does description quality matter more for smaller models?"
+                },
+                {
+                  "text": "Read Anthropic's tool-use documentation for the canonical description pattern."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. The difference from your baseline is what this tutorial actually cost on Sonnet 4.6 — add it to a running tally so you can compare against the ~$2–4 total budget for the whole workbook."
+            },
+            {
+              "type": "p",
+              "text": "Optional in-code tally. Drop this line after each `client.messages.create(…)` call to see per-request token counts in your terminal:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "print(f\"[usage] in={resp.usage.input_tokens} out={resp.usage.output_tokens}\")"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1021,
+        "bullets": 22,
+        "blocks": 27
+      }
+    },
+    {
+      "id": "claude-md-hierarchy-in-claude-code",
+      "heading": "CLAUDE.md Hierarchy in Claude Code",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. Claude Code loads CLAUDE.md instructions at three tiers — global (`~/.claude/CLAUDE.md`), project (`./CLAUDE.md`), and subdirectory (`./src/foo/CLAUDE.md`). All applicable files are concatenated into context — subdirectory files join only when Claude works in that subtree, and the docs promise no winner when rules contradict. Personal preferences go global; team rules go in project; per-directory specifics go in subdirs — written so tiers never conflict."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 3 · CLAUDE.md Pyramid · Quiz Q13"
+        },
+        {
+          "type": "p",
+          "text": "Claude Code loads the global and project `CLAUDE.md` files at session start and pulls subdirectory files in on demand as it works in those paths. Scope narrows as you descend — global affects every project, project affects the repo, nested affects a subfolder. All applicable files are concatenated, not overridden: the docs say contradictory rules \"may resolve arbitrarily\", so write tiers that never conflict. Use user global for personal style, project for repo invariants, nested for per-directory specifics."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Claude Code CLI installed"
+            },
+            {
+              "text": "A throwaway directory"
+            },
+            {
+              "text": "Your existing `~/.claude/CLAUDE.md` will be temporarily displaced (we'll back it up)"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Observe three CLAUDE.md files loading simultaneously"
+            },
+            {
+              "text": "Force a conflict and learn why the docs tell you not to rely on a winner"
+            },
+            {
+              "text": "Identify what belongs at each tier (team / personal / local)"
+            },
+            {
+              "text": "Break the hierarchy by putting a user preference in a project file"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-5",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "# Back up existing global CLAUDE.md if any\ncp ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.bak 2>/dev/null || true\n\nmkdir -p ~/hierarchy-demo/src/payments\ncd ~/hierarchy-demo"
+            },
+            {
+              "type": "p",
+              "text": "Create three tiered files:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "cat > ~/.claude/CLAUDE.md <<'EOF'\n# Personal preferences\n- Always use emoji-free commit messages.\n- When writing code, prefer 4-space indentation.\nEOF\n\ncat > ~/hierarchy-demo/CLAUDE.md <<'EOF'\n# Team rules for hierarchy-demo\n- All Python code must use type hints.\n- Do not add dependencies without asking first.\nEOF\n\ncat > ~/hierarchy-demo/src/payments/CLAUDE.md <<'EOF'\n# Payments module overrides\n- This module uses 2-space indentation (legacy).\n- Never log raw card numbers, even in tests.\nEOF"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-how-claude-code-resolves-the-hierarchy",
+          "heading": "Code trace — how Claude Code resolves the hierarchy",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "There's no Python to execute here — but Claude Code runs a deterministic scope-walk algorithm every time it starts a session and every time its working scope changes. Once you know that algorithm, the \"which rule wins?\" question answers itself."
+            },
+            {
+              "type": "p",
+              "text": "The three files you just created"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "`~/.claude/CLAUDE.md` (global tier) — personal preferences. Follows you, not the repo."
+                },
+                {
+                  "text": "`~/hierarchy-demo/CLAUDE.md` (project tier) — team rules. Checked into source control; every clone inherits them."
+                },
+                {
+                  "text": "`~/hierarchy-demo/src/payments/CLAUDE.md` (subdirectory tier) — local overrides for a specific module. Only in effect while Claude is working inside that subtree."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Phase 1 — session start at the project root. When you run `claude` inside `~/hierarchy-demo`, Claude Code walks from the current working directory up to home looking for `CLAUDE.md` files, then adds the global one. Each file found is loaded into the session's instruction context. The `src/payments/CLAUDE.md` file is not loaded yet — the harness hasn't been asked to look inside that subdirectory. So right now: two tiers are active. Claude knows \"emoji-free commits, 4-space indent, type hints required, ask before adding dependencies.\" That's the state when you ask \"What instructions are loaded for you right now?\""
+                },
+                {
+                  "text": "Phase 2 — you ask for an edit in `src/payments/`. The moment Claude Code's file-op scope shifts into `src/payments/` — typically because of an `Edit` or `Write` tool call targeting a file there — the harness re-walks and finds `src/payments/CLAUDE.md`. It gets added to the context as the most specific tier. Now there's a conflict: global says 4-space, subdir says 2-space. In practice Claude usually follows the most specific rule — the subdir file sits closest to the work — but the docs are explicit that this is not a guarantee: all applicable files are concatenated into context, and \"if two rules contradict each other, Claude may pick one arbitrarily\". The design rule that follows: scope rules so tiers never contradict in the first place. Why it's scope-based, not merge-at-startup: a monorepo can have dozens of subdirectory CLAUDE.md files. Loading all of them at session start would bloat context. They're loaded on demand as Claude actually works in those paths."
+                },
+                {
+                  "text": "Phase 3 — you move back to the repo root. Edit a file outside `src/payments/`. The subdir rules lose scope; project + global remain. The 2-space rule no longer applies, and \"Never log raw card numbers\" is no longer in-context either — which is exactly what you want. A local rule about one module shouldn't bleed into unrelated files. Wrong-tier failure mode: the build-and-break exercise puts \"I like verbose commit messages\" into the project file. Because that tier is checked in, every teammate inherits your preference. The pyramid's \"Don't\" — personal preferences must never leave the global tier."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "The tiers are scopes, not a precedence ladder. Global follows you. Project follows the repo. Subdir follows a specific path. Everything in scope is concatenated, and the docs promise no winner for contradictions — so content belongs at the tier whose audience matches the rule's scope, written so tiers never disagree. That's the only design rule, and every anti-pattern violates it."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-5",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Launch Claude Code at the project root. bashcd ~/hierarchy-demo && claude Ask: What instructions are loaded for you right now? Expected: Claude cites rules from both global and project CLAUDE.md — but NOT the payments one (you're not in that path). Why it matters: Subdir CLAUDE.md only loads when Claude is working in that subdir."
+                },
+                {
+                  "text": "Work in the payments subdir. Ask: Let's edit src/payments/charge.py — create it with a small function. Then ask: Which indentation rule applies here? Expected: Claude typically answers \"2-space\", citing the payments CLAUDE.md — the most specific rule now in context. Note that the docs don't guarantee this: contradictory rules \"may resolve arbitrarily\". Why it matters: Specificity usually carries the day in practice, but it's a heuristic, not a contract — the documented model is concatenation, and the real fix is removing the contradiction."
+                },
+                {
+                  "text": "Force a conflict. Edit the project `CLAUDE.md` to say `- Prefer tabs everywhere` and ask Claude to write a function in the repo root. Your global says 4-space; project says tabs. Expected: Claude usually follows the project rule — but run it a few times and you may see it drift. That is the documented behaviour: conflicting rules may resolve arbitrarily. Why it matters: Don't leave the contradiction in place and hope the \"right\" tier wins. Put the rule at the tier whose audience it belongs to, and delete the conflicting one."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-5",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Put a personal preference in the project file"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "cat >> ~/hierarchy-demo/CLAUDE.md <<'EOF'\n- I like verbose commit messages with rationale in every line.\nEOF"
+            },
+            {
+              "type": "p",
+              "text": "Commit it. Imagine a teammate cloning the repo — they'd inherit your commit-message preference, never having asked for it. The study guide's Domain 3 \"Don't\" list explicitly warns against this."
+            },
+            {
+              "type": "p",
+              "text": "Confirm: ask Claude Who is \"I\" in this CLAUDE.md? Does this rule belong here? Claude should flag it as a user-scoped rule in the wrong tier."
+            },
+            {
+              "type": "p",
+              "text": "Revert: remove the offending line and restore your real global CLAUDE.md: `mv ~/.claude/CLAUDE.md.bak ~/.claude/CLAUDE.md`"
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-5",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I can name what belongs at global / project / subdir tiers."
+                },
+                {
+                  "text": "I've seen Claude cite rules from multiple CLAUDE.md files."
+                },
+                {
+                  "text": "I've seen a subdir rule shape output inside its path — and I know the docs don't guarantee it wins a contradiction."
+                },
+                {
+                  "text": "I understand why \"I prefer X\" should not go in a checked-in CLAUDE.md."
+                },
+                {
+                  "text": "I can explain why this is a hierarchy, not a flat config."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-5",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "rm -rf ~/hierarchy-demo"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-5",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Use `/memory` in Claude Code to see which CLAUDE.md files are currently loaded."
+                },
+                {
+                  "text": "Add a fourth tier via a `CLAUDE.local.md` file (untracked personal overrides per repo)."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. This tutorial doesn't call the Anthropic API directly from Python — Claude Code makes the requests on your behalf — so the Console is your only live signal for spend. Note the delta and add it to the running tally."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1212,
+        "bullets": 23,
+        "blocks": 26
+      }
+    },
+    {
+      "id": "hooks-vs-skills-vs-slash-commands",
+      "heading": "Hooks vs Skills vs Slash Commands",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. Claude Code gives you three automation mechanisms, differing by who initiates. Hooks fire deterministically on harness events. Skills are capabilities the model chooses to use. Slash commands are shortcuts the user types. Pick by initiator, not by what you want to do."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 3 · Flashcards · Quiz Q3 and Q8"
+        },
+        {
+          "type": "p",
+          "text": "Same outcome, different entry point. If the harness should react to something, use a hook. If the model should follow a recipe when it recognizes a situation, use a skill. If the user should invoke a named workflow, use a slash command. Picking the wrong mechanism is the most frequent Domain 3 exam mistake."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Tutorial 05 complete"
+            },
+            {
+              "text": "Claude Code CLI + `jq`"
+            },
+            {
+              "text": "A scratch directory"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Create one hook, one skill, and one slash command"
+            },
+            {
+              "text": "Observe each being triggered by its correct initiator"
+            },
+            {
+              "text": "See a hook fire even when the model didn't \"want\" it to"
+            },
+            {
+              "text": "Try to get a skill to fire deterministically (it can't)"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-6",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "mkdir ~/primitives && cd ~/primitives\nmkdir -p .claude/skills/security-review .claude/commands"
+            },
+            {
+              "type": "p",
+              "text": "Hook — `.claude/settings.json`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "{\n  \"hooks\": {\n    \"PostToolUse\": [{\n      \"matcher\": \"Edit|Write\",\n      \"hooks\": [{\n        \"type\": \"command\",\n        \"command\": \"echo \\\"[hook] file touched at $(date -Is)\\\" >> /tmp/hook.log\"\n      }]\n    }]\n  }\n}"
+            },
+            {
+              "type": "p",
+              "text": "Skill — `.claude/skills/security-review/SKILL.md`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "---\nname: security-review\ndescription: Use when the user asks to review code for security issues, audit for vulnerabilities, or check for injection/XSS/secrets.\n---\n\n# Security Review\n\nWhen invoked, scan the target file(s) for:\n1. Hardcoded secrets (API keys, passwords, tokens)\n2. SQL injection sinks (unparameterised queries)\n3. XSS risks (unescaped user input in HTML)\n4. Command injection (shell execution with user input)\n\nReport findings as a numbered list with file:line references."
+            },
+            {
+              "type": "p",
+              "text": "Slash command — `.claude/commands/log-summary.md`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "Summarise the last hour of entries in /tmp/hook.log and print a table of which files were touched most frequently."
+            }
+          ]
+        },
+        {
+          "id": "code-trace-three-primitives-three-initiators",
+          "heading": "Code trace — three primitives, three initiators",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Just like the MCP tutorial, there is no single runtime flow. `.claude/settings.json`, `SKILL.md`, and the slash-command file each wire a different initiator into Claude Code. Same harness, three different trigger surfaces."
+            },
+            {
+              "type": "p",
+              "text": "What happens at session start"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Claude Code reads `.claude/settings.json` and registers the `PostToolUse` hook — a declaration of \"run this shell command whenever a tool matching `Edit|Write` finishes\". Nothing runs yet."
+                },
+                {
+                  "text": "It scans `.claude/skills/*/SKILL.md` and loads the frontmatter — the `---`-delimited metadata block at the top (`name` + `description`) — into the skill catalogue the model will see as routing signals each turn. The body of `SKILL.md` stays on disk — only loaded when the skill is invoked."
+                },
+                {
+                  "text": "It indexes `.claude/commands/*.md` as slash-command templates. The command body is a prompt stub, not executable code."
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "HOOK — the harness initiates. You ask \"Create hello.txt containing 'hi'\". Turn flow: model emits a `Write` tool_use block → harness executes the write → before returning control to the model, Claude Code iterates its PostToolUse hooks, finds the one whose `matcher` regex matches `Write`, and runs its shell command. `/tmp/hook.log` gets a new line appended. Then the tool_result is returned to the model. Key point: the model cannot skip the hook. It didn't even know it ran. That's why the exam says \"deterministic → hook\". Hooks are enforcement, not advice."
+                },
+                {
+                  "text": "SKILL — the model initiates. You ask \"Review hello.txt for security issues\". At the top of that turn, Claude's planner sees every skill's frontmatter description as part of its routing prompt. The matcher in this case is the description — \"Use when the user asks to review code for security issues…\" — which matches the user's phrasing. The model chooses to invoke the skill by treating its body as a mini-instruction prompt. The skill's four-step checklist becomes the model's plan for this turn. Key point: every step between \"user said something\" and \"skill fires\" involves a model decision. Change the wording of the user's request and the skill may not fire — that's the probabilistic nature the build-and-break exercise exposes."
+                },
+                {
+                  "text": "SLASH COMMAND — the user initiates. You type `/log-summary`. The CLI intercepts the slash before the text reaches the model, looks up `.claude/commands/log-summary.md`, takes its body verbatim (\"Summarise the last hour…\") and submits it as a user message. The model then proceeds normally — it will likely call `Read` on `/tmp/hook.log`, parse it, and produce the table. No model decision on whether to fire — you already decided by typing the slash. Key point: the model's subsequent behaviour is non-deterministic, but the firing was deterministic. Slash commands move the \"when\" decision to the user while leaving the \"how\" to the model."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Three automation mechanisms differ on one axis: who initiates. Hook = harness (deterministic). Skill = model (probabilistic match on description). Slash = user (deterministic on firing, probabilistic on execution). \"What should this do?\" is a second-order question — pick the initiator first."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-6",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Trigger the HOOK (harness-initiated). Launch `claude`. Ask: Create hello.txt containing \"hi\". Then: bashcat /tmp/hook.log Expected: a `[hook] file touched at …` line. Why it matters: The hook fired because the harness saw a `Write` tool call. Claude couldn't skip it — it's deterministic."
+                },
+                {
+                  "text": "Trigger the SKILL (model-initiated). Ask: Review hello.txt for security issues. Expected: Claude recognises the skill's description, invokes it, and applies its checklist. Why it matters: The description is the routing signal — the model chose to use the skill because the task matched."
+                },
+                {
+                  "text": "Trigger the SLASH COMMAND (user-initiated). Type `/log-summary`. Expected: Claude reads `/tmp/hook.log` and prints a table. Why it matters: Slash commands are shortcuts you decide to run — no AI routing involved."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-6",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Try to make a skill fire on every edit"
+            },
+            {
+              "type": "p",
+              "text": "Edit `.claude/skills/security-review/SKILL.md` — change only the `description:` line in the frontmatter, keep the body untouched. Full file with the change highlighted — save over your existing `SKILL.md`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "---\nname: security-review\ndescription: Use after every edit, no exceptions    # ← was the security-review sentence\n---\n\n# Security Review\n\nWhen invoked, scan the target file(s) for:\n1. Hardcoded secrets (API keys, passwords, tokens)\n2. SQL injection sinks (unparameterised queries)\n3. XSS risks (unescaped user input in HTML)\n4. Command injection (shell execution with user input)\n\nReport findings as a numbered list with file:line references."
+            },
+            {
+              "type": "p",
+              "text": "Now create five files in a row and count the skill invocations in the transcript."
+            },
+            {
+              "type": "p",
+              "text": "Expected failure: the model may invoke it 0, 1, or 5 times — not deterministic. If you need \"always runs\", you need a hook, not a skill."
+            },
+            {
+              "type": "p",
+              "text": "Confirm: inspect `/tmp/hook.log` (5 entries) vs the number of skill invocations in the transcript (variable). This is the answer to Quiz Q3: deterministic → hook."
+            },
+            {
+              "type": "p",
+              "text": "Revert: remove the \"use after every edit\" language from the skill description."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-6",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I've watched one hook, one skill, and one slash command fire."
+                },
+                {
+                  "text": "I can name the initiator for each of the three."
+                },
+                {
+                  "text": "I've confirmed a skill is non-deterministic by running it multiple times."
+                },
+                {
+                  "text": "I know which one to pick for \"run gofmt after every edit\" (hook)."
+                },
+                {
+                  "text": "I know which one to pick for \"review PR when relevant\" (skill)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-6",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "cd ~ && rm -rf ~/primitives /tmp/hook.log"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-6",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Write a `PreToolUse` hook that blocks a tool call based on a `jq` filter on the input."
+                },
+                {
+                  "text": "Chain a skill and a hook: skill suggests an edit; hook lints after."
+                },
+                {
+                  "text": "Compare `.claude/skills/*/SKILL.md` to `.claude/agents/*.md` (sub-agent definitions — another Claude Code primitive)."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. This tutorial doesn't call the Anthropic API directly from Python — Claude Code makes the requests on your behalf — so the Console is your only live signal for spend. Note the delta and add it to the running tally."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1061,
+        "bullets": 24,
+        "blocks": 32
+      }
+    },
+    {
+      "id": "structured-output-with-tool-use-json-schema-retry-loop",
+      "heading": "Structured Output with Tool Use + JSON Schema Retry Loop",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. Two layers of structured output. The API's native features — `output_config.format` with a JSON schema, and `strict: true` on a tool — guarantee schema-valid shape. The validate-and-retry loop you build here closes the remaining semantic gap (email formats, ranges, business rules): when validation fails, return the validator's error to the model and retry. Cap retries and fail loudly."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 4 · JSON Schema Retry mental model · Quiz Q4 and Q14"
+        },
+        {
+          "type": "p",
+          "text": "Tool use + JSON Schema is a durable way to force structured output (native `output_config.format` and `strict: true` are the API-level guarantees). The validator is not optional — it's the contract. When it fails, feed the exact error string back to the model so the next turn can correct, not guess. Cap retries; structured output without a loop bound is a spend bomb."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Tutorial 01 complete"
+            },
+            {
+              "text": "Python, `anthropic` SDK, and `jsonschema`"
+            },
+            {
+              "text": "Anthropic API key"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Get schema-shaped JSON via tool use (not prose), then close the semantic gap with validation + retry"
+            },
+            {
+              "text": "Validate against a `jsonschema` spec"
+            },
+            {
+              "text": "On failure, feed the validator's error back and retry"
+            },
+            {
+              "text": "Compare with the \"please return JSON\" prose approach"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-7",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "mkdir retry-loop && cd retry-loop\npython3 -m venv .venv && source .venv/bin/activate\npip install anthropic jsonschema"
+            },
+            {
+              "type": "p",
+              "text": "Create `extract.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, json\nfrom jsonschema import Draft202012Validator\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\nMAX_RETRIES = 3\n\nschema = {\n    \"type\": \"object\",\n    \"properties\": {\n        \"name\":   {\"type\": \"string\", \"minLength\": 1},\n        \"email\":  {\"type\": \"string\", \"format\": \"email\"},\n        \"age\":    {\"type\": \"integer\", \"minimum\": 0, \"maximum\": 130},\n        \"topics\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"minItems\": 1},\n    },\n    \"required\": [\"name\", \"email\", \"age\", \"topics\"],\n    \"additionalProperties\": False,\n}\nvalidator = Draft202012Validator(schema)\n\ntools = [{\n    \"name\": \"record_contact\",\n    \"description\": \"Record an extracted contact. All fields required.\",\n    \"input_schema\": schema,\n}]\n\ndocument = \"\"\"\nHi, I'm Nadia Okafor. Email: nadia@example.com.\nI'm 34 and interested in MCP, agent patterns, and prompt caching.\n\"\"\"\n\ndef extract_with_retry(doc: str) -> dict:\n    messages = [{\"role\": \"user\",\n                 \"content\": f\"Extract the contact from:\\n<doc>{doc}</doc>\"}]\n    for attempt in range(MAX_RETRIES):\n        resp = client.messages.create(\n            model=MODEL, max_tokens=512, tools=tools, messages=messages,\n            tool_choice={\"type\": \"tool\", \"name\": \"record_contact\"},\n        )\n        tool_block = next(b for b in resp.content if b.type == \"tool_use\")\n        errors = list(validator.iter_errors(tool_block.input))\n        if not errors:\n            print(f\"✓ valid on attempt {attempt+1}\")\n            return tool_block.input\n        print(f\"✗ attempt {attempt+1} failed: {errors[0].message}\")\n        messages.append({\"role\": \"assistant\", \"content\": resp.content})\n        messages.append({\n            \"role\": \"user\",\n            \"content\": [{\n                \"type\": \"tool_result\",\n                \"tool_use_id\": tool_block.id,\n                \"content\": f\"Validation failed: {errors[0].message}. \"\n                           f\"Path: {list(errors[0].path)}. Please retry.\",\n                \"is_error\": True,\n            }],\n        })\n    raise RuntimeError(\"max retries exceeded\")\n\nprint(json.dumps(extract_with_retry(document), indent=2))"
+            }
+          ]
+        },
+        {
+          "id": "code-trace-the-self-healing-retry-loop",
+          "heading": "Code trace — the self-healing retry loop",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "This loop turns a schema validator into a training signal. Whenever `jsonschema` rejects the model's output, the failing message becomes the next turn's input — the model reads its own mistake and corrects it. Three design choices make that work."
+            },
+            {
+              "type": "p",
+              "text": "Three design choices before the loop"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Tool use, not prose. The tool catalogue has exactly one tool (`record_contact`) whose `input_schema` is the target JSON shape. The model almost always emits `tool_use.input` matching that shape — and you never parse JSON out of prose. (Only `strict: true` on the tool makes the API guarantee it; without it, conformance is reliable but not contractual — which is one more reason the validator below isn't optional.)"
+                },
+                {
+                  "text": "Forced tool use. `tool_choice={\"type\": \"tool\", \"name\": \"record_contact\"}` removes the model's option to reply with prose. Every response must contain a `tool_use` block."
+                },
+                {
+                  "text": "Schema-level validation on top. The API layer covers types and required fields; `jsonschema` enforces everything else — `format: email`, `minLength`, `minimum`/`maximum`, `additionalProperties: false`. That gap is what retries close."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "The Messages API now ships structured outputs natively — both are GA on Sonnet 4.6, no beta header:"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "`output_config={\"format\": {\"type\": \"json_schema\", \"schema\": ...}}` constrains the response itself to your schema — no tool needed. The Python SDK's `client.messages.parse()` validates against a Pydantic model for you."
+                },
+                {
+                  "text": "`strict: true` on a tool definition makes the API guarantee that `tool_use.input` validates against `input_schema` (the schema needs `additionalProperties: false` and a `required` list)."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Reach for those first in production. This tutorial still builds the validate-and-retry loop because native structured outputs don't cover semantic constraints — `format: email`, numeric ranges, business rules — and because the error-becomes-a-message pattern generalises to every self-healing agent loop, which is what the exam probes."
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Attempt 1 — the happy path. `messages` starts with a single user turn: the extraction prompt. `create()` returns a response whose `content` contains a `ToolUseBlock(name='record_contact', input={...})`. `next(b for b in resp.content if b.type == \"tool_use\")` pulls it out. `validator.iter_errors(tool_block.input)` returns an empty list — success. The loop returns `tool_block.input` on attempt 1 and never runs again. Why it works: the input schema is the target shape. The API and model cooperate to produce JSON matching it; the validator is just a belt-and-braces check."
+                },
+                {
+                  "text": "Attempt 1 — the sad path. Error becomes a message. This path won't fire with the document as shipped — you'll trigger it in walkthrough step 2 by ambiguating the age. When it does: suppose the source text said \"I'm about thirty-something\". The model guesses `age=35` — type-valid but semantically unsupported — or it may emit a string like `\"thirty-something\"`. `validator.iter_errors` returns an `ValidationError` with a human-readable `.message` and a JSON-pointer `.path`. The loop does three things in sequence: Why `is_error: True` matters: it tells the model \"this wasn't a normal tool result — fix the thing that failed.\" Without that flag, the model tends to treat the message as data and carry on.",
+                  "sub": [
+                    "Appends the assistant turn (`resp.content` as-is) — so the next `create()` call sees what the model just said.",
+                    "Appends a user turn containing a `tool_result` with `is_error: True` and the validator's error text.",
+                    "Loops back to the top of `for attempt in range(MAX_RETRIES)` for another `create()`."
+                  ]
+                },
+                {
+                  "text": "Attempt 2 — the model reads its own error. The next `create()` sees the full message history: user prompt → assistant tool_use (wrong) → user tool_result (`is_error`, validator message) → assistant ???. The model has enough context to recognise that its previous input violated a specific constraint at a specific path, and emits a new `tool_use` with the fix. Validator re-runs — usually passes on attempt 2. Generic \"try again\" wastes this turn. Feed a pointer to what failed — \"Validation failed: 'age' is a required property. Path: [].\" — or the model has no signal and guesses a different wrong thing."
+                },
+                {
+                  "text": "Attempt 3 — the hard cap. If attempt 3 still fails, `for` exits normally (no `break` needed — `return` is the exit) and the trailing `raise RuntimeError(\"max retries exceeded\")` fires. That's the seatbelt: you never silently return bad data, and you never spin forever."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Structured output is shape + semantics + retry. Shape comes from the API — a tool's `input_schema` (guaranteed with `strict: true`) or native `output_config.format`. The `jsonschema` validator closes the semantic gap, and the retry loop turns validation failures into corrections. Anything prose-based — \"please return JSON\" — skips all three."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-7",
+          "heading": "Walkthrough",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run a clean extraction. bashpython extract.py Expected: `✓ valid on attempt 1` and a well-formed JSON dump. Why it matters: The model reliably matches the declared `input_schema` for a clean schema, so retries are rare — add `strict: true` to the tool when you need that shape contractually guaranteed by the API."
+                },
+                {
+                  "text": "Force a retry. Ambiguate the age: change `I'm 34 and interested in...` to `I'm about thirty-something...`. Run again. Expected: first attempt fails (age cannot be coerced to integer), second or third succeeds — the model reads the error and fixes. Why it matters: This is the self-healing loop — the model uses the validator's error as a signal, not a termination."
+                },
+                {
+                  "text": "Inspect the retry message. Before the retry, `messages[-1][\"content\"][0][\"content\"]` is the validator error you fed back. Why it matters: The model needs a concrete pointer to what failed — generic \"try again\" wastes a turn."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-7",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Replace tool use with a prose request"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "resp = client.messages.create(\n    model=MODEL, max_tokens=512,\n    messages=[{\"role\": \"user\",\n               \"content\": f\"Extract this as JSON matching {schema}:\\n{document}\"}],\n)\nraw = resp.content[0].text\n# Try to parse:\ndata = json.loads(raw)   # this often fails"
+            },
+            {
+              "type": "p",
+              "text": "Run 5–10 times. Expected failure modes:"
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Claude wraps JSON in ````json` fences → `json.loads` throws."
+                },
+                {
+                  "text": "Claude adds a sentence before the JSON → parse error."
+                },
+                {
+                  "text": "Claude invents a field or drops one."
+                },
+                {
+                  "text": "You cannot set `tool_choice` to force the shape."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "This is why Domain 4 insists on schema-backed paths — tool use or native `output_config.format` — and why Quiz Q14 calls out prose \"return as JSON\" as most unreliable."
+            },
+            {
+              "type": "p",
+              "text": "Revert: restore the tool-use version."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-7",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I've seen valid JSON returned via `tool_use.input`."
+                },
+                {
+                  "text": "I've forced a retry and watched the loop self-heal."
+                },
+                {
+                  "text": "I've observed the prose-JSON approach fail in a specific way."
+                },
+                {
+                  "text": "My retry loop has a cap and raises on exhaustion."
+                },
+                {
+                  "text": "I feed the validator's error, not \"please try again\", back to the model."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-7",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "deactivate && cd .. && rm -rf retry-loop"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-7",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Add `strict: true` to the tool and confirm attempt-1 validation failures disappear for structural errors (semantic ones remain)."
+                },
+                {
+                  "text": "Rewrite the exercise with native `output_config={\"format\": {\"type\": \"json_schema\", \"schema\": schema}}` and no tool at all — compare code size and token use."
+                },
+                {
+                  "text": "Compare total tokens: tool use vs prose+parse-then-repair."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. The difference from your baseline is what this tutorial actually cost on Sonnet 4.6 — add it to a running tally so you can compare against the ~$2–4 total budget for the whole workbook."
+            },
+            {
+              "type": "p",
+              "text": "Optional in-code tally. Drop this line after each `client.messages.create(…)` call to see per-request token counts in your terminal:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "print(f\"[usage] in={resp.usage.input_tokens} out={resp.usage.output_tokens}\")"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1327,
+        "bullets": 31,
+        "blocks": 32
+      }
+    },
+    {
+      "id": "prompt-caching-fighting-lost-in-the-middle",
+      "heading": "Prompt Caching & Fighting \"Lost in the Middle\"",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Concept covered. Two independent techniques for long-context reliability. Prompt caching marks stable prefix tokens with `cache_control` so repeated calls cost ~10% of uncached. Lost in the middle — attention is strongest at start and end; critical rules belong at both anchors, never buried mid-context."
+        },
+        {
+          "type": "p",
+          "text": "Source: Domain 5 · Attention Curve · Quiz Q5 and Q10"
+        },
+        {
+          "type": "p",
+          "text": "Caching pays you for discipline: freeze the static prefix, put the variable bits last, mark the boundary with `cache_control`. Separately — the model's attention is not uniform across the window. The middle is the memory black hole; put your instructions where attention lives."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Tutorial 01 complete"
+            },
+            {
+              "text": "Python, `anthropic` SDK, API key"
+            },
+            {
+              "text": "A long document (the prep script pulls Moby Dick chapters 1–2 from Project Gutenberg; any 3–5K-token text works)"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Mark a stable prefix with `cache_control` and observe token-cost reduction"
+            },
+            {
+              "text": "Read `usage.cache_read_input_tokens` vs `cache_creation_input_tokens`"
+            },
+            {
+              "text": "Plant a test fact in the middle vs end of a long context and see recall differ"
+            },
+            {
+              "text": "Observe the performance cliff at the 5-minute cache TTL"
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Record your spend baseline"
+        },
+        {
+          "type": "p",
+          "text": "Open console.anthropic.com/usage, filter to today, and note the current dollar amount (or screenshot the chart). You'll check the delta at the end of this tutorial so you know exactly what this one exercise cost."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "setup-8",
+          "heading": "Setup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "mkdir cache-demo && cd cache-demo\npython3 -m venv .venv && source .venv/bin/activate\npip install anthropic requests"
+            },
+            {
+              "type": "p",
+              "text": "Fetch a long document with `prep.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import requests, pathlib\ntext = requests.get(\n    \"https://www.gutenberg.org/files/2701/2701-0.txt\",\n    timeout=30,\n).text\n# Keep chapters 1–2 (~5K tokens) — comfortably past the ~2K-token\n# minimum prefix Sonnet 4.6 will cache. The Gutenberg file lists every\n# chapter in a table of contents first, so split on the full body\n# heading and skip the TOC match ([1] is the TOC, [2] is the body).\nbody = text.split(\"CHAPTER 1. Loomings.\")[2] \\\n           .split(\"CHAPTER 3. The Spouter-Inn.\")[0]\nassert len(body) > 15_000, \"extraction failed — grabbed the TOC instead?\"\npathlib.Path(\"moby.txt\").write_text(body)\nprint(f\"saved {len(body)} chars\")   # expect ≈ 20,000"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "python prep.py"
+            },
+            {
+              "type": "p",
+              "text": "Heads-up on structure: this tutorial runs the scaffold twice — Part A (prompt caching) and Part B (lost in the middle) each pair their own walkthrough with an inline code trace, instead of the single up-front trace Tutorials 01–07 use."
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-part-a-prompt-caching",
+          "heading": "Walkthrough — Part A · Prompt Caching",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Create `cache.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, pathlib, time\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\ndoc = pathlib.Path(\"moby.txt\").read_text()\n\ndef ask(question, use_cache):\n    system = [\n        {\"type\": \"text\", \"text\": \"You are a literary analyst.\"},\n        {\"type\": \"text\", \"text\": f\"<doc>{doc}</doc>\",\n         **({\"cache_control\": {\"type\": \"ephemeral\"}} if use_cache else {})},\n    ]\n    t = time.time()\n    resp = client.messages.create(\n        model=MODEL, max_tokens=256, system=system,\n        messages=[{\"role\": \"user\", \"content\": question}],\n    )\n    dt = time.time() - t\n    u = resp.usage\n    print(f\"[{'cached' if use_cache else 'plain '}] \"\n          f\"in={u.input_tokens} cache_read={getattr(u,'cache_read_input_tokens',0)} \"\n          f\"cache_write={getattr(u,'cache_creation_input_tokens',0)} \"\n          f\"out={u.output_tokens} · {dt:.2f}s\")\n\nprint(\"--- first call (cache miss) ---\")\nask(\"What does Ishmael do when he feels spleen?\", use_cache=True)\nprint(\"--- second call (cache hit expected) ---\")\nask(\"Name one ship mentioned.\", use_cache=True)\nprint(\"--- control: no cache ---\")\nask(\"What does Ishmael do when he feels spleen?\", use_cache=False)"
+            },
+            {
+              "type": "p",
+              "text": "Code trace — three calls, three cache states"
+            },
+            {
+              "type": "p",
+              "text": "The system prompt is split into two content blocks: a short role statement and the full Moby Dick chapters. The `cache_control: {\"type\": \"ephemeral\"}` marker on the document block tells the API \"everything up to and including this block is a stable prefix — cache it under a key derived from the token contents.\" Three calls exercise three different cache states."
+            },
+            {
+              "type": "p",
+              "text": "Call 1 — `use_cache=True`, cache miss (cache write). First call with this prefix. The API computes the hash of the system tokens, finds no entry, processes the full input, and writes the prefix to an ephemeral cache with a 5-minute TTL. Usage reports `cache_creation_input_tokens ≈ 5000` (the doc being indexed), `cache_read_input_tokens = 0`, and a small `input_tokens` for the question itself. You pay a ~25% premium over normal input for the write."
+            },
+            {
+              "type": "p",
+              "text": "Call 2 — `use_cache=True`, cache hit (cache read). Different question, same system prefix. Hash matches. The API serves ~5000 tokens from cache and only re-processes the 10-or-so tokens of the new question. Usage flips: `cache_creation_input_tokens = 0`, `cache_read_input_tokens ≈ 5000`. Those cached tokens are billed at ~10% of normal input — that's the whole reason to cache."
+            },
+            {
+              "type": "p",
+              "text": "Call 3 — `use_cache=False`, control. Same prefix, but the `cache_control` marker is absent. The API treats every token as fresh input. Both cache counters are zero; `input_tokens ≈ 5000` at the full rate. This is your baseline for measuring the savings."
+            },
+            {
+              "type": "p",
+              "text": "What actually drives the hit. The cache key is a hash of the exact prefix tokens. Any change — a punctuation edit, a blank line, a different role description — produces a different key and a cache miss. That's why the TTL test you'll add in the next step (a `time.sleep(310)` between calls) also forces a rewrite: the prefix is the same, but the entry has expired, so it's effectively a new key."
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run the caching comparison. bashpython cache.py Expected lines: Why it matters: Cache-read tokens cost ~10% of regular input tokens. On a chatbot with a fixed 40K-token system prompt, that's nearly the whole prompt billed at a tenth the rate.",
+                  "sub": [
+                    "Call 1 — `cache_write≈5000, cache_read=0` — cache creation",
+                    "Call 2 — `cache_write=0, cache_read≈5000` — cache hit; `input_tokens` drops",
+                    "Call 3 — `cache_write=0, cache_read=0` — no caching"
+                  ]
+                },
+                {
+                  "text": "Test the 5-minute TTL. At the bottom of `cache.py`, insert one `time.sleep(310)` between the first and second calls. Full file with the change highlighted — save over your existing `cache.py`: python · cache.py · TTL variant import anthropic, pathlib, time client = anthropic.Anthropic() MODEL = \"claude-sonnet-4-6\" doc = pathlib.Path(\"moby.txt\").read_text() def ask(question, use_cache): system = [ {\"type\": \"text\", \"text\": \"You are a literary analyst.\"}, {\"type\": \"text\", \"text\": f\"<doc>{doc}</doc>\", **({\"cache_control\": {\"type\": \"ephemeral\"}} if use_cache else {})}, ] t = time.time() resp = client.messages.create( model=MODEL, max_tokens=256, system=system, messages=[{\"role\": \"user\", \"content\": question}], ) dt = time.time() - t u = resp.usage print(f\"[{'cached' if use_cache else 'plain '}] \" f\"in={u.input_tokens} cache_read={getattr(u,'cache_read_input_tokens',0)} \" f\"cache_write={getattr(u,'cache_creation_input_tokens',0)} \" f\"out={u.output_tokens} · {dt:.2f}s\") print(\"--- first call (cache miss) ---\") ask(\"What does Ishmael do when he feels spleen?\", use_cache=True) time.sleep(310) # ← add this — forces the 5-minute ephemeral TTL to expire print(\"--- second call (cache hit expected) ---\") ask(\"Name one ship mentioned.\", use_cache=True) print(\"--- control: no cache ---\") ask(\"What does Ishmael do when he feels spleen?\", use_cache=False) Expected: call 2 now shows `cache_write≈5000` again — the cache expired. Why it matters: Ephemeral caches live 5 minutes (standard) or 1 hour (premium). Plan your wake-up intervals."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "walkthrough-part-b-lost-in-the-middle",
+          "heading": "Walkthrough — Part B · Lost in the Middle",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Create `middle.py`:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "import anthropic, pathlib\nclient = anthropic.Anthropic()\nMODEL = \"claude-sonnet-4-6\"\ndoc = pathlib.Path(\"moby.txt\").read_text()\n\nSECRET_FACT = \"The secret passphrase is SPERMACETI-7.\"\n\ndef ask_with_placement(placement):\n    if placement == \"middle\":\n        mid = len(doc) // 2\n        body = doc[:mid] + f\"\\n\\n{SECRET_FACT}\\n\\n\" + doc[mid:]\n    elif placement == \"end\":\n        body = doc + f\"\\n\\n{SECRET_FACT}\\n\"\n    else:  # start\n        body = f\"{SECRET_FACT}\\n\\n\" + doc\n\n    resp = client.messages.create(\n        model=MODEL, max_tokens=100,\n        system=f\"You have been given a document. A secret passphrase is hidden \"\n               f\"in it. Quote the full passphrase exactly.\\n\\n<doc>{body}</doc>\",\n        messages=[{\"role\": \"user\", \"content\": \"What is the secret passphrase?\"}],\n    )\n    answer = resp.content[0].text\n    hit = \"SPERMACETI-7\" in answer\n    print(f\"[{placement:6s}] {'✓' if hit else '✗'} → {answer[:80]}\")\n\nfor placement in [\"start\", \"middle\", \"end\"]:\n    for trial in range(3):\n        ask_with_placement(placement)"
+            },
+            {
+              "type": "p",
+              "text": "Code trace — nine trials across three placements"
+            },
+            {
+              "type": "p",
+              "text": "Same document, same question, same model — the only variable is where the target fact lives inside the context. The outer `for placement` loop crossed with the inner `for trial` loop fires 9 `create()` calls total, three per placement, so you can see the recall rate as a ratio rather than a single data point."
+            },
+            {
+              "type": "p",
+              "text": "What each placement produces in the system prompt."
+            },
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "`start`: `f\"{SECRET_FACT}\\n\\n\" + doc` — the target sentence is the first thing the model sees after the instruction. Attention curve is strong here."
+                },
+                {
+                  "text": "`middle`: `doc[:mid] + f\"\\n\\n{SECRET_FACT}\\n\\n\" + doc[mid:]` — the fact is buried roughly halfway through ~5000 tokens of narrative. Attention curve is weakest here."
+                },
+                {
+                  "text": "`end`: `doc + f\"\\n\\n{SECRET_FACT}\\n\"` — the target is the last thing the model reads before the user's question. Recency makes this position almost as strong as `start`."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "What `hit` is measuring. `\"SPERMACETI-7\" in answer` is a substring check against the model's reply. A ✓ means the model recovered the exact passphrase; a ✗ means it either hedged, guessed a plausible-but-wrong phrase from Moby-Dick, or refused."
+            },
+            {
+              "type": "p",
+              "text": "Expected shape of the output. `start` rows: three ✓. `end` rows: three ✓. `middle` rows: some mix — often two ✓ and one ✗, sometimes worse with bigger documents. That's the U-shaped attention curve from the Domain 5 source, now a number on your terminal rather than a diagram in a slide."
+            },
+            {
+              "type": "p",
+              "text": "Why three trials. The model is probabilistic — a single run can coincidentally succeed or fail on any placement. Three trials lets you distinguish \"always fails\" from \"fails sometimes\", which is the whole point: lost-in-the-middle is an unreliability pattern, not a hard failure. If middle recall were always-fail, the workaround would be obvious; because it's sometimes-fail, teams ship the bug."
+            },
+            {
+              "type": "list",
+              "ordered": true,
+              "items": [
+                {
+                  "text": "Run the placement test. bashpython middle.py Expected: `start` and `end` recall the passphrase reliably. `middle` fails some fraction of the time — especially with larger documents. Why it matters: This is the \"lost in the middle\" curve from the study guide's Domain 5 material, made observable in your own terminal."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "build-and-break-exercise-8",
+          "heading": "Build-and-break exercise",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Bury a critical instruction in the middle"
+            },
+            {
+              "type": "p",
+              "text": "Combine both failure modes. Put a critical instruction — \"Before answering, always capitalise the first word\" — in the middle of the doc, and do NOT repeat it elsewhere. Ask a question that requires following it."
+            },
+            {
+              "type": "p",
+              "text": "Expected: intermittent compliance. The Domain 5 \"Do\" list in the companion study guide says: repeat critical rules at start AND end. Confirm by adding the rule to both anchors — compliance jumps to ~100%."
+            }
+          ]
+        },
+        {
+          "id": "verification-checklist-8",
+          "heading": "Verification checklist",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "I've seen `cache_read_input_tokens` be non-zero on a repeat call."
+                },
+                {
+                  "text": "I know the default ephemeral cache TTL (5 minutes)."
+                },
+                {
+                  "text": "I've measured middle-placement recall failing vs start/end."
+                },
+                {
+                  "text": "I can explain why system-prompt rules at position 0 aren't always enough."
+                },
+                {
+                  "text": "I've used `cache_control` on a stable prefix."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cleanup-8",
+          "heading": "Cleanup",
+          "level": 3,
+          "content": [
+            {
+              "type": "code",
+              "lang": null,
+              "text": "deactivate && cd .. && rm -rf cache-demo"
+            }
+          ]
+        },
+        {
+          "id": "further-exploration-8",
+          "heading": "Further exploration",
+          "level": 3,
+          "content": [
+            {
+              "type": "list",
+              "ordered": false,
+              "items": [
+                {
+                  "text": "Add a third cache breakpoint and measure hit rate across different query patterns."
+                },
+                {
+                  "text": "Try the same middle-vs-end test with Haiku 4.5 and compare attention curves."
+                },
+                {
+                  "text": "Re-read Quiz Q10 and Q15 in the companion study guide and reason through which primitive each maps to."
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "text": "Check your spend delta"
+            },
+            {
+              "type": "p",
+              "text": "Refresh console.anthropic.com/usage. The difference from your baseline is what this tutorial cost — the cache-hit run should be dramatically cheaper than the cold-cache run, which is exactly the observation this exercise is built around."
+            },
+            {
+              "type": "p",
+              "text": "In-code tally with cache fields. Caching splits `input_tokens` across three counters — print all four to see what the cache actually paid for:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "u = resp.usage\nprint(f\"[usage] in={u.input_tokens} cache_read={u.cache_read_input_tokens} cache_create={u.cache_creation_input_tokens} out={u.output_tokens}\")"
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 1391,
+        "bullets": 21,
+        "blocks": 41
+      }
+    },
+    {
+      "id": "finished",
+      "heading": "Turn 8/8 into a booked exam.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "You've now watched every CCA-F domain run, fail, and recover on your own terminal. Three steps close the loop:"
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "text": "Take the 15-question mock exam in the companion study guide, and print its one-page cheat sheet for revision week."
+            },
+            {
+              "text": "Re-run any tutorial whose checklist items you couldn't honestly tick — the build-and-break variants are the fastest refreshers."
+            },
+            {
+              "text": "Register with Pearson VUE — $125 USD, online proctored or at a test center. The credential is valid for 12 months, so time your attempt."
+            }
+          ]
+        }
+      ],
+      "subsections": [],
+      "stats": {
+        "words": 81,
+        "bullets": 3,
+        "blocks": 2
+      }
+    },
+    {
+      "id": "glossary-heading",
+      "heading": "Thirty-three terms you'll meet in the tutorials.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Short, exam-relevant definitions. Filter by term, domain (`D1`–`D5`), or any phrase in the definition. Use this as a reference while you work through the workbook."
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": []
+        }
+      ],
+      "subsections": [],
+      "stats": {
+        "words": 25,
+        "bullets": 0,
+        "blocks": 2
+      }
+    },
+    {
+      "id": "troubleshooting-heading",
+      "heading": "When things go wrong.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "The errors most people hit running these tutorials, with the fix that actually works — especially on Ubuntu, where the defaults bite."
+        },
+        {
+          "type": "p",
+          "text": "`TypeError: Could not resolve authentication method. Expected either api_key or auth_token to be set`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. The `ANTHROPIC_API_KEY` environment variable is not visible to the Python process — `anthropic.Anthropic()` with no arguments reads the key from the environment. Typically you exported it in a different shell, or ran the script under `sudo` (which strips env vars)."
+        },
+        {
+          "type": "p",
+          "text": "First confirm what the shell sees. If this prints empty, export the key in the same shell where you run the script:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "echo $ANTHROPIC_API_KEY\nexport ANTHROPIC_API_KEY=\"sk-ant-…\"\npython3 loop.py"
+        },
+        {
+          "type": "p",
+          "text": "For a durable per-project setup, use a `.env` file:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "pip install python-dotenv\necho 'ANTHROPIC_API_KEY=sk-ant-…' > .env\n# then at the top of loop.py:\nfrom dotenv import load_dotenv; load_dotenv()"
+        },
+        {
+          "type": "p",
+          "text": "`Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. Your API key is valid (auth succeeded) but the account has no usable credit. New accounts start at $0; any free trial credit from onboarding may have expired or been consumed. Important gotcha (observed in our testing, not officially documented): an API key created before the account had credit can stay stuck on this error even after you buy credits — the credit-check state attached to that key doesn't always refresh. The reliable fix is to buy credit first, then mint a new key."
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "text": "Buy credit first. Open console.anthropic.com/settings/billing, add a payment method, and purchase credits. The minimum purchase was $5 at the time of writing (check the billing page) — the whole workbook budgets ~$2–4 on Sonnet 4.6, so the minimum covers it several times over."
+            },
+            {
+              "text": "Wait 1–2 minutes and confirm the balance shows on the billing page. Credits occasionally lag behind the purchase confirmation."
+            },
+            {
+              "text": "Then create a new API key at console.anthropic.com/settings/keys. If you already created a key before buying credit, delete that one and mint a fresh one — the new key will pick up the credited balance cleanly."
+            },
+            {
+              "text": "Export and retry in the same shell where you run the script:"
+            }
+          ]
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "export ANTHROPIC_API_KEY=\"sk-ant-…NEW_KEY\"\npython3 loop.py"
+        },
+        {
+          "type": "p",
+          "text": "Two follow-ups while you're in the console:"
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            {
+              "text": "Key belongs to the right workspace. If you're in an organisation, the key must be issued under a workspace that has a balance — personal keys won't draw from org credit and vice versa."
+            },
+            {
+              "text": "Enable auto-reload on the billing page. Hub-and-spoke (Tutorial 02) and the retry loop (Tutorial 07) fan out multiple calls and a mid-run balance drop will make this error re-appear partway through."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "text": "`The virtual environment was not created successfully because ensurepip is not available`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. Ubuntu and Debian ship a minimal Python 3 by default — the stdlib `venv` module needs the separate `python3-venv` package to actually bootstrap a virtual environment."
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "sudo apt update && sudo apt install -y python3 python3-venv python3-pip"
+        },
+        {
+          "type": "p",
+          "text": "Then re-run the venv step from the tutorial setup."
+        },
+        {
+          "type": "p",
+          "text": "`python: command not found` (Ubuntu)"
+        },
+        {
+          "type": "p",
+          "text": "Cause. On Ubuntu 20.04+ the binary on PATH is `python3`, not `python`. This workbook uses `python3` throughout for that reason."
+        },
+        {
+          "type": "p",
+          "text": "Either run every command with `python3` explicitly, or install the alias package so `python` resolves to `python3`:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "sudo apt install -y python-is-python3"
+        },
+        {
+          "type": "p",
+          "text": "`error: externally-managed-environment` from `pip install`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. Ubuntu 23.04+ and current Homebrew Python enforce PEP 668 — the system Python refuses global `pip install` to protect OS packages. This workbook assumes you install Python packages inside each tutorial's venv, which sidesteps the problem entirely."
+        },
+        {
+          "type": "p",
+          "text": "Activate the venv before `pip install`:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "source .venv/bin/activate\nwhich pip  # should point inside .venv, not /usr/bin/pip\npip install \"anthropic>=0.40\""
+        },
+        {
+          "type": "p",
+          "text": "For CLIs you genuinely want globally (like a linter), use `pipx` instead of `pip`."
+        },
+        {
+          "type": "p",
+          "text": "`ModuleNotFoundError: No module named 'anthropic'`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. You installed the package into a different Python than the one running the script. Nearly always: venv not activated, or you opened a new terminal and forgot to re-activate."
+        },
+        {
+          "type": "p",
+          "text": "Verify which Python and which pip the shell is using — both should live inside `.venv`:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "source .venv/bin/activate\nwhich python3 pip\npython3 -c \"import anthropic, sys; print(anthropic.__version__, sys.executable)\""
+        },
+        {
+          "type": "p",
+          "text": "If `which` points to `/usr/bin/`, activation didn't run — re-run `source .venv/bin/activate` and re-install."
+        },
+        {
+          "type": "p",
+          "text": "`NotFoundError: 404 {\"error\":{\"type\":\"not_found_error\",\"message\":\"model: claude-…\"}}`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. Either the model ID has drifted (the workbook pins `claude-sonnet-4-6`), or your SDK is too old to know about it, or your API key's tier hasn't been enabled for that model."
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "pip install -U \"anthropic>=0.40\"\n# Confirm the model ID against the live catalogue:\npython3 -c \"import anthropic; [print(m.id) for m in anthropic.Anthropic().models.list().data]\""
+        },
+        {
+          "type": "p",
+          "text": "If Sonnet 4.6 isn't listed, fall back to `claude-haiku-4-5-20251001` for the tutorials — they don't require the bigger model."
+        },
+        {
+          "type": "p",
+          "text": "`RateLimitError: 429 — Your account has hit a rate limit`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. New accounts start on tight tiers. Tutorials 02 (hub-and-spoke), 07 (retry loop), and 08 (caching) fan out multiple calls and can trip requests-per-minute or tokens-per-minute limits."
+        },
+        {
+          "type": "p",
+          "text": "Lower parallelism and retry with backoff. The SDK already retries transient 429s, but you can also reduce the iteration cap in the loop or switch to Haiku 4.5 while you're testing. Check your current tier limits in the Anthropic console."
+        },
+        {
+          "type": "p",
+          "text": "Loop in Tutorial 01 keeps running, never prints `FINAL:`, never exits"
+        },
+        {
+          "type": "p",
+          "text": "Cause. That's not a bug — that's the intentional build-and-break in Tutorial 01. You removed `MAX_ITERATIONS` and now nothing terminates the agentic loop when the model keeps requesting tools."
+        },
+        {
+          "type": "p",
+          "text": "Ctrl-C to kill the runaway loop. Put the bound back: `for turn in range(MAX_ITERATIONS):`. The whole point of T01 is to watch this happen once, then never forget it."
+        },
+        {
+          "type": "p",
+          "text": "`BadRequestError: tool_result.content must be a string or list of content blocks`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. You returned a Python dict (or some other non-string object) as the `content` of a `tool_result`. The API accepts a string or a structured content-block list — not a raw dict."
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "tool_results.append({\n    \"type\": \"tool_result\",\n    \"tool_use_id\": block.id,\n    \"content\": json.dumps(result),   # <- stringify here\n})"
+        },
+        {
+          "type": "p",
+          "text": "`claude: command not found` after `npm i -g @anthropic-ai/claude-code`"
+        },
+        {
+          "type": "p",
+          "text": "Cause. npm's global bin directory is not on your PATH. On Ubuntu with a system-packaged Node, this happens because the default prefix is `/usr/local` but shells installed earlier may not include it; with nvm, each version has its own bin dir that must be sourced. (The native installer — `curl -fsSL https://claude.ai/install.sh | bash` — sidesteps all of this, which is why the official docs recommend it and warn against `sudo npm install -g`.)"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "npm config get prefix          # find where it installed\nls $(npm config get prefix)/bin # should list 'claude'\necho 'export PATH=\"$(npm config get prefix)/bin:$PATH\"' >> ~/.bashrc\nsource ~/.bashrc"
+        },
+        {
+          "type": "p",
+          "text": "MCP server in Tutorial 03 starts but Claude Code never gets a response; stdio just hangs"
+        },
+        {
+          "type": "p",
+          "text": "Cause. Almost always a silent import error or exception in the server script. Because Claude Code launches the server over stdio as a subprocess, its `stderr` doesn't surface in the CLI UI — the process just dies quietly and the handshake never completes."
+        },
+        {
+          "type": "p",
+          "text": "Run the server directly before registering it with Claude Code — any traceback surfaces immediately:"
+        },
+        {
+          "type": "code",
+          "lang": null,
+          "text": "source .venv/bin/activate\npython3 server.py  # Ctrl-C once it reports \"ready\" or prints a traceback"
+        },
+        {
+          "type": "p",
+          "text": "If it says \"ready\", the server itself is fine — check the Claude Code `mcp.json` config path is absolute and the working directory is correct."
+        },
+        {
+          "type": "p",
+          "text": "Still stuck? Open an issue on the GitHub repo — the more specific the error and the command that produced it, the faster it gets added here."
+        }
+      ],
+      "subsections": [],
+      "stats": {
+        "words": 1068,
+        "bullets": 6,
+        "blocks": 53
+      }
+    },
+    {
+      "id": "utilities-heading",
+      "heading": "Helper scripts for the workbook.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Small, self-contained scripts you can drop alongside any tutorial. One file each, no dependencies beyond the `anthropic` SDK the pre-start block already installs."
+        }
+      ],
+      "subsections": [
+        {
+          "id": "usage-py-api-smoke-test-and-pre-flight-cost-estimator",
+          "heading": "`usage.py` — API smoke test and pre-flight cost estimator",
+          "level": 3,
+          "content": [
+            {
+              "type": "p",
+              "text": "Two questions students run into early: does my key actually work? and roughly what will this prompt cost? `usage.py` answers both in one file. With no arguments it makes an 8-token smoke call against Sonnet 4.6 and prints the full `response.usage` block plus a dollar figure. With `--prompt` or `--file` it uses the Anthropic `count_tokens` endpoint to report per-model input tokens and estimated cost — no completion is run in that path, so pre-flight estimation is free."
+            },
+            {
+              "type": "p",
+              "text": "Drop it in the root of your workbook directory, then `python3 usage.py` from any tutorial folder. The API key is read from `ANTHROPIC_API_KEY` exactly like every tutorial in the workbook."
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "\"\"\"usage.py — API smoke test + pre-flight token / cost estimator.\n\nReads ANTHROPIC_API_KEY from the environment, same as every tutorial.\n\n    python3 usage.py                          # 8-token smoke call\n    python3 usage.py --prompt \"your text\"     # estimate input cost\n    python3 usage.py --file prompt.txt        # estimate from a file\n\"\"\"\nimport argparse, anthropic\n\n# (input $ per 1M tokens, output $ per 1M tokens) — verify on the\n# Anthropic pricing page before you trust the cost column.\nPRICING = {\n    \"claude-sonnet-4-6\":         ( 3.00, 15.00),\n    \"claude-haiku-4-5-20251001\": ( 1.00,  5.00),\n    \"claude-opus-4-7\":           ( 5.00, 25.00),\n}\n\ndef estimate(text: str) -> None:\n    \"\"\"Report per-model input tokens + estimated input cost. Free.\"\"\"\n    client = anthropic.Anthropic()\n    header = f\"{'model':<30}{'input tokens':>14}{'input $':>12}{'$/1k out':>12}\"\n    print(header)\n    print(\"-\" * len(header))\n    for model, (in_p, out_p) in PRICING.items():\n        c = client.messages.count_tokens(\n            model=model,\n            messages=[{\"role\": \"user\", \"content\": text}],\n        )\n        in_cost = c.input_tokens / 1_000_000 * in_p\n        print(f\"{model:<30}{c.input_tokens:>14,}{'$' + format(in_cost, '.5f'):>12}{'$' + format(out_p/1000, '.5f'):>12}\")\n\ndef smoke_test() -> None:\n    \"\"\"Make one tiny real call so you see live .usage fields.\"\"\"\n    client = anthropic.Anthropic()\n    resp = client.messages.create(\n        model=\"claude-sonnet-4-6\",\n        max_tokens=8,\n        messages=[{\"role\": \"user\", \"content\": \"Say exactly: OK\"}],\n    )\n    u = resp.usage\n    in_p, out_p = PRICING[\"claude-sonnet-4-6\"]\n    cost = u.input_tokens / 1_000_000 * in_p + u.output_tokens / 1_000_000 * out_p\n    print(f\"[ok] API key works — model={resp.model}\")\n    print(f\"     response={resp.content[0].text!r}\")\n    print(f\"     usage: input={u.input_tokens} output={u.output_tokens}\")\n    print(f\"            cache_read={u.cache_read_input_tokens or 0} cache_create={u.cache_creation_input_tokens or 0}\")\n    print(f\"     cost=${cost:.6f}\")\n\ndef main() -> None:\n    ap = argparse.ArgumentParser(description=\"Claude API smoke test + pre-flight token counter\")\n    g = ap.add_mutually_exclusive_group()\n    g.add_argument(\"--prompt\", help=\"estimate cost of a literal prompt string\")\n    g.add_argument(\"--file\",   help=\"estimate cost of a prompt read from a file\")\n    args = ap.parse_args()\n    if args.prompt:\n        estimate(args.prompt)\n    elif args.file:\n        with open(args.file) as f:\n            estimate(f.read())\n    else:\n        smoke_test()\n\nif __name__ == \"__main__\":\n    main()"
+            },
+            {
+              "type": "p",
+              "text": "Smoke test — confirm the key works and see real `.usage` fields:"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "$ python3 usage.py\n[ok] API key works — model=claude-sonnet-4-6\n     response='OK'\n     usage: input=12 output=3\n            cache_read=0 cache_create=0\n     cost=$0.000081"
+            },
+            {
+              "type": "p",
+              "text": "Pre-flight — what will this prompt cost on each model?"
+            },
+            {
+              "type": "code",
+              "lang": null,
+              "text": "$ python3 usage.py --prompt \"Summarise this repository in one sentence.\"\nmodel                           input tokens     input $    $/1k out\n--------------------------------------------------------------------\nclaude-sonnet-4-6                         13    $0.00004    $0.01500\nclaude-haiku-4-5-20251001                 13    $0.00001    $0.00500\nclaude-opus-4-7                           13    $0.00006    $0.02500"
+            },
+            {
+              "type": "p",
+              "text": "The `count_tokens` path doesn't draw from your balance — it's a free-of-charge preview. The smoke test does draw (around a tenth of a cent on Sonnet 4.6), but that's the whole point: you want to see real `.usage` fields come back before spending six hours on tutorials. Keep the `PRICING` table aligned with the official Anthropic pricing page — the numbers here match the workbook's tested date but can drift."
+            }
+          ]
+        }
+      ],
+      "stats": {
+        "words": 222,
+        "bullets": 0,
+        "blocks": 9
+      }
+    },
+    {
+      "id": "pick-a-tutorial",
+      "heading": "Pick a tutorial.",
+      "level": 2,
+      "content": [
+        {
+          "type": "p",
+          "text": "Ordered by exam domain. Do Tutorial 01 first — 02, 04 and 08 build on its environment and concepts; the rest are self-contained. Progress saves locally."
+        }
+      ],
+      "subsections": [],
+      "stats": {
+        "words": 26,
+        "bullets": 0,
+        "blocks": 1
+      }
+    }
+  ],
+  "stats": {
+    "sections": 16,
+    "words": 12746,
+    "tables": 0,
+    "codeBlocks": 59,
+    "images": 0
+  },
+  "ignored": {
+    "nav": 2,
+    "footer": 1,
+    "branding": 0,
+    "scriptStyle": 0,
+    "ariaHidden": 0
+  }
+}
